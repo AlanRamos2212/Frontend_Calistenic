@@ -1,0 +1,66 @@
+<p-dialog
+  id="workout-details-dialog"
+  [visible]="isVisible"
+  (visibleChange)="$event ? null : close()"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '600px', 'max-width': '95vw' }"
+  [header]="workout?.name || 'Detalles de sesión'"
+>
+  @if (workout) {
+    <div class="modal-body">
+
+      <!-- Date + Status -->
+      <div class="modal-meta">
+        <span class="modal-date">{{ workout.startTime | date:'dd MMMM yyyy, HH:mm' }}</span>
+        <p-tag
+          [value]="workout.status === 'COMPLETED' ? 'Completado' : 'Activa'"
+          [severity]="workout.status === 'COMPLETED' ? 'success' : 'warn'"
+          [rounded]="true"
+        />
+      </div>
+
+      @if (workout.description) {
+        <p class="modal-desc">{{ workout.description }}</p>
+      }
+
+      <!-- Stats Row -->
+      <div class="modal-stats">
+        <div class="modal-stat">
+          <i class="pi pi-clock modal-stat-icon"></i>
+          <span class="modal-stat-label">Duración</span>
+          <span class="modal-stat-value font-mono">{{ formatDuration(workout.durationSeconds) }}</span>
+        </div>
+        <div class="modal-stat stat-green">
+          <i class="pi pi-heart modal-stat-icon"></i>
+          <span class="modal-stat-label">FC Promedio</span>
+          <span class="modal-stat-value">{{ workout.avgBpm ?? '--' }} <span class="stat-unit">bpm</span></span>
+        </div>
+        <div class="modal-stat stat-red">
+          <i class="pi pi-chart-line modal-stat-icon"></i>
+          <span class="modal-stat-label">FC Máxima</span>
+          <span class="modal-stat-value">{{ workout.maxBpm ?? '--' }} <span class="stat-unit">bpm</span></span>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      @if (workout.heartRateData && workout.heartRateData.length > 0) {
+        <div class="modal-chart-section">
+          <h4 class="modal-chart-title">Curva Cardíaca</h4>
+          <p-chart
+            id="details-hr-chart"
+            type="line"
+            [data]="chartData"
+            [options]="chartOptions"
+            height="180px"
+          />
+        </div>
+      } @else {
+        <p class="no-data-hint"><i class="pi pi-info-circle"></i> Sin datos de FC grabados para esta sesión.</p>
+      }
+
+    </div>
+  }
+</p-dialog>

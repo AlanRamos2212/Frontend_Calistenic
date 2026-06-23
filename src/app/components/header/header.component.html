@@ -1,0 +1,111 @@
+<header class="ct-header">
+  <div class="ct-header-inner">
+
+    <!-- Brand -->
+    <a [routerLink]="['/dashboard']" class="ct-brand" id="header-brand-link">
+      <div class="ct-brand-icon animate-heartbeat" aria-hidden="true">❤️</div>
+      <div class="ct-brand-text">
+        <span class="ct-brand-name">CalistenicTrack</span>
+        <span class="ct-brand-version">v2</span>
+      </div>
+    </a>
+
+    <!-- Nav Links -->
+    <nav class="ct-nav" aria-label="Navegación principal">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="ct-nav-link--active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="ct-nav-link"
+          [id]="'nav-' + link.label.toLowerCase()"
+        >
+          <i [class]="link.icon" aria-hidden="true"></i>
+          <span>{{ link.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <!-- Right Controls -->
+    <div class="ct-header-actions">
+
+      <!-- BLE Status Badge -->
+      @if (ble.deviceConnected()) {
+        <p-tag
+          id="header-ble-badge"
+          value="Wearable listo"
+          severity="success"
+          icon="pi pi-heart-fill"
+          [rounded]="true"
+          pTooltip="{{ ble.deviceName() }}"
+          tooltipPosition="bottom"
+        />
+      } @else {
+        <p-tag
+          id="header-ble-badge-offline"
+          value="Sin wearable"
+          severity="secondary"
+          icon="pi pi-wifi"
+          [rounded]="true"
+        />
+      }
+
+      <!-- Search Button -->
+      <button
+        id="header-search-btn"
+        class="ct-search-btn"
+        (click)="openSearch()"
+        pTooltip="Buscar  (Ctrl+K)"
+        tooltipPosition="bottom"
+        aria-label="Abrir búsqueda"
+      >
+        <i class="pi pi-search"></i>
+        <kbd class="ct-kbd">Ctrl K</kbd>
+      </button>
+
+      <!-- Theme Toggle -->
+      <app-theme-toggle />
+
+    </div>
+  </div>
+</header>
+
+<!-- Global Search Dialog -->
+<p-dialog
+  id="search-dialog"
+  [(visible)]="searchOpen"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="ct-search-dialog"
+  [style]="{ width: '560px', 'max-width': '95vw' }"
+  header="Búsqueda Global"
+>
+  <p-autocomplete
+    id="global-search-input"
+    [(ngModel)]="selectedResult"
+    [suggestions]="searchSuggestions"
+    (completeMethod)="onSearchInput($event)"
+    (onSelect)="onResultSelect($event)"
+    [inputStyle]="{ width: '100%' }"
+    styleClass="w-full"
+    placeholder="Buscar ejercicios, páginas… (min. 2 caracteres)"
+    [dropdown]="false"
+    [forceSelection]="false"
+    [showClear]="true"
+    appendTo="body"
+    dataKey="title"
+  >
+    <ng-template let-result pTemplate="item">
+      <div class="ct-search-item">
+        <span class="ct-search-item-icon">{{ result.icon || '🔍' }}</span>
+        <div class="ct-search-item-content">
+          <span class="ct-search-item-title">{{ result.title }}</span>
+          <span class="ct-search-item-desc">{{ result.description }}</span>
+        </div>
+        <span class="ct-search-item-cat">{{ result.category }}</span>
+      </div>
+    </ng-template>
+  </p-autocomplete>
+</p-dialog>

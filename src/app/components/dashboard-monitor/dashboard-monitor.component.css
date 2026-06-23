@@ -1,0 +1,135 @@
+.monitor-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  height: 100%;
+}
+
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.monitor-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.monitor-sub {
+  font-size: 0.78rem;
+  opacity: 0.55;
+}
+
+/* Center: knob + metrics */
+.monitor-center {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.knob-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.knob-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.bpm-number {
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bpm-unit {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Metrics */
+.metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(100,116,139,0.06);
+  border: 1px solid var(--glass-border);
+}
+
+.metric-icon {
+  font-size: 0.9rem;
+  color: #6366f1;
+  opacity: 0.7;
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.55;
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.metric-unit {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+/* Chart */
+.chart-section { display: flex; flex-direction: column; gap: 0.5rem; }
+.chart-label { font-size: 0.75rem; font-weight: 600; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
+.chart-wrapper { width: 100%; }
+
+/* Zones */
+.zones-section { display: flex; flex-direction: column; gap: 0.6rem; }
+.zones-label { font-size: 0.75rem; font-weight: 600; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.zone-legend {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.legend-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+.legend-chip--z1 { background: rgba(59,130,246,0.12); color: #3b82f6; border-color: rgba(59,130,246,0.2); }
+.legend-chip--z2 { background: rgba(16,185,129,0.12); color: #10b981; border-color: rgba(16,185,129,0.2); }
+.legend-chip--z3 { background: rgba(245,158,11,0.12); color: #f59e0b; border-color: rgba(245,158,11,0.2); }
+.legend-chip--z4 { background: rgba(239,68,68,0.12);  color: #ef4444; border-color: rgba(239,68,68,0.2); }
+.legend-chip--z5 { background: rgba(185,28,28,0.12);  color: #b91c1c; border-color: rgba(185,28,28,0.2); }

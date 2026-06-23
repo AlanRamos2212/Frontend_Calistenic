@@ -1,0 +1,84 @@
+<p-dialog
+  id="settings-dialog"
+  [(visible)]="isVisible"
+  (onHide)="close()"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  header="⚙️ Configuración"
+  [style]="{ width: '480px', 'max-width': '95vw' }"
+>
+  <div class="settings-body">
+
+    <!-- Promo Card -->
+    <div class="promo-card">
+      <p-tag value="PRO ATHLETE" severity="warn" icon="pi pi-star-fill" [rounded]="true" />
+      <h3 class="promo-title">¡Obtén CalistenicTrack Premium al 50%!</h3>
+      <p class="promo-desc">Análisis en la nube, reportes PDF para tu entrenador, y sincronización con Strava y Google Fit.</p>
+    </div>
+
+    <p-divider />
+
+    <!-- HR Settings -->
+    <div class="settings-section">
+      <h4 class="settings-section-title">Umbrales de Frecuencia Cardíaca</h4>
+
+      <div class="setting-item">
+        <div class="setting-label-row">
+          <span class="setting-label">Umbral Máximo Seguro</span>
+          <p-inputnumber
+            id="max-hr-input"
+            [(ngModel)]="maxHrThreshold"
+            [min]="140" [max]="220"
+            suffix=" BPM"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            [style]="{ width: '140px' }"
+            styleClass="p-inputtext-sm"
+          />
+        </div>
+        <p-slider id="max-hr-slider" [(ngModel)]="maxHrThreshold" [min]="140" [max]="220" styleClass="w-full mt-2" />
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label-row">
+          <span class="setting-label">Zona Objetivo Mínima</span>
+          <p-inputnumber
+            id="zone-min-input"
+            [(ngModel)]="targetZoneMin"
+            [min]="60" [max]="targetZoneMax - 5"
+            suffix=" BPM"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            [style]="{ width: '140px' }"
+            styleClass="p-inputtext-sm"
+          />
+        </div>
+        <p-slider id="zone-min-slider" [(ngModel)]="targetZoneMin" [min]="60" [max]="targetZoneMax - 5" styleClass="w-full mt-2" />
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label-row">
+          <span class="setting-label">Zona Objetivo Máxima</span>
+          <p-inputnumber
+            id="zone-max-input"
+            [(ngModel)]="targetZoneMax"
+            [min]="targetZoneMin + 5" [max]="220"
+            suffix=" BPM"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            [style]="{ width: '140px' }"
+            styleClass="p-inputtext-sm"
+          />
+        </div>
+        <p-slider id="zone-max-slider" [(ngModel)]="targetZoneMax" [min]="targetZoneMin + 5" [max]="220" styleClass="w-full mt-2" />
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="close()" />
+    <p-button label="Guardar cambios" icon="pi pi-check" severity="contrast" (onClick)="save()" />
+  </ng-template>
+</p-dialog>

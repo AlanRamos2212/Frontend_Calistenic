@@ -1,0 +1,48 @@
+<div class="comunidad-layout">
+
+  <!-- Hero Coming Soon -->
+  <div class="coming-soon-hero glass-card animate-fade-in">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <p-tag id="comunidad-badge" value="Próximamente" severity="warn" icon="pi pi-clock" [rounded]="true" />
+      <h1 class="hero-title">Comunidad CalistenicTrack</h1>
+      <p class="hero-desc">
+        Estamos construyendo el espacio donde los atletas se conectan, compiten y se motivan juntos.
+        Únete a la lista de espera para ser el primero en acceder.
+      </p>
+      <div class="hero-actions">
+        <p-button
+          id="waitlist-btn"
+          label="Unirse a la lista de espera"
+          icon="pi pi-bell"
+          severity="contrast"
+          [disabled]="true"
+        />
+        <p-button
+          id="dashboard-from-comunidad"
+          label="Ir al Dashboard"
+          icon="pi pi-chart-line"
+          severity="secondary"
+          [outlined]="true"
+          routerLink="/dashboard"
+        />
+      </div>
+    </div>
+    <div class="hero-emoji" aria-hidden="true">🌐</div>
+  </div>
+
+  <!-- Feature Preview -->
+  <div class="features-grid animate-fade-in">
+    <h2 class="features-title">Lo que viene</h2>
+    <div class="features-cards">
+      @for (f of features; track f.title) {
+        <div class="feature-card glass-card">
+          <span class="feature-icon">{{ f.icon }}</span>
+          <h3 class="feature-name">{{ f.title }}</h3>
+          <p class="feature-desc">{{ f.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,143 @@
+/* ── Google Fonts MUST be first ── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+
+/* ── Dark mode custom variant (synced with PrimeNG darkModeSelector) ── */
+@custom-variant dark (&:where(.app-dark, .app-dark *));
+
+/* ── Design Tokens ── */
+:root {
+  --font-sans:  'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Heart Rate Zone Colors */
+  --zone-z1: #3b82f6;
+  --zone-z2: #10b981;
+  --zone-z3: #f59e0b;
+  --zone-z4: #ef4444;
+  --zone-z5: #b91c1c;
+
+  /* Accents */
+  --accent-cyan:   #06b6d4;
+  --accent-purple: #6366f1;
+  --accent-green:  #10b981;
+  --accent-red:    #ef4444;
+  --accent-amber:  #f59e0b;
+
+  /* Glassmorphism - Light */
+  --glass-bg:     rgba(255, 255, 255, 0.80);
+  --glass-border: rgba(15, 23, 42, 0.07);
+  --glass-shadow: 0 20px 25px -5px rgba(0,0,0,0.04), 0 8px 10px -6px rgba(0,0,0,0.03), inset 0 1px 0 0 rgba(255,255,255,0.6);
+}
+
+/* Glassmorphism - Dark */
+.app-dark {
+  --glass-bg:     rgba(15, 23, 42, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 20px 25px -5px rgba(0,0,0,0.25), 0 8px 10px -6px rgba(0,0,0,0.18), inset 0 1px 0 0 rgba(255,255,255,0.04);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.35); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.6); }
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  box-shadow: var(--glass-shadow);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.glass-card:hover { border-color: rgba(99,102,241,0.2); }
+.glass-card-lift:hover { transform: translateY(-3px); box-shadow: 0 24px 40px -6px rgba(0,0,0,0.08); }
+
+/* ── Zone Bars ── */
+.zone-bar-container {
+  display: flex; height: 10px; border-radius: 9999px; overflow: hidden;
+  background: rgba(100,116,139,0.15);
+}
+.zone-segment { height: 100%; transition: width 0.4s ease; }
+.zone-segment-z1 { background: var(--zone-z1); }
+.zone-segment-z2 { background: var(--zone-z2); }
+.zone-segment-z3 { background: var(--zone-z3); }
+.zone-segment-z4 { background: var(--zone-z4); }
+.zone-segment-z5 { background: var(--zone-z5); }
+
+/* ── Animations ── */
+@keyframes heartBeat {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.18); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.15); }
+  70%  { transform: scale(1); }
+}
+.animate-heartbeat { animation: heartBeat 1.1s infinite; }
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+.pulse-active { animation: pulse-ring 2s infinite; }
+
+@keyframes slideDown {
+  from { transform: translateY(-12px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+.animate-slide-down { animation: slideDown 0.25s ease; }
+
+@keyframes breathingAlert {
+  0%, 100% { border-color: rgba(239,68,68,0.3); box-shadow: 0 0 6px rgba(239,68,68,0.12); }
+  50%       { border-color: rgba(239,68,68,0.8); box-shadow: 0 0 18px rgba(239,68,68,0.35); }
+}
+.alert-breathing { animation: breathingAlert 1.5s infinite; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-fade-in { animation: fadeIn 0.3s ease; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(148,163,184,0.1) 25%, rgba(148,163,184,0.2) 50%, rgba(148,163,184,0.1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+/* ── PrimeNG overrides ── */
+.p-card { border-radius: 1rem !important; }
+.p-toast { z-index: 9999 !important; }
+
+/* font-mono utility */
+.font-mono { font-family: var(--font-mono) !important; }

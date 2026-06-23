@@ -1,0 +1,37 @@
+<article 
+  class="glass-card glass-card-interactive"
+  (click)="selectWorkout()"
+>
+  <div class="card-header">
+    <span class="card-date">{{ workout.startTime | date:'dd/MM/yyyy HH:mm' }}</span>
+    <button 
+      (click)="deleteWorkout($event)"
+      class="btn-delete"
+      title="Eliminar entrenamiento"
+      aria-label="Eliminar"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+      </svg>
+    </button>
+  </div>
+  
+  <h3 class="card-title">{{ workout.name }}</h3>
+  <p class="card-description">{{ workout.description || 'Sin detalles adicionales' }}</p>
+
+  <div class="card-stats">
+    <div class="stat-item">
+      <span class="stat-label">DURACIÓN</span>
+      <strong class="stat-value">{{ formatDuration(workout.durationSeconds) }}</strong>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">AVG HR</span>
+      <strong class="stat-value" style="color: var(--accent-green);">{{ workout.avgBpm || '--' }}</strong>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">MAX HR</span>
+      <strong class="stat-value" style="color: var(--accent-red);">{{ workout.maxBpm || '--' }}</strong>
+    </div>
+  </div>
+</article>

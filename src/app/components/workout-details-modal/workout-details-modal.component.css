@@ -1,0 +1,28 @@
+.modal-body { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.modal-meta { display: flex; align-items: center; justify-content: space-between; }
+.modal-date { font-size: 0.8rem; opacity: 0.55; }
+.modal-desc { font-size: 0.875rem; opacity: 0.65; line-height: 1.6; }
+
+.modal-stats { display: flex; gap: 0.75rem; }
+.modal-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: rgba(100,116,139,0.06);
+  border: 1px solid rgba(100,116,139,0.1);
+}
+.modal-stat-icon { font-size: 0.9rem; color: #6366f1; opacity: 0.7; }
+.modal-stat-label { font-size: 0.72rem; opacity: 0.55; font-weight: 500; }
+.modal-stat-value { font-size: 1.2rem; font-weight: 700; }
+.stat-unit { font-size: 0.65rem; opacity: 0.6; font-weight: 400; }
+.stat-green .modal-stat-icon { color: #10b981; }
+.stat-red   .modal-stat-icon { color: #ef4444; }
+
+.modal-chart-section { display: flex; flex-direction: column; gap: 0.5rem; }
+.modal-chart-title { font-size: 0.85rem; font-weight: 600; opacity: 0.6; }
+
+.no-data-hint { font-size: 0.8rem; opacity: 0.5; display: flex; align-items: center; gap: 0.4rem; }

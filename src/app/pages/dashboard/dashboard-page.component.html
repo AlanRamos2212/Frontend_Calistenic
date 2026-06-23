@@ -1,0 +1,136 @@
+<div class="dashboard-layout">
+
+  <!-- TAB SWITCHER -->
+  <div class="tab-bar">
+    <button
+      id="tab-dashboard-btn"
+      class="tab-btn"
+      [class.tab-btn--active]="activeTab() === 'dashboard'"
+      (click)="activeTab.set('dashboard')"
+    >
+      <i class="pi pi-chart-line"></i> Monitor Live
+    </button>
+    <button
+      id="tab-history-btn"
+      class="tab-btn"
+      [class.tab-btn--active]="activeTab() === 'history'"
+      (click)="activeTab.set('history'); loadWorkoutsHistory()"
+    >
+      <i class="pi pi-list"></i> Historial
+      @if (workouts().length > 0) {
+        <span class="tab-badge">{{ workouts().length }}</span>
+      }
+    </button>
+    <div class="tab-actions">
+      <button
+        id="settings-open-btn"
+        class="icon-btn"
+        (click)="isSettingsOpen.set(true)"
+        title="Configuración"
+      >
+        <i class="pi pi-cog"></i>
+      </button>
+      <button
+        id="simulate-alert-btn"
+        class="icon-btn icon-btn--warning"
+        (click)="simulateHighHRAlert()"
+        title="Simular alerta de FC alta"
+      >
+        <i class="pi pi-exclamation-triangle"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD TAB -->
+  @if (activeTab() === 'dashboard') {
+    <div class="dashboard-grid animate-fade-in">
+
+      <!-- LEFT: Device + Form -->
+      <div class="dashboard-left">
+        <app-ble-panel></app-ble-panel>
+        <app-workout-form
+          [isActive]="isWorkoutActive()"
+          [currentWorkout]="currentWorkout()"
+          [deviceConnected]="ble.deviceConnected()"
+          [formattedTime]="formattedTime()"
+          (onStart)="startWorkout($event)"
+          (onEnd)="endWorkout()">
+        </app-workout-form>
+      </div>
+
+      <!-- RIGHT: Monitor -->
+      <div class="dashboard-right">
+        <app-dashboard-monitor
+          [isWorkoutActive]="isWorkoutActive()"
+          [avgBpm]="currentAvgBpm()"
+          [calories]="estimatedCalories()"
+          [zonePercentages]="zonePercentages()"
+          [formattedTime]="formattedTime()">
+        </app-dashboard-monitor>
+      </div>
+
+    </div>
+  }
+
+  <!-- HISTORY TAB -->
+  @if (activeTab() === 'history') {
+    <div class="history-section animate-fade-in">
+      <div class="history-header">
+        <div>
+          <h2 class="text-2xl font-bold">Historial de Sesiones</h2>
+          <p class="text-sm opacity-60 mt-1">Revisa tus entrenamientos guardados</p>
+        </div>
+        <button class="icon-btn" (click)="loadWorkoutsHistory()" title="Actualizar">
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+
+      @if (workouts().length === 0) {
+        <app-empty-state
+          icon="💪"
+          title="No hay sesiones guardadas"
+          description="Conecta un dispositivo BLE o inicia la simulación para guardar tus primeras sesiones."
+          actionText="Ir al Monitor"
+          (onAction)="activeTab.set('dashboard')">
+        </app-empty-state>
+      }
+
+      @if (workouts().length > 0) {
+        <div class="workouts-grid">
+          @for (workout of workouts(); track workout.id) {
+            <app-workout-card
+              [workout]="workout"
+              (onClick)="viewWorkoutDetails($event.id)"
+              (onDelete)="deleteWorkout($event)">
+            </app-workout-card>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Help -->
+  <app-help-panel></app-help-panel>
+
+</div>
+
+<!-- Warning Banner -->
+<app-warning-banner
+  [isVisible]="warningBannerVisible()"
+  [message]="warningMessage()"
+  [heartRate]="ble.heartRate()"
+  (onDismiss)="dismissWarning()">
+</app-warning-banner>
+
+<!-- Workout Details Modal -->
+<app-workout-details-modal
+  [workout]="selectedWorkout()"
+  (onClose)="closeWorkoutDetails()">
+</app-workout-details-modal>
+
+<!-- Settings Modal -->
+<app-settings-modal
+  [isVisible]="isSettingsOpen()"
+  (onClose)="isSettingsOpen.set(false)"
+  (onSettingChange)="null">
+</app-settings-modal>

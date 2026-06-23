@@ -1,0 +1,109 @@
+.dashboard-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: calc(100vh - 64px);
+}
+
+.tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.875rem;
+  padding: 0.4rem;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--p-text-muted-color, #64748b);
+  transition: all 0.15s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(99,102,241,0.08);
+  color: #6366f1;
+}
+
+.tab-btn--active {
+  background: rgba(99,102,241,0.12) !important;
+  color: #6366f1 !important;
+  font-weight: 600;
+}
+
+.tab-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #6366f1;
+  color: white;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+}
+
+.tab-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  cursor: pointer;
+  color: var(--p-text-muted-color, #64748b);
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+.icon-btn:hover { background: rgba(99,102,241,0.08); color: #6366f1; border-color: rgba(99,102,241,0.25); }
+.icon-btn--warning:hover { background: rgba(245,158,11,0.08); color: #d97706; border-color: rgba(245,158,11,0.3); }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.dashboard-left { display: flex; flex-direction: column; gap: 1.25rem; }
+.dashboard-right { display: flex; flex-direction: column; }
+
+.history-section { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.workouts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-layout { padding: 1rem; }
+}

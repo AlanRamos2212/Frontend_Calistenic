@@ -1,0 +1,19 @@
+@if (isVisible) {
+  <div class="warning-banner alert-breathing" role="alert" aria-live="assertive">
+    <div class="warning-left">
+      <span class="warning-icon animate-heartbeat">❤️‍🔥</span>
+      <div>
+        <strong class="warning-title">🚨 Alerta Cardíaca</strong>
+        <p class="warning-message">{{ message }}</p>
+      </div>
+    </div>
+    <p-button
+      id="dismiss-warning-btn"
+      label="Entendido"
+      icon="pi pi-times"
+      severity="danger"
+      size="small"
+      (onClick)="dismiss()"
+    />
+  </div>
+}

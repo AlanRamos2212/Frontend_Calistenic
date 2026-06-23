@@ -1,0 +1,30 @@
+<!-- Top Alert Banners Row -->
+<div class="alerts-container">
+  
+  @for (alert of alerts; track alert.id) {
+    <div 
+      [class]="'alert alert-' + alert.type"
+      role="alert"
+    >
+      <div class="alert-content">
+        <div class="alert-icon">{{ alert.icon }}</div>
+        <div>
+          <strong class="alert-title">{{ alert.title }}</strong>
+          <p class="alert-message">{{ alert.message }}</p>
+        </div>
+      </div>
+      
+      @if (alert.dismissible) {
+        <button 
+          (click)="dismissAlert(alert.id)"
+          class="alert-close"
+          title="Cerrar alerta"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      }
+    </div>
+  }
+
+</div>

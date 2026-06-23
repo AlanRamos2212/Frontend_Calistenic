@@ -1,0 +1,85 @@
+<section class="glass-card workout-form-card">
+
+  <!-- INACTIVE: Form to start session -->
+  @if (!isActive) {
+    <div class="form-section">
+      <div class="form-header">
+        <h3 class="form-title">Nueva Sesión</h3>
+        @if (!deviceConnected) {
+          <p-tag value="Sin Wearable" severity="warn" icon="pi pi-exclamation-circle" [rounded]="true" />
+        } @else {
+          <p-tag value="Listo" severity="success" icon="pi pi-check-circle" [rounded]="true" />
+        }
+      </div>
+
+      <div class="form-fields">
+        <p-floatlabel>
+          <input
+            id="workout-name"
+            pInputText
+            type="text"
+            [(ngModel)]="workoutName"
+            class="w-full"
+          />
+          <label for="workout-name">Nombre de la sesión</label>
+        </p-floatlabel>
+
+        <p-floatlabel>
+          <textarea
+            id="workout-desc"
+            pTextarea
+            [(ngModel)]="workoutDescription"
+            rows="3"
+            class="w-full"
+          ></textarea>
+          <label for="workout-desc">Objetivos / Notas</label>
+        </p-floatlabel>
+      </div>
+
+      <p-button
+        id="start-workout-btn"
+        label="Iniciar Grabación"
+        icon="pi pi-circle-fill"
+        severity="contrast"
+        styleClass="w-full"
+        [disabled]="!deviceConnected"
+        (onClick)="startWorkout()"
+      />
+
+      @if (!deviceConnected) {
+        <p class="no-device-hint">
+          <i class="pi pi-info-circle"></i>
+          Conecta un wearable BLE o inicia la simulación para grabar.
+        </p>
+      }
+    </div>
+  }
+
+  <!-- ACTIVE: Recording -->
+  @if (isActive) {
+    <div class="active-section">
+      <div class="rec-header">
+        <div class="rec-badge-group">
+          <span class="rec-dot"></span>
+          <span class="rec-label">REC LIVE</span>
+        </div>
+        <div class="rec-timer font-mono">{{ formattedTime }}</div>
+      </div>
+
+      <div class="rec-info">
+        <h3 class="rec-name">{{ currentWorkout?.name }}</h3>
+        <p class="rec-desc">{{ currentWorkout?.description }}</p>
+      </div>
+
+      <p-button
+        id="end-workout-btn"
+        label="Terminar y Guardar"
+        icon="pi pi-stop-circle"
+        severity="danger"
+        styleClass="w-full"
+        (onClick)="endWorkout()"
+      />
+    </div>
+  }
+
+</section>

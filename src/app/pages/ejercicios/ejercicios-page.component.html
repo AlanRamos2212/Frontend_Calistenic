@@ -1,0 +1,151 @@
+<div class="ejercicios-layout">
+
+  <!-- Page Header -->
+  <div class="page-header animate-fade-in">
+    <div>
+      <h1 class="page-title">Librería de Ejercicios</h1>
+      <p class="page-sub">{{ filteredExercises().length }} rutinas · Selecciona y entrena con tu wearable</p>
+    </div>
+
+    <!-- Search -->
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search" />
+      <input
+        id="ejercicios-search"
+        pInputText
+        type="text"
+        placeholder="Buscar ejercicios, músculos…"
+        (input)="onSearchInput($event)"
+        class="search-input"
+      />
+    </p-iconfield>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-row animate-slide-down">
+    <!-- Category chips -->
+    <div class="filter-group">
+      @for (cat of categories; track cat.value) {
+        <button
+          [id]="'cat-' + cat.value"
+          class="filter-chip"
+          [class.filter-chip--active]="activeCategory() === cat.value"
+          (click)="setCategory(cat.value)"
+        >
+          {{ cat.icon }} {{ cat.label }}
+        </button>
+      }
+    </div>
+
+    <!-- Level tags -->
+    <div class="filter-group">
+      @for (lvl of levels; track lvl.value) {
+        <button
+          [id]="'lvl-' + lvl.value"
+          class="filter-chip filter-chip--level"
+          [class.filter-chip--active]="activeLevel() === lvl.value"
+          (click)="toggleLevel(lvl.value)"
+        >
+          {{ lvl.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Exercise Grid -->
+  @if (filteredExercises().length > 0) {
+    <div class="exercise-grid animate-fade-in">
+      @for (exercise of filteredExercises(); track exercise.id) {
+        <div class="exercise-card glass-card glass-card-lift">
+          <!-- Card Header -->
+          <div class="exercise-card-header">
+            <div class="exercise-icon">{{ exercise.icon }}</div>
+            <div class="exercise-badges">
+              <p-tag
+                [value]="exercise.level"
+                [severity]="getLevelSeverity(exercise.level)"
+                [rounded]="true"
+                styleClass="text-xs"
+              />
+              <p-tag
+                [value]="getCategoryLabel(exercise.category)"
+                severity="secondary"
+                [rounded]="true"
+                styleClass="text-xs"
+              />
+            </div>
+          </div>
+
+          <!-- Card Body -->
+          <div class="exercise-card-body">
+            <h3 class="exercise-name">{{ exercise.name }}</h3>
+            <p class="exercise-desc">{{ exercise.description }}</p>
+
+            <!-- Muscles -->
+            <div class="muscles-row">
+              @for (m of exercise.muscles; track m) {
+                <span class="muscle-chip">{{ m }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="exercise-stats">
+            <div class="stat">
+              <i class="pi pi-clock stat-icon"></i>
+              <span>{{ exercise.durationMin }} min</span>
+            </div>
+            <div class="stat">
+              <i class="pi pi-bolt stat-icon"></i>
+              <span>~{{ exercise.estimatedCalories }} kcal</span>
+            </div>
+            <div class="stat">
+              <i class="pi pi-heart stat-icon"></i>
+              <span>{{ exercise.targetHrMin }}–{{ exercise.targetHrMax }} bpm</span>
+            </div>
+          </div>
+
+          <!-- Action -->
+          <p-button
+            [id]="'start-ex-' + exercise.id"
+            label="Iniciar con wearable"
+            icon="pi pi-play"
+            severity="contrast"
+            styleClass="w-full"
+            [routerLink]="['/dashboard']"
+            size="small"
+          />
+        </div>
+      }
+
+      <!-- AI Card CTA -->
+      <div class="exercise-card ai-card glass-card">
+        <div class="ai-card-content">
+          <div class="ai-icon">🤖</div>
+          <h3 class="ai-title">Crear rutina personalizada con IA</h3>
+          <p class="ai-desc">Describe tu objetivo y nivel, y la IA generará una rutina única para ti.</p>
+          <p-button
+            id="ai-routine-btn"
+            label="Próximamente"
+            icon="pi pi-sparkles"
+            severity="secondary"
+            [outlined]="true"
+            [disabled]="true"
+          />
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (filteredExercises().length === 0) {
+    <div class="empty-exercises animate-fade-in">
+      <span class="empty-icon">🔍</span>
+      <h3>Sin resultados</h3>
+      <p>Prueba con otros filtros o términos de búsqueda.</p>
+      <p-button label="Limpiar filtros" icon="pi pi-times" severity="secondary" [outlined]="true"
+        (onClick)="searchQuery.set(''); activeCategory.set('all'); activeLevel.set('all')" />
+    </div>
+  }
+
+</div>

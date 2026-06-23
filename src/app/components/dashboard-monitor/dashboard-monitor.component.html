@@ -1,0 +1,95 @@
+<section class="monitor-card glass-card">
+
+  <!-- Top: BPM Knob + Zone Tag -->
+  <div class="monitor-header">
+    <div>
+      <h3 class="monitor-title">Monitor de Frecuencia Cardíaca</h3>
+      <p class="monitor-sub">{{ isWorkoutActive ? 'Sesión activa — ' + formattedTime : 'Sin sesión activa' }}</p>
+    </div>
+    <p-tag
+      id="zone-tag"
+      [value]="getHeartRateZone(ble.heartRate()).name"
+      [severity]="getHeartRateZone(ble.heartRate()).severity"
+      [rounded]="true"
+    />
+  </div>
+
+  <!-- Center: Knob + Metrics -->
+  <div class="monitor-center">
+
+    <!-- BPM Knob -->
+    <div class="knob-container">
+      <p-knob
+        id="bpm-knob"
+        [(ngModel)]="knobBpm"
+        [min]="40"
+        [max]="220"
+        [size]="160"
+        [readonly]="true"
+        valueColor="#6366f1"
+        rangeColor="rgba(99,102,241,0.12)"
+        [showValue]="false"
+      />
+      <div class="knob-center-text">
+        <span class="bpm-number" [class.animate-heartbeat]="ble.heartRate() > 0">
+          {{ ble.heartRate() || '--' }}
+        </span>
+        <span class="bpm-unit">bpm</span>
+      </div>
+    </div>
+
+    <!-- Session Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <i class="pi pi-clock metric-icon"></i>
+        <span class="metric-label">Duración</span>
+        <span class="metric-value font-mono">{{ isWorkoutActive ? formattedTime : '--:--:--' }}</span>
+      </div>
+      <div class="metric-card">
+        <i class="pi pi-heart metric-icon"></i>
+        <span class="metric-label">HR Promedio</span>
+        <span class="metric-value">{{ isWorkoutActive ? avgBpm : '--' }} <span class="metric-unit">bpm</span></span>
+      </div>
+      <div class="metric-card">
+        <i class="pi pi-bolt metric-icon"></i>
+        <span class="metric-label">Calorías est.</span>
+        <span class="metric-value">{{ isWorkoutActive ? (calories | number:'1.0-0') : '--' }} <span class="metric-unit">kcal</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Live Chart -->
+  <div class="chart-section">
+    <span class="chart-label">HR en tiempo real</span>
+    <div class="chart-wrapper">
+      <p-chart
+        id="realtime-hr-chart"
+        type="line"
+        [data]="chartData"
+        [options]="chartOptions"
+        height="120px"
+      />
+    </div>
+  </div>
+
+  <!-- Zone Bars -->
+  <div class="zones-section">
+    <span class="zones-label">Distribución de zonas</span>
+    <div class="zone-bar-container">
+      <div class="zone-segment zone-segment-z1" [style.width.%]="zonePercentages[0]"></div>
+      <div class="zone-segment zone-segment-z2" [style.width.%]="zonePercentages[1]"></div>
+      <div class="zone-segment zone-segment-z3" [style.width.%]="zonePercentages[2]"></div>
+      <div class="zone-segment zone-segment-z4" [style.width.%]="zonePercentages[3]"></div>
+      <div class="zone-segment zone-segment-z5" [style.width.%]="zonePercentages[4]"></div>
+    </div>
+    <div class="zone-legend">
+      @for (zone of ['Z1','Z2','Z3','Z4','Z5']; track zone; let i = $index) {
+        <span class="legend-chip" [class]="'legend-chip--z' + (i+1)">
+          {{ zone }} {{ zonePercentages[i] }}%
+        </span>
+      }
+    </div>
+  </div>
+
+</section>

@@ -1,0 +1,129 @@
+<div class="progreso-layout">
+
+  <!-- Header -->
+  <div class="page-header animate-fade-in">
+    <div>
+      <h1 class="page-title">Mi Progreso</h1>
+      <p class="page-sub">Historial de sesiones y estadísticas de rendimiento</p>
+    </div>
+    <p-button icon="pi pi-refresh" severity="secondary" [outlined]="true" (onClick)="reload()" pTooltip="Actualizar" tooltipPosition="left" />
+  </div>
+
+  <!-- Stats Cards -->
+  @if (!isLoading()) {
+    <div class="stats-grid animate-fade-in">
+      <div class="stat-card glass-card">
+        <div class="stat-icon-wrap stat-purple"><i class="pi pi-list"></i></div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalSessions() }}</span>
+          <span class="stat-label">Sesiones totales</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon-wrap stat-orange"><i class="pi pi-bolt"></i></div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalCalories() | number:'1.0-0' }}</span>
+          <span class="stat-label">Calorías quemadas</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon-wrap stat-blue"><i class="pi pi-clock"></i></div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalMinutes() | number:'1.0-0' }}</span>
+          <span class="stat-label">Minutos entrenados</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon-wrap stat-red"><i class="pi pi-heart-fill"></i></div>
+        <div class="stat-info">
+          <span class="stat-value">{{ avgBpmAll() }}</span>
+          <span class="stat-label">FC promedio global</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    @if (workouts().length > 0) {
+      <div class="chart-card glass-card animate-fade-in">
+        <h2 class="section-title">Frecuencia Cardíaca por Sesión</h2>
+        <div class="chart-wrap">
+          <p-chart
+            id="progreso-bpm-chart"
+            type="line"
+            [data]="bpmChartData"
+            [options]="bpmChartOptions"
+            height="280px"
+          />
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card glass-card animate-fade-in">
+        <h2 class="section-title">Historial de Sesiones</h2>
+        <p-table
+          id="sessions-table"
+          [value]="workouts()"
+          [paginator]="true"
+          [rows]="8"
+          [rowsPerPageOptions]="[5, 8, 15]"
+          styleClass="p-datatable-sm"
+          [tableStyle]="{'min-width': '50rem'}"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Sesión <p-sortIcon field="name" /></th>
+              <th pSortableColumn="startTime">Fecha <p-sortIcon field="startTime" /></th>
+              <th pSortableColumn="durationSeconds">Duración <p-sortIcon field="durationSeconds" /></th>
+              <th pSortableColumn="avgBpm">FC Prom. <p-sortIcon field="avgBpm" /></th>
+              <th pSortableColumn="maxBpm">FC Máx. <p-sortIcon field="maxBpm" /></th>
+              <th>Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-workout>
+            <tr>
+              <td><span class="session-name">{{ workout.name }}</span></td>
+              <td>{{ workout.startTime | date:'dd/MM/yy HH:mm' }}</td>
+              <td>{{ formatDuration(workout.durationSeconds) }}</td>
+              <td>
+                <span class="bpm-cell">{{ workout.avgBpm ?? '--' }} <span class="bpm-unit">bpm</span></span>
+              </td>
+              <td>
+                <span class="bpm-cell bpm-max">{{ workout.maxBpm ?? '--' }} <span class="bpm-unit">bpm</span></span>
+              </td>
+              <td>
+                <p-tag
+                  [value]="workout.status === 'COMPLETED' ? 'Completado' : 'Activa'"
+                  [severity]="workout.status === 'COMPLETED' ? 'success' : 'warn'"
+                  [rounded]="true"
+                />
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="6" class="text-center py-8 opacity-50">No hay sesiones registradas aún.</td></tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+
+    <!-- Empty -->
+    @if (workouts().length === 0) {
+      <div class="empty-state-wrap animate-fade-in">
+        <span class="empty-icon">📊</span>
+        <h3>Sin sesiones completadas</h3>
+        <p>Completa tu primera sesión de entrenamiento para ver tus estadísticas aquí.</p>
+        <p-button label="Ir al Dashboard" icon="pi pi-chart-line" routerLink="/dashboard" />
+      </div>
+    }
+
+  } @else {
+    <!-- Skeletons -->
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <p-skeleton height="100px" borderRadius="1rem" />
+      }
+    </div>
+    <p-skeleton height="320px" borderRadius="1rem" />
+  }
+
+</div>

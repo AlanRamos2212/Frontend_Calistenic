@@ -1,0 +1,97 @@
+<section class="glass-card ble-panel">
+
+  <!-- Header -->
+  <div class="ble-header">
+    <div class="ble-header-left">
+      <div class="ble-icon">📡</div>
+      <div>
+        <h3 class="ble-title">Wearable BLE</h3>
+        <p class="ble-sub">Banda cardíaca Bluetooth Smart</p>
+      </div>
+    </div>
+    @if (ble.deviceConnected()) {
+      <p-tag
+        id="ble-status-connected"
+        [value]="ble.isSimulated() ? 'Simulado' : 'BLE Activo'"
+        severity="success"
+        icon="pi pi-circle-fill"
+        [rounded]="true"
+        styleClass="pulse-active"
+      />
+    } @else {
+      <p-tag id="ble-status-offline" value="Offline" severity="danger" icon="pi pi-power-off" [rounded]="true" />
+    }
+  </div>
+
+  <!-- Scanning Progress -->
+  @if (ble.isScanning()) {
+    <p-progressbar id="ble-scanning-bar" mode="indeterminate" styleClass="h-1" />
+    <p class="scanning-text">Buscando dispositivos BLE…</p>
+  }
+
+  <!-- Error -->
+  @if (ble.error()) {
+    <p-message id="ble-error-msg" severity="error" [text]="ble.error()" styleClass="w-full" />
+  }
+
+  <!-- Device Info -->
+  @if (ble.deviceConnected()) {
+    <div class="device-info">
+      <div class="info-row">
+        <span class="info-label"><i class="pi pi-mobile-alt"></i> Dispositivo</span>
+        <strong class="info-value">{{ ble.deviceName() }}</strong>
+      </div>
+      <div class="info-row">
+        <span class="info-label"><i class="pi pi-heart-fill"></i> FC Actual</span>
+        <strong class="info-value bpm-live">{{ ble.heartRate() }} <span class="bpm-unit">bpm</span></strong>
+      </div>
+    </div>
+  }
+
+  <!-- Buttons -->
+  <div class="ble-actions">
+    @if (!ble.deviceConnected()) {
+      <p-button
+        id="ble-connect-btn"
+        label="Vincular Wearable BLE"
+        icon="pi pi-bluetooth"
+        severity="contrast"
+        styleClass="w-full"
+        [loading]="ble.isScanning()"
+        (onClick)="connect()"
+      />
+      <p-button
+        id="ble-simulate-btn"
+        label="Iniciar Simulación"
+        icon="pi pi-play"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="w-full"
+        (onClick)="startSimulation()"
+      />
+    } @else {
+      <p-button
+        id="ble-disconnect-btn"
+        label="Desconectar Wearable"
+        icon="pi pi-power-off"
+        severity="danger"
+        [outlined]="true"
+        styleClass="w-full"
+        (onClick)="disconnect()"
+      />
+    }
+  </div>
+
+  <!-- Simulation Controls -->
+  @if (ble.isSimulated()) {
+    <div class="sim-controls">
+      <p class="sim-label">⚡ Ajuste de Esfuerzo Emulado</p>
+      <div class="sim-buttons">
+        <p-button id="sim-rest-btn"     label="Reposo"   icon="pi pi-moon"      severity="info"    [outlined]="true" size="small" (onClick)="exertSimulated('rest')" />
+        <p-button id="sim-moderate-btn" label="Moderado" icon="pi pi-sun"        severity="warn"    [outlined]="true" size="small" (onClick)="exertSimulated('moderate')" />
+        <p-button id="sim-intense-btn"  label="Máximo"   icon="pi pi-bolt"       severity="danger"  [outlined]="true" size="small" (onClick)="exertSimulated('intense')" />
+      </div>
+    </div>
+  }
+
+</section>
