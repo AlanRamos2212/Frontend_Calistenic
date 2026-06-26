@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { CardModule } from 'primeng/card';
+import { LucideAngularModule, Dumbbell, Zap, Flame, User, Users, Clock, Heart, Cpu, Target, Activity } from 'lucide-angular';
 
 import { Exercise, ExerciseCategory, ExerciseLevel } from '../../models/exercise.model';
 import { EXERCISES_DATA } from '../../data/exercises.data';
@@ -27,7 +28,8 @@ type FilterLevel    = 'all' | ExerciseLevel;
     InputTextModule,
     IconFieldModule,
     InputIconModule,
-    CardModule
+    CardModule,
+    LucideAngularModule
   ],
   templateUrl: './ejercicios-page.component.html',
   styleUrl: './ejercicios-page.component.css'
@@ -37,12 +39,12 @@ export class EjerciciosPageComponent {
   activeCategory = signal<FilterCategory>('all');
   activeLevel    = signal<FilterLevel>('all');
 
-  readonly categories: { label: string; value: FilterCategory; icon: string }[] = [
-    { label: 'Todos',       value: 'all',        icon: '🏆' },
-    { label: 'Upper Body',  value: 'upper_body', icon: '💪' },
-    { label: 'Core',        value: 'core',       icon: '🔥' },
-    { label: 'Lower Body',  value: 'lower_body', icon: '🦵' },
-    { label: 'Full Body',   value: 'full_body',  icon: '🚀' },
+  readonly categories = [
+    { label: 'Todos',       value: 'all' as FilterCategory,        icon: Dumbbell },
+    { label: 'Upper Body',  value: 'upper_body' as FilterCategory, icon: Dumbbell },
+    { label: 'Core',        value: 'core' as FilterCategory,       icon: Target },
+    { label: 'Lower Body',  value: 'lower_body' as FilterCategory, icon: Activity },
+    { label: 'Full Body',   value: 'full_body' as FilterCategory,  icon: Flame },
   ];
 
   readonly levels: { label: string; value: FilterLevel; severity: 'success'|'warn'|'danger' }[] = [
@@ -78,6 +80,20 @@ export class EjerciciosPageComponent {
       full_body:  'Full Body'
     };
     return map[cat];
+  }
+
+  readonly Clock = Clock;
+  readonly Heart = Heart;
+  readonly Cpu = Cpu;
+
+  getCategoryIcon(cat: ExerciseCategory) {
+    const map = {
+      upper_body: Dumbbell,
+      core: Target,
+      lower_body: Activity,
+      full_body: Flame
+    };
+    return map[cat] || Dumbbell;
   }
 
   onSearchInput(event: Event) {

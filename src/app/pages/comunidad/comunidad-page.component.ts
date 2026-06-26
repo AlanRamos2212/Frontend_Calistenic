@@ -14,9 +14,9 @@ import { TagModule } from 'primeng/tag';
 })
 export class ComunidadPageComponent {
   readonly features = [
-    { icon: '🏆', title: 'Tablas de Clasificación', desc: 'Compite con otros atletas por el mayor volumen de entrenamiento.' },
-    { icon: '💬', title: 'Feed Social',             desc: 'Comparte tus logros, sesiones y rutinas con la comunidad.' },
-    { icon: '👥', title: 'Grupos de Entrenamiento', desc: 'Únete o crea grupos para entrenar juntos y motivarse.' },
-    { icon: '🎯', title: 'Retos Semanales',         desc: 'Participa en retos de la comunidad y gana insignias exclusivas.' },
+    { icon: 'pi-trophy',   title: 'Tablas de Clasificación', desc: 'Compite con otros atletas por el mayor volumen de entrenamiento.' },
+    { icon: 'pi-comments', title: 'Feed Social',             desc: 'Comparte tus logros, sesiones y rutinas con la comunidad.' },
+    { icon: 'pi-users',    title: 'Grupos de Entrenamiento', desc: 'Únete o crea grupos para entrenar juntos y motivarse.' },
+    { icon: 'pi-target',   title: 'Retos Semanales',         desc: 'Participa en retos de la comunidad y gana insignias exclusivas.' },
   ];
 }

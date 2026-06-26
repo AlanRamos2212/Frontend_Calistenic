@@ -1,52 +1,70 @@
-<div class="ejercicios-layout">
+<div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col gap-6">
 
   <!-- Page Header -->
-  <div class="page-header animate-fade-in">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800 animate-fade-in">
     <div>
-      <h1 class="page-title">Librería de Ejercicios</h1>
-      <p class="page-sub">{{ filteredExercises().length }} rutinas · Selecciona y entrena con tu wearable</p>
+      <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 m-0">Librería de Ejercicios</h1>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">{{ filteredExercises().length }} rutinas · Selecciona y entrena con tu wearable</p>
     </div>
 
     <!-- Search -->
-    <p-iconfield>
+    <p-iconfield styleClass="w-full sm:w-[280px]">
       <p-inputicon styleClass="pi pi-search" />
       <input
         id="ejercicios-search"
         pInputText
         type="text"
         placeholder="Buscar ejercicios, músculos…"
-        (input)="onSearchInput($event)"
-        class="search-input"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        class="w-full"
       />
     </p-iconfield>
   </div>
 
   <!-- Filters -->
-  <div class="filters-row animate-slide-down">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center justify-between animate-slide-down">
     <!-- Category chips -->
-    <div class="filter-group">
+    <div class="flex flex-wrap gap-2">
       @for (cat of categories; track cat.value) {
         <button
           [id]="'cat-' + cat.value"
-          class="filter-chip"
-          [class.filter-chip--active]="activeCategory() === cat.value"
-          (click)="setCategory(cat.value)"
+          class="px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-indigo-200 dark:hover:border-indigo-900/30 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all cursor-pointer flex items-center gap-1.5"
+          [class.!bg-indigo-50]="activeCategory() === cat.value"
+          [class.dark:!bg-indigo-950/30]="activeCategory() === cat.value"
+          [class.!text-indigo-600]="activeCategory() === cat.value"
+          [class.dark:!text-indigo-400]="activeCategory() === cat.value"
+          [class.!border-indigo-200]="activeCategory() === cat.value"
+          [class.dark:!border-indigo-900/50]="activeCategory() === cat.value"
+          (click)="activeCategory.set(cat.value)"
         >
-          {{ cat.icon }} {{ cat.label }}
+          <lucide-icon [img]="cat.icon" class="w-3.5 h-3.5"></lucide-icon>
+          <span>{{ cat.label }}</span>
         </button>
       }
     </div>
 
     <!-- Level tags -->
-    <div class="filter-group">
+    <div class="flex flex-wrap gap-2">
       @for (lvl of levels; track lvl.value) {
         <button
           [id]="'lvl-' + lvl.value"
-          class="filter-chip filter-chip--level"
-          [class.filter-chip--active]="activeLevel() === lvl.value"
-          (click)="toggleLevel(lvl.value)"
+          class="px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-indigo-200 dark:hover:border-indigo-900/30 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all cursor-pointer flex items-center gap-1.5"
+          [class.!bg-indigo-50]="activeLevel() === lvl.value"
+          [class.dark:!bg-indigo-950/30]="activeLevel() === lvl.value"
+          [class.!text-indigo-600]="activeLevel() === lvl.value"
+          [class.dark:!text-indigo-400]="activeLevel() === lvl.value"
+          [class.!border-indigo-200]="activeLevel() === lvl.value"
+          [class.dark:!border-indigo-900/50]="activeLevel() === lvl.value"
+          (click)="activeLevel.set(lvl.value)"
         >
-          {{ lvl.label }}
+          <span class="w-1.5 h-1.5 rounded-full"
+                [ngClass]="{
+                  'bg-emerald-500': lvl.value === 'principiante',
+                  'bg-amber-500': lvl.value === 'intermedio',
+                  'bg-red-500': lvl.value === 'avanzado'
+                }"></span>
+          <span>{{ lvl.label }}</span>
         </button>
       }
     </div>
@@ -54,53 +72,61 @@
 
   <!-- Exercise Grid -->
   @if (filteredExercises().length > 0) {
-    <div class="exercise-grid animate-fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start animate-fade-in">
       @for (exercise of filteredExercises(); track exercise.id) {
-        <div class="exercise-card glass-card glass-card-lift">
+        <div class="glass-card p-6 flex flex-col gap-4 relative overflow-hidden transition-all duration-300 hover:border-indigo-200 dark:hover:border-indigo-900/30 hover:-translate-y-1 hover:shadow-lg">
           <!-- Card Header -->
-          <div class="exercise-card-header">
-            <div class="exercise-icon">{{ exercise.icon }}</div>
-            <div class="exercise-badges">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center justify-center w-12 h-12 rounded-xl"
+                 [ngClass]="{
+                   'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400': exercise.category === 'upper_body',
+                   'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400': exercise.category === 'core',
+                   'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400': exercise.category === 'lower_body',
+                   'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-600 dark:text-cyan-400': exercise.category === 'full_body'
+                 }">
+              <lucide-icon [img]="getCategoryIcon(exercise.category)" class="w-6 h-6"></lucide-icon>
+            </div>
+            <div class="flex flex-col gap-1.5 items-end">
               <p-tag
                 [value]="exercise.level"
                 [severity]="getLevelSeverity(exercise.level)"
                 [rounded]="true"
-                styleClass="text-xs"
+                styleClass="text-[10px] font-bold uppercase tracking-wider px-2"
               />
               <p-tag
                 [value]="getCategoryLabel(exercise.category)"
                 severity="secondary"
                 [rounded]="true"
-                styleClass="text-xs"
+                styleClass="text-[10px] font-bold uppercase tracking-wider px-2"
               />
             </div>
           </div>
 
           <!-- Card Body -->
-          <div class="exercise-card-body">
-            <h3 class="exercise-name">{{ exercise.name }}</h3>
-            <p class="exercise-desc">{{ exercise.description }}</p>
+          <div class="flex flex-col gap-2.5 flex-1">
+            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">{{ exercise.name }}</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed m-0">{{ exercise.description }}</p>
 
             <!-- Muscles -->
-            <div class="muscles-row">
+            <div class="flex flex-wrap gap-1.5 mt-1.5">
               @for (m of exercise.muscles; track m) {
-                <span class="muscle-chip">{{ m }}</span>
+                <span class="text-[9px] px-2 py-0.5 rounded-full bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-950/20 text-indigo-600 dark:text-indigo-400 font-semibold uppercase tracking-wider">{{ m }}</span>
               }
             </div>
           </div>
 
           <!-- Stats Row -->
-          <div class="exercise-stats">
-            <div class="stat">
-              <i class="pi pi-clock stat-icon"></i>
+          <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-100 dark:border-slate-800/80">
+            <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center">
+              <lucide-icon [img]="Clock" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
               <span>{{ exercise.durationMin }} min</span>
             </div>
-            <div class="stat">
-              <i class="pi pi-bolt stat-icon"></i>
+            <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center border-x border-slate-200/60 dark:border-slate-800/60 px-1">
+              <lucide-icon [img]="getCategoryIcon('lower_body')" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
               <span>~{{ exercise.estimatedCalories }} kcal</span>
             </div>
-            <div class="stat">
-              <i class="pi pi-heart stat-icon"></i>
+            <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center">
+              <lucide-icon [img]="Heart" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
               <span>{{ exercise.targetHrMin }}–{{ exercise.targetHrMax }} bpm</span>
             </div>
           </div>
@@ -111,7 +137,7 @@
             label="Iniciar con wearable"
             icon="pi pi-play"
             severity="contrast"
-            styleClass="w-full"
+            styleClass="w-full py-2.5 font-semibold transition-transform active:scale-[0.98]"
             [routerLink]="['/dashboard']"
             size="small"
           />
@@ -119,32 +145,35 @@
       }
 
       <!-- AI Card CTA -->
-      <div class="exercise-card ai-card glass-card">
-        <div class="ai-card-content">
-          <div class="ai-icon">🤖</div>
-          <h3 class="ai-title">Crear rutina personalizada con IA</h3>
-          <p class="ai-desc">Describe tu objetivo y nivel, y la IA generará una rutina única para ti.</p>
-          <p-button
-            id="ai-routine-btn"
-            label="Próximamente"
-            icon="pi pi-sparkles"
-            severity="secondary"
-            [outlined]="true"
-            [disabled]="true"
-          />
+      <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-4 min-h-[280px] border-dashed border-indigo-300 dark:border-indigo-900/50 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5">
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 animate-pulse">
+            <lucide-icon [img]="Cpu" class="w-6 h-6"></lucide-icon>
+          </div>
+          <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">Crear rutina personalizada con IA</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[220px] leading-relaxed m-0">Describe tu objetivo y nivel, y la IA generará una rutina única para ti.</p>
         </div>
+        <p-button
+          id="ai-routine-btn"
+          label="Próximamente"
+          icon="pi pi-sparkles"
+          severity="secondary"
+          [outlined]="true"
+          [disabled]="true"
+          styleClass="font-semibold"
+        />
       </div>
     </div>
   }
 
   <!-- Empty State -->
   @if (filteredExercises().length === 0) {
-    <div class="empty-exercises animate-fade-in">
-      <span class="empty-icon">🔍</span>
-      <h3>Sin resultados</h3>
-      <p>Prueba con otros filtros o términos de búsqueda.</p>
+    <div class="flex flex-col items-center justify-center text-center gap-4 py-16 px-4">
+      <i class="pi pi-search text-5xl text-slate-300 dark:text-slate-700"></i>
+      <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Sin resultados</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 m-0">Prueba con otros filtros o términos de búsqueda.</p>
       <p-button label="Limpiar filtros" icon="pi pi-times" severity="secondary" [outlined]="true"
-        (onClick)="searchQuery.set(''); activeCategory.set('all'); activeLevel.set('all')" />
+        (onClick)="searchQuery.set(''); activeCategory.set('all'); activeLevel.set('all')" styleClass="font-semibold" />
     </div>
   }
 

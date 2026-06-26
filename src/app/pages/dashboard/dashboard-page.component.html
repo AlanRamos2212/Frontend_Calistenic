@@ -1,30 +1,41 @@
-<div class="dashboard-layout">
+<div class="max-w-[1400px] mx-auto p-6 flex flex-col gap-5 min-h-[calc(100vh-64px)]">
 
   <!-- TAB SWITCHER -->
-  <div class="tab-bar">
+  <div class="flex items-center gap-2 bg-white/80 dark:bg-slate-900/75 backdrop-blur-md border border-slate-100 dark:border-slate-800 rounded-2xl p-1.5 shadow-sm">
     <button
       id="tab-dashboard-btn"
-      class="tab-btn"
-      [class.tab-btn--active]="activeTab() === 'dashboard'"
+      class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
+      [class.!bg-indigo-50]="activeTab() === 'dashboard'"
+      [class.dark:!bg-indigo-950/30]="activeTab() === 'dashboard'"
+      [class.!text-indigo-600]="activeTab() === 'dashboard'"
+      [class.dark:!text-indigo-400]="activeTab() === 'dashboard'"
+      [class.font-bold]="activeTab() === 'dashboard'"
       (click)="activeTab.set('dashboard')"
     >
-      <i class="pi pi-chart-line"></i> Monitor Live
+      <i class="pi pi-chart-line"></i>
+      <span>Monitor Live</span>
     </button>
     <button
       id="tab-history-btn"
-      class="tab-btn"
-      [class.tab-btn--active]="activeTab() === 'history'"
+      class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
+      [class.!bg-indigo-50]="activeTab() === 'history'"
+      [class.dark:!bg-indigo-950/30]="activeTab() === 'history'"
+      [class.!text-indigo-600]="activeTab() === 'history'"
+      [class.dark:!text-indigo-400]="activeTab() === 'history'"
+      [class.font-bold]="activeTab() === 'history'"
       (click)="activeTab.set('history'); loadWorkoutsHistory()"
     >
-      <i class="pi pi-list"></i> Historial
+      <i class="pi pi-list"></i>
+      <span>Historial</span>
       @if (workouts().length > 0) {
-        <span class="tab-badge">{{ workouts().length }}</span>
+        <span class="text-[9px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1">{{ workouts().length }}</span>
       }
     </button>
-    <div class="tab-actions">
+
+    <div class="ml-auto flex items-center gap-1.5">
       <button
         id="settings-open-btn"
-        class="icon-btn"
+        class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all"
         (click)="isSettingsOpen.set(true)"
         title="Configuración"
       >
@@ -32,7 +43,7 @@
       </button>
       <button
         id="simulate-alert-btn"
-        class="icon-btn icon-btn--warning"
+        class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-950/20 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-900/30 transition-all"
         (click)="simulateHighHRAlert()"
         title="Simular alerta de FC alta"
       >
@@ -43,15 +54,16 @@
 
   <!-- DASHBOARD TAB -->
   @if (activeTab() === 'dashboard') {
-    <div class="dashboard-grid animate-fade-in">
+    <div class="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-5 items-start animate-fade-in">
 
       <!-- LEFT: Device + Form -->
-      <div class="dashboard-left">
+      <div class="flex flex-col gap-5 w-full">
         <app-ble-panel></app-ble-panel>
         <app-workout-form
           [isActive]="isWorkoutActive()"
           [currentWorkout]="currentWorkout()"
           [deviceConnected]="ble.deviceConnected()"
+          [isSimulated]="ble.isSimulated()"
           [formattedTime]="formattedTime()"
           (onStart)="startWorkout($event)"
           (onEnd)="endWorkout()">
@@ -59,7 +71,7 @@
       </div>
 
       <!-- RIGHT: Monitor -->
-      <div class="dashboard-right">
+      <div class="flex flex-col w-full">
         <app-dashboard-monitor
           [isWorkoutActive]="isWorkoutActive()"
           [avgBpm]="currentAvgBpm()"
@@ -74,13 +86,13 @@
 
   <!-- HISTORY TAB -->
   @if (activeTab() === 'history') {
-    <div class="history-section animate-fade-in">
-      <div class="history-header">
+    <div class="flex flex-col gap-5 animate-fade-in">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h2 class="text-2xl font-bold">Historial de Sesiones</h2>
-          <p class="text-sm opacity-60 mt-1">Revisa tus entrenamientos guardados</p>
+          <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100 m-0">Historial de Sesiones</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Revisa tus entrenamientos guardados</p>
         </div>
-        <button class="icon-btn" (click)="loadWorkoutsHistory()" title="Actualizar">
+        <button class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all" (click)="loadWorkoutsHistory()" title="Actualizar">
           <i class="pi pi-refresh"></i>
         </button>
       </div>
@@ -96,7 +108,7 @@
       }
 
       @if (workouts().length > 0) {
-        <div class="workouts-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           @for (workout of workouts(); track workout.id) {
             <app-workout-card
               [workout]="workout"
@@ -108,9 +120,6 @@
       }
     </div>
   }
-
-  <!-- Help -->
-  <app-help-panel></app-help-panel>
 
 </div>
 

@@ -1,52 +1,52 @@
-<div class="progreso-layout">
+<div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col gap-6">
 
   <!-- Header -->
-  <div class="page-header animate-fade-in">
+  <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 animate-fade-in">
     <div>
-      <h1 class="page-title">Mi Progreso</h1>
-      <p class="page-sub">Historial de sesiones y estadísticas de rendimiento</p>
+      <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 m-0">Mi Progreso</h1>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Historial de sesiones y estadísticas de rendimiento</p>
     </div>
     <p-button icon="pi pi-refresh" severity="secondary" [outlined]="true" (onClick)="reload()" pTooltip="Actualizar" tooltipPosition="left" />
   </div>
 
   <!-- Stats Cards -->
   @if (!isLoading()) {
-    <div class="stats-grid animate-fade-in">
-      <div class="stat-card glass-card">
-        <div class="stat-icon-wrap stat-purple"><i class="pi pi-list"></i></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ totalSessions() }}</span>
-          <span class="stat-label">Sesiones totales</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
+      <div class="glass-card flex items-center gap-4 p-5 shadow-sm">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400"><i class="pi pi-list"></i></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-none tracking-tight">{{ totalSessions() }}</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Sesiones totales</span>
         </div>
       </div>
-      <div class="stat-card glass-card">
-        <div class="stat-icon-wrap stat-orange"><i class="pi pi-bolt"></i></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ totalCalories() | number:'1.0-0' }}</span>
-          <span class="stat-label">Calorías quemadas</span>
+      <div class="glass-card flex items-center gap-4 p-5 shadow-sm">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400"><i class="pi pi-bolt"></i></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-none tracking-tight">{{ totalCalories() | number:'1.0-0' }}</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Calorías quemadas</span>
         </div>
       </div>
-      <div class="stat-card glass-card">
-        <div class="stat-icon-wrap stat-blue"><i class="pi pi-clock"></i></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ totalMinutes() | number:'1.0-0' }}</span>
-          <span class="stat-label">Minutos entrenados</span>
+      <div class="glass-card flex items-center gap-4 p-5 shadow-sm">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400"><i class="pi pi-clock"></i></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-none tracking-tight">{{ totalMinutes() | number:'1.0-0' }}</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Minutos entrenados</span>
         </div>
       </div>
-      <div class="stat-card glass-card">
-        <div class="stat-icon-wrap stat-red"><i class="pi pi-heart-fill"></i></div>
-        <div class="stat-info">
-          <span class="stat-value">{{ avgBpmAll() }}</span>
-          <span class="stat-label">FC promedio global</span>
+      <div class="glass-card flex items-center gap-4 p-5 shadow-sm">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400"><i class="pi pi-heart-fill"></i></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 leading-none tracking-tight">{{ avgBpmAll() }}</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">FC promedio global</span>
         </div>
       </div>
     </div>
 
     <!-- Chart -->
     @if (workouts().length > 0) {
-      <div class="chart-card glass-card animate-fade-in">
-        <h2 class="section-title">Frecuencia Cardíaca por Sesión</h2>
-        <div class="chart-wrap">
+      <div class="glass-card p-6 flex flex-col gap-4 animate-fade-in">
+        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">Frecuencia Cardíaca por Sesión</h2>
+        <div class="mt-2">
           <p-chart
             id="progreso-bpm-chart"
             type="line"
@@ -58,8 +58,8 @@
       </div>
 
       <!-- Table -->
-      <div class="table-card glass-card animate-fade-in">
-        <h2 class="section-title">Historial de Sesiones</h2>
+      <div class="glass-card p-6 flex flex-col gap-4 overflow-hidden animate-fade-in">
+        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">Historial de Sesiones</h2>
         <p-table
           id="sessions-table"
           [value]="workouts()"
@@ -81,26 +81,27 @@
           </ng-template>
           <ng-template pTemplate="body" let-workout>
             <tr>
-              <td><span class="session-name">{{ workout.name }}</span></td>
-              <td>{{ workout.startTime | date:'dd/MM/yy HH:mm' }}</td>
-              <td>{{ formatDuration(workout.durationSeconds) }}</td>
+              <td><span class="font-semibold text-slate-700 dark:text-slate-300 text-sm">{{ workout.name }}</span></td>
+              <td class="text-xs text-slate-500 dark:text-slate-400">{{ workout.startTime | date:'dd/MM/yy HH:mm' }}</td>
+              <td class="text-xs text-slate-500 dark:text-slate-400">{{ formatDuration(workout.durationSeconds) }}</td>
               <td>
-                <span class="bpm-cell">{{ workout.avgBpm ?? '--' }} <span class="bpm-unit">bpm</span></span>
+                <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">{{ workout.avgBpm ?? '--' }} <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">bpm</span></span>
               </td>
               <td>
-                <span class="bpm-cell bpm-max">{{ workout.maxBpm ?? '--' }} <span class="bpm-unit">bpm</span></span>
+                <span class="font-bold text-red-500 dark:text-red-400 text-sm">{{ workout.maxBpm ?? '--' }} <span class="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">bpm</span></span>
               </td>
               <td>
                 <p-tag
                   [value]="workout.status === 'COMPLETED' ? 'Completado' : 'Activa'"
                   [severity]="workout.status === 'COMPLETED' ? 'success' : 'warn'"
                   [rounded]="true"
+                  styleClass="text-[10px] font-bold px-2 py-0.5 uppercase"
                 />
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-            <tr><td colspan="6" class="text-center py-8 opacity-50">No hay sesiones registradas aún.</td></tr>
+            <tr><td colspan="6" class="text-center py-8 opacity-50 text-xs">No hay sesiones registradas aún.</td></tr>
           </ng-template>
         </p-table>
       </div>
@@ -108,17 +109,17 @@
 
     <!-- Empty -->
     @if (workouts().length === 0) {
-      <div class="empty-state-wrap animate-fade-in">
-        <span class="empty-icon">📊</span>
-        <h3>Sin sesiones completadas</h3>
-        <p>Completa tu primera sesión de entrenamiento para ver tus estadísticas aquí.</p>
-        <p-button label="Ir al Dashboard" icon="pi pi-chart-line" routerLink="/dashboard" />
+      <div class="flex flex-col items-center justify-center text-center gap-4 py-16 px-4 animate-fade-in">
+        <i class="pi pi-chart-bar text-6xl text-slate-300 dark:text-slate-700"></i>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Sin sesiones completadas</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 m-0">Completa tu primera sesión de entrenamiento para ver tus estadísticas aquí.</p>
+        <p-button label="Ir al Dashboard" icon="pi pi-chart-line" routerLink="/dashboard" styleClass="font-semibold" />
       </div>
     }
 
   } @else {
     <!-- Skeletons -->
-    <div class="stats-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       @for (i of [1,2,3,4]; track i) {
         <p-skeleton height="100px" borderRadius="1rem" />
       }

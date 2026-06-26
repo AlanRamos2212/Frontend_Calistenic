@@ -12,7 +12,6 @@ import { WorkoutCardComponent } from '../../components/workout-card/workout-card
 import { WorkoutDetailsModalComponent } from '../../components/workout-details-modal/workout-details-modal.component';
 import { WarningBannerComponent } from '../../components/warning-banner/warning-banner.component';
 import { SettingsModalComponent } from '../../components/settings-modal/settings-modal.component';
-import { HelpPanelComponent } from '../../components/help-panel/help-panel.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 
 @Component({
@@ -28,7 +27,6 @@ import { EmptyStateComponent } from '../../components/empty-state/empty-state.co
     WorkoutDetailsModalComponent,
     WarningBannerComponent,
     SettingsModalComponent,
-    HelpPanelComponent,
     EmptyStateComponent
   ],
   templateUrl: './dashboard-page.component.html',

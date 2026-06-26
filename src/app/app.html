@@ -1,10 +1,15 @@
 <!-- Global toast for all pages -->
 <p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}" />
 
-<!-- Sticky Header -->
-<app-header />
+<div class="flex flex-col min-h-screen w-full bg-slate-50 dark:bg-[#0a0a0b] text-slate-900 dark:text-slate-50">
+  <!-- Sticky Header -->
+  <app-header />
 
-<!-- Page Content via Router -->
-<main class="app-main">
-  <router-outlet />
-</main>
+  <!-- Page Content via Router -->
+  <main class="flex-1 w-full flex flex-col">
+    <router-outlet />
+  </main>
+
+  <!-- Global Footer -->
+  <app-footer />
+</div>

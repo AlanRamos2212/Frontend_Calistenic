@@ -19,16 +19,38 @@ export class WorkoutFormComponent {
   @Input() isActive: boolean = false;
   @Input() currentWorkout: Workout | null = null;
   @Input() deviceConnected: boolean = false;
-  @Input() formattedTime = '';
+  @Input() isSimulated: boolean = false;
+  @Input() formattedTime = '00:00';
+  
   @Output() onStart = new EventEmitter<{ name: string; description: string }>();
   @Output() onEnd = new EventEmitter<void>();
 
+  // Placeholders editables por el usuario
   workoutName = 'Entrenamiento de Calistenia';
   workoutDescription = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
+  nameTouched = false;
 
   startWorkout() {
-    this.onStart.emit({ name: this.workoutName, description: this.workoutDescription });
+    if (!this.workoutName.trim()) {
+      this.nameTouched = true;
+      return;
+    }
+    
+    this.onStart.emit({ 
+      name: this.workoutName.trim(), 
+      description: this.workoutDescription.trim() 
+    });
   }
 
-  endWorkout() { this.onEnd.emit(); }
+  endWorkout() { 
+    this.onEnd.emit();
+    this.resetForm();
+  }
+
+  private resetForm() {
+    // Restablece valores por defecto tras finalizar la sesión
+    this.workoutName = 'Entrenamiento de Calistenia';
+    this.workoutDescription = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
+    this.nameTouched = false;
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { ThemeService } from './services/theme.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { ThemeService } from './services/theme.service';
   imports: [
     RouterOutlet,
     ToastModule,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

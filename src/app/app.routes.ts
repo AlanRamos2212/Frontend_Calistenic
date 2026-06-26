@@ -22,5 +22,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/comunidad/comunidad-page.component').then(m => m.ComunidadPageComponent)
   },
+  {
+    path: 'contacto',
+    loadComponent: () =>
+      import('./pages/contacto/contacto-page.component').then(m => m.ContactoPageComponent)
+  },
+  {
+    path: 'politicas',
+    loadComponent: () =>
+      import('./pages/politicas/politicas-page.component').then(m => m.PoliticasPageComponent)
+  },
+  {
+    path: 'privacidad',
+    loadComponent: () =>
+      import('./pages/privacidad/privacidad-page.component').then(m => m.PrivacidadPageComponent)
+  },
   { path: '**', redirectTo: 'dashboard' }
 ];
