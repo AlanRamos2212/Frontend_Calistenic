@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
@@ -13,6 +14,9 @@ import { WorkoutDetailsModalComponent } from '../../components/workout-details-m
 import { WarningBannerComponent } from '../../components/warning-banner/warning-banner.component';
 import { SettingsModalComponent } from '../../components/settings-modal/settings-modal.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
+
+const DEFAULT_WORKOUT_NAME = 'Entrenamiento de Calistenia';
+const DEFAULT_WORKOUT_DESCRIPTION = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -36,6 +40,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   readonly ble = inject(BleService);
   readonly api = inject(ApiService);
   readonly messageService = inject(MessageService);
+  private readonly route = inject(ActivatedRoute);
 
   // UI State
   readonly activeTab = signal<'dashboard' | 'history'>('dashboard');
@@ -46,6 +51,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   readonly isSettingsOpen = signal<boolean>(false);
   readonly warningBannerVisible = signal<boolean>(false);
   readonly warningMessage = signal<string>('');
+  readonly initialWorkoutName = signal<string>(DEFAULT_WORKOUT_NAME);
+  readonly initialWorkoutDescription = signal<string>(DEFAULT_WORKOUT_DESCRIPTION);
 
   // Analytics
   readonly elapsedSeconds = signal<number>(0);
@@ -109,6 +116,13 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      const name = params.get('workoutName');
+      const description = params.get('workoutDescription');
+      this.initialWorkoutName.set(name?.trim() || DEFAULT_WORKOUT_NAME);
+      this.initialWorkoutDescription.set(description?.trim() || DEFAULT_WORKOUT_DESCRIPTION);
+    });
+
     this.loadWorkoutsHistory();
     this.requestNotificationPermissions();
   }

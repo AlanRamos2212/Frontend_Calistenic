@@ -1,17 +1,20 @@
-<section class="glass-card p-6 shadow-md transition-all duration-300">
+<section class="ct-glass-panel flex flex-col p-6 shadow-2xl transition-all duration-300 w-full h-full relative overflow-hidden">
+  
+  <!-- Subtle gradient blob in background -->
+  <div class="absolute top-[-50px] right-[-50px] w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
   @if (!isActive) {
-    <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5 relative z-10">
       <!-- Header -->
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800/60">
         <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">Nueva Sesión</h3>
         <div class="flex gap-2">
           @if (!deviceConnected) {
-            <p-tag value="Sin Wearable" severity="warn" icon="pi pi-exclamation-circle" [rounded]="true" />
+            <p-tag value="Sin Wearable" severity="warn" icon="pi pi-exclamation-circle" [rounded]="true" styleClass="!bg-amber-500/10 !text-amber-500 !border !border-amber-500/20" />
           } @else if (isSimulated) {
-            <p-tag value="Simulado" severity="info" icon="pi pi-desktop" [rounded]="true" />
+            <p-tag value="Simulado" severity="info" icon="pi pi-desktop" [rounded]="true" styleClass="!bg-cyan-500/10 !text-cyan-400 !border !border-cyan-500/20" />
           } @else {
-            <p-tag value="Listo" severity="success" icon="pi pi-check-circle" [rounded]="true" />
+            <p-tag value="Listo" severity="success" icon="pi pi-check-circle" [rounded]="true" styleClass="!bg-emerald-500/10 !text-emerald-400 !border !border-emerald-500/20" />
           }
         </div>
       </div>
@@ -25,15 +28,15 @@
               pInputText
               type="text"
               [(ngModel)]="workoutName"
-              class="w-full"
+              class="w-full !bg-slate-100/50 dark:!bg-slate-900/40 !border-slate-200 dark:!border-slate-700/50 focus:!border-indigo-500 transition-colors"
               [class.ng-invalid]="nameTouched && !workoutName.trim()"
               [class.ng-dirty]="nameTouched"
               (blur)="nameTouched = true"
             />
-            <label for="workout-name">Nombre de la sesión</label>
+            <label for="workout-name" class="dark:text-slate-400">Nombre de la sesión</label>
           </p-floatlabel>
           @if (nameTouched && !workoutName.trim()) {
-            <small class="text-red-500 text-xs mt-1 block flex items-center gap-1">
+            <small class="text-red-500 text-xs mt-1 flex items-center gap-1">
               <i class="pi pi-times-circle text-[10px]"></i> El nombre es obligatorio.
             </small>
           }
@@ -45,59 +48,63 @@
             pTextarea
             [(ngModel)]="workoutDescription"
             rows="3"
-            class="w-full resize-none"
+            class="w-full resize-none !bg-slate-100/50 dark:!bg-slate-900/40 !border-slate-200 dark:!border-slate-700/50 focus:!border-indigo-500 transition-colors"
           ></textarea>
-          <label for="workout-desc">Objetivos / Notas</label>
+          <label for="workout-desc" class="dark:text-slate-400">Objetivos / Notas</label>
         </p-floatlabel>
       </div>
 
       <!-- Start Button -->
-      <p-button
+      <button
         id="start-workout-btn"
-        label="Iniciar Grabación"
-        icon="pi pi-circle-fill"
-        severity="contrast"
-        styleClass="w-full py-2.5 font-semibold transition-transform active:scale-[0.98]"
+        class="w-full mt-2 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-200"
+        [class]="(!deviceConnected || !workoutName.trim()) ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-70' : 'bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer'"
         [disabled]="!deviceConnected || !workoutName.trim()"
-        (onClick)="startWorkout()"
-      />
+        (click)="startWorkout()"
+      >
+        <i class="pi pi-circle-fill" [class.animate-pulse]="deviceConnected && workoutName.trim()"></i>
+        <span>Iniciar Grabación</span>
+      </button>
 
       @if (!deviceConnected) {
-        <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 justify-center bg-amber-50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-100 dark:border-amber-900/30 m-0">
-          <i class="pi pi-info-circle text-amber-500"></i>
-          <span>Conecta un wearable BLE o inicia la simulación para grabar.</span>
+        <p class="text-xs flex items-center gap-2 justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400 p-3 rounded-lg border border-amber-500/20 m-0 backdrop-blur-sm">
+          <i class="pi pi-info-circle"></i>
+          <span>Conecta un wearable BLE o simulador para grabar.</span>
         </p>
       }
     </div>
   }
 
   @if (isActive) {
-    <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5 relative z-10 h-full">
       <!-- Active Header -->
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-        <div class="flex items-center gap-2 bg-red-50 dark:bg-red-950/30 px-3 py-1.5 rounded-full border border-red-100 dark:border-red-900/20">
-          <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
-          <span class="text-xs font-bold text-red-600 dark:text-red-400 tracking-wider">REC LIVE</span>
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800/60">
+        <div class="flex items-center gap-2 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+          <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+          <span class="text-[10px] font-black text-red-500 tracking-widest">REC LIVE</span>
         </div>
-        <div class="text-xl font-mono font-bold text-indigo-600 dark:text-indigo-400 tracking-wider">{{ formattedTime || '00:00' }}</div>
+        <div class="text-2xl font-mono font-black bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent tracking-wider drop-shadow-sm">{{ formattedTime || '00:00' }}</div>
       </div>
 
       <!-- Active Info Card -->
-      <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800/80">
-        <h4 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Sesión Activa</h4>
-        <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-1.5 truncate">{{ currentWorkout?.name || workoutName }}</h3>
-        <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed whitespace-pre-line m-0">{{ currentWorkout?.description || workoutDescription || 'Sin descripción u objetivos registrados.' }}</p>
+      <div class="flex-1 bg-slate-900/40 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 shadow-inner flex flex-col gap-2">
+        <h4 class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
+          <i class="pi pi-bolt"></i> Sesión Activa
+        </h4>
+        <h3 class="text-lg font-bold text-slate-100 mb-1 line-clamp-2 leading-tight">{{ currentWorkout?.name || workoutName }}</h3>
+        <div class="w-8 h-[2px] bg-indigo-500/50 rounded-full my-1"></div>
+        <p class="text-sm text-slate-400 line-clamp-4 leading-relaxed whitespace-pre-line m-0 mt-1">{{ currentWorkout?.description || workoutDescription || 'Sin descripción u objetivos registrados.' }}</p>
       </div>
 
       <!-- End Button -->
-      <p-button
+      <button
         id="end-workout-btn"
-        label="Terminar y Guardar"
-        icon="pi pi-stop-circle"
-        severity="danger"
-        styleClass="w-full py-2.5 font-semibold transition-transform active:scale-[0.98]"
-        (onClick)="endWorkout()"
-      />
+        class="w-full mt-2 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 hover:border-red-500/50 transition-all duration-200 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_25px_rgba(239,68,68,0.2)] hover:-translate-y-0.5 active:translate-y-0"
+        (click)="endWorkout()"
+      >
+        <i class="pi pi-stop-circle text-lg"></i>
+        <span>Terminar y Guardar</span>
+      </button>
     </div>
   }
 

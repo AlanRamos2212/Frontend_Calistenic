@@ -1,19 +1,24 @@
 @if (isVisible) {
-  <div class="warning-banner alert-breathing" role="alert" aria-live="assertive">
-    <div class="warning-left">
-      <span class="warning-icon animate-heartbeat">❤️‍🔥</span>
-      <div>
-        <strong class="warning-title">🚨 Alerta Cardíaca</strong>
-        <p class="warning-message">{{ message }}</p>
+  <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[150] w-[90vw] max-w-lg flex items-center justify-between p-4 rounded-2xl bg-red-500/10 dark:bg-red-900/40 backdrop-blur-xl border border-red-500/30 shadow-[0_10px_40px_rgba(239,68,68,0.3)] animate-fade-in" role="alert" aria-live="assertive">
+    <div class="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/5 to-red-500/0 animate-pulse pointer-events-none rounded-2xl"></div>
+    
+    <div class="flex items-center gap-4 relative z-10">
+      <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-red-500/20 text-2xl animate-heartbeat shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+        ❤️‍🔥
+      </div>
+      <div class="flex flex-col">
+        <strong class="text-sm font-black text-red-600 dark:text-red-400 uppercase tracking-widest mb-0.5">🚨 Alerta Cardíaca</strong>
+        <p class="text-sm font-medium text-red-800 dark:text-red-200 m-0">{{ message }}</p>
       </div>
     </div>
-    <p-button
+
+    <button
       id="dismiss-warning-btn"
-      label="Entendido"
-      icon="pi pi-times"
-      severity="danger"
-      size="small"
-      (onClick)="dismiss()"
-    />
+      class="relative z-10 flex items-center justify-center w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors cursor-pointer"
+      (click)="dismiss()"
+      aria-label="Cerrar alerta"
+    >
+      <i class="pi pi-times text-sm"></i>
+    </button>
   </div>
 }

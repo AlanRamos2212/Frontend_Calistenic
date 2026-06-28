@@ -1,4 +1,10 @@
-.ble-panel { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; }
+.ble-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
 
 .ble-header { display: flex; align-items: center; justify-content: space-between; }
 .ble-header-left { display: flex; align-items: center; gap: 0.75rem; }
@@ -8,14 +14,29 @@
 
 .scanning-text { font-size: 0.78rem; opacity: 0.6; text-align: center; }
 
-.device-info { display: flex; flex-direction: column; gap: 0.5rem; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.12); border-radius: 0.75rem; padding: 0.875rem; }
+.device-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(99,102,241,0.07) 0%, rgba(6,182,212,0.05) 100%);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 0.85rem;
+  padding: 0.875rem;
+}
 .info-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .info-label { font-size: 0.78rem; opacity: 0.6; display: flex; align-items: center; gap: 0.35rem; }
 .info-value { font-size: 0.9rem; }
-.bpm-live { font-size: 1.2rem; font-weight: 800; color: #6366f1; }
+.bpm-live {
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .bpm-unit { font-size: 0.65rem; font-weight: 500; opacity: 0.6; }
 
-.ble-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+.ble-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
 
 .sim-controls { border-top: 1px solid var(--glass-border); padding-top: 0.875rem; }
 .sim-label { font-size: 0.78rem; font-weight: 600; margin-bottom: 0.6rem; opacity: 0.7; }

@@ -1,23 +1,23 @@
-<header class="ct-header">
-  <div class="ct-header-inner">
+<header class="sticky top-0 z-[100] w-full bg-slate-50/85 dark:bg-[#080810]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-slate-800/80 shadow-sm dark:shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-colors duration-300">
+  <div class="w-full max-w-[1400px] mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between gap-4 md:gap-8">
 
     <!-- Brand -->
-    <a [routerLink]="['/dashboard']" class="ct-brand" id="header-brand-link">
-      <div class="ct-brand-icon animate-heartbeat" aria-hidden="true">❤️</div>
-      <div class="ct-brand-text">
-        <span class="ct-brand-name">CalistenicTrack</span>
-        <span class="ct-brand-version">v2</span>
+    <a [routerLink]="['/']" class="flex items-center gap-2 hover:opacity-85 transition-opacity flex-shrink-0" id="header-brand-link">
+      <div class="text-xl md:text-2xl animate-heartbeat drop-shadow-sm" aria-hidden="true">❤️</div>
+      <div class="flex items-baseline gap-1.5 hidden sm:flex">
+        <span class="text-lg md:text-xl font-black tracking-tight bg-gradient-to-r from-indigo-500 via-cyan-500 to-emerald-400 bg-clip-text text-transparent drop-shadow-sm">CalistenicTrack</span>
+        <span class="text-[10px] font-bold text-cyan-500 bg-cyan-500/10 border border-cyan-500/20 px-1.5 py-0.5 rounded-full">v2</span>
       </div>
     </a>
 
     <!-- Nav Links -->
-    <nav class="ct-nav" aria-label="Navegación principal">
+    <nav class="hidden md:flex items-center gap-1 flex-1" aria-label="Navegación principal">
       @for (link of navLinks; track link.path) {
         <a
           [routerLink]="link.path"
-          routerLinkActive="ct-nav-link--active"
+          routerLinkActive="!bg-indigo-500/10 !text-indigo-600 dark:!bg-indigo-500/15 dark:!text-indigo-400 font-bold"
           [routerLinkActiveOptions]="{ exact: false }"
-          class="ct-nav-link"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-indigo-500 transition-colors"
           [id]="'nav-' + link.label.toLowerCase()"
         >
           <i [class]="link.icon" aria-hidden="true"></i>
@@ -27,40 +27,32 @@
     </nav>
 
     <!-- Right Controls -->
-    <div class="ct-header-actions">
+    <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-auto md:ml-0">
 
       <!-- BLE Status Badge -->
       @if (ble.deviceConnected()) {
-        <p-tag
-          id="header-ble-badge"
-          value="Wearable listo"
-          severity="success"
-          icon="pi pi-heart-fill"
-          [rounded]="true"
-          pTooltip="{{ ble.deviceName() }}"
-          tooltipPosition="bottom"
-        />
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] md:text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm" id="header-ble-badge">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+          <span>{{ ble.isSimulated() ? 'Simulado' : 'BLE Activo' }}</span>
+        </div>
       } @else {
-        <p-tag
-          id="header-ble-badge-offline"
-          value="Sin wearable"
-          severity="secondary"
-          icon="pi pi-wifi"
-          [rounded]="true"
-        />
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 text-slate-500 dark:text-slate-400" id="header-ble-badge-offline">
+          <i class="pi pi-wifi text-[10px]"></i>
+          <span>Sin wearable</span>
+        </div>
       }
 
       <!-- Search Button -->
       <button
         id="header-search-btn"
-        class="ct-search-btn"
+        class="flex items-center gap-1.5 px-2 py-1.5 md:px-3 border border-slate-200 dark:border-slate-700/50 rounded-lg bg-slate-50 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 text-sm hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
         (click)="openSearch()"
-        pTooltip="Buscar  (Ctrl+K)"
+        pTooltip="Buscar (Ctrl+K)"
         tooltipPosition="bottom"
         aria-label="Abrir búsqueda"
       >
         <i class="pi pi-search"></i>
-        <kbd class="ct-kbd">Ctrl K</kbd>
+        <kbd class="hidden md:inline-block font-mono text-[9px] px-1.5 py-0.5 border border-slate-200 dark:border-slate-700 rounded bg-slate-100 dark:bg-slate-800/80">Ctrl K</kbd>
       </button>
 
       <!-- Theme Toggle -->
@@ -78,34 +70,36 @@
   [closable]="true"
   [draggable]="false"
   [resizable]="false"
-  styleClass="ct-search-dialog"
+  styleClass="ct-glass-dialog"
   [style]="{ width: '560px', 'max-width': '95vw' }"
   header="Búsqueda Global"
 >
-  <p-autocomplete
-    id="global-search-input"
-    [(ngModel)]="selectedResult"
-    [suggestions]="searchSuggestions"
-    (completeMethod)="onSearchInput($event)"
-    (onSelect)="onResultSelect($event)"
-    [inputStyle]="{ width: '100%' }"
-    styleClass="w-full"
-    placeholder="Buscar ejercicios, páginas… (min. 2 caracteres)"
-    [dropdown]="false"
-    [forceSelection]="false"
-    [showClear]="true"
-    appendTo="body"
-    dataKey="title"
-  >
-    <ng-template let-result pTemplate="item">
-      <div class="ct-search-item">
-        <span class="ct-search-item-icon">{{ result.icon || '🔍' }}</span>
-        <div class="ct-search-item-content">
-          <span class="ct-search-item-title">{{ result.title }}</span>
-          <span class="ct-search-item-desc">{{ result.description }}</span>
+  <div class="p-4">
+    <p-autocomplete
+      id="global-search-input"
+      [(ngModel)]="selectedResult"
+      [suggestions]="searchSuggestions"
+      (completeMethod)="onSearchInput($event)"
+      (onSelect)="onResultSelect($event)"
+      [inputStyle]="{ width: '100%' }"
+      styleClass="w-full"
+      placeholder="Buscar ejercicios, páginas… (min. 2 caracteres)"
+      [dropdown]="false"
+      [forceSelection]="false"
+      [showClear]="true"
+      appendTo="body"
+      dataKey="title"
+    >
+      <ng-template let-result pTemplate="item">
+        <div class="flex items-center gap-3 py-1">
+          <span class="text-xl flex-shrink-0">{{ result.icon || '🔍' }}</span>
+          <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+            <span class="font-bold text-sm text-slate-800 dark:text-slate-200">{{ result.title }}</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ result.description }}</span>
+          </div>
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex-shrink-0">{{ result.category }}</span>
         </div>
-        <span class="ct-search-item-cat">{{ result.category }}</span>
-      </div>
-    </ng-template>
-  </p-autocomplete>
+      </ng-template>
+    </p-autocomplete>
+  </div>
 </p-dialog>

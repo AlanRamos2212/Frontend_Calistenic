@@ -1,12 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Workout } from '../../api.service';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
+import { TextareaModule } from 'primeng/textarea';
+
+import { Workout } from '../../api.service';
+
+const DEFAULT_WORKOUT_NAME = 'Entrenamiento de Calistenia';
+const DEFAULT_WORKOUT_DESCRIPTION = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
 
 @Component({
   selector: 'app-workout-form',
@@ -16,18 +20,37 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './workout-form.component.css'
 })
 export class WorkoutFormComponent {
-  @Input() isActive: boolean = false;
+  @Input() isActive = false;
   @Input() currentWorkout: Workout | null = null;
-  @Input() deviceConnected: boolean = false;
-  @Input() isSimulated: boolean = false;
+  @Input() deviceConnected = false;
+  @Input() isSimulated = false;
   @Input() formattedTime = '00:00';
-  
+  private _initialWorkoutName = DEFAULT_WORKOUT_NAME;
+  private _initialWorkoutDescription = DEFAULT_WORKOUT_DESCRIPTION;
+
+  @Input()
+  set initialWorkoutName(value: string) {
+    this._initialWorkoutName = value?.trim() || DEFAULT_WORKOUT_NAME;
+    this.syncDraft();
+  }
+  get initialWorkoutName() {
+    return this._initialWorkoutName;
+  }
+
+  @Input()
+  set initialWorkoutDescription(value: string) {
+    this._initialWorkoutDescription = value?.trim() || DEFAULT_WORKOUT_DESCRIPTION;
+    this.syncDraft();
+  }
+  get initialWorkoutDescription() {
+    return this._initialWorkoutDescription;
+  }
+
   @Output() onStart = new EventEmitter<{ name: string; description: string }>();
   @Output() onEnd = new EventEmitter<void>();
 
-  // Placeholders editables por el usuario
-  workoutName = 'Entrenamiento de Calistenia';
-  workoutDescription = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
+  workoutName = DEFAULT_WORKOUT_NAME;
+  workoutDescription = DEFAULT_WORKOUT_DESCRIPTION;
   nameTouched = false;
 
   startWorkout() {
@@ -35,22 +58,25 @@ export class WorkoutFormComponent {
       this.nameTouched = true;
       return;
     }
-    
-    this.onStart.emit({ 
-      name: this.workoutName.trim(), 
-      description: this.workoutDescription.trim() 
+
+    this.onStart.emit({
+      name: this.workoutName.trim(),
+      description: this.workoutDescription.trim()
     });
   }
 
-  endWorkout() { 
+  endWorkout() {
     this.onEnd.emit();
     this.resetForm();
   }
 
-  private resetForm() {
-    // Restablece valores por defecto tras finalizar la sesión
-    this.workoutName = 'Entrenamiento de Calistenia';
-    this.workoutDescription = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
+  private syncDraft() {
+    this.workoutName = this._initialWorkoutName;
+    this.workoutDescription = this._initialWorkoutDescription;
     this.nameTouched = false;
+  }
+
+  private resetForm() {
+    this.syncDraft();
   }
 }

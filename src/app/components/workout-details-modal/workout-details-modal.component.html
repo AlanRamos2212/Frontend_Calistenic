@@ -7,58 +7,82 @@
   [draggable]="false"
   [resizable]="false"
   [style]="{ width: '600px', 'max-width': '95vw' }"
+  styleClass="ct-glass-dialog"
   [header]="workout?.name || 'Detalles de sesión'"
 >
   @if (workout) {
-    <div class="modal-body">
+    <div class="modal-body p-2 flex flex-col gap-6">
 
       <!-- Date + Status -->
-      <div class="modal-meta">
-        <span class="modal-date">{{ workout.startTime | date:'dd MMMM yyyy, HH:mm' }}</span>
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800/60">
+        <div class="flex items-center gap-2 text-indigo-500 font-mono text-sm font-bold opacity-80">
+          <i class="pi pi-calendar"></i>
+          <span>{{ workout.startTime | date:'dd MMMM yyyy, HH:mm' }}</span>
+        </div>
         <p-tag
           [value]="workout.status === 'COMPLETED' ? 'Completado' : 'Activa'"
           [severity]="workout.status === 'COMPLETED' ? 'success' : 'warn'"
           [rounded]="true"
+          styleClass="uppercase text-[10px] tracking-wider font-black px-3 py-1"
         />
       </div>
 
       @if (workout.description) {
-        <p class="modal-desc">{{ workout.description }}</p>
+        <div class="bg-slate-100/50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-800/50">
+          <p class="text-sm text-slate-600 dark:text-slate-400 m-0 leading-relaxed">{{ workout.description }}</p>
+        </div>
       }
 
       <!-- Stats Row -->
-      <div class="modal-stats">
-        <div class="modal-stat">
-          <i class="pi pi-clock modal-stat-icon"></i>
-          <span class="modal-stat-label">Duración</span>
-          <span class="modal-stat-value font-mono">{{ formatDuration(workout.durationSeconds) }}</span>
+      <div class="grid grid-cols-3 gap-3">
+        <!-- Duración -->
+        <div class="flex flex-col items-center p-4 rounded-xl bg-slate-100/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/50 transition-colors hover:border-indigo-500/30">
+          <i class="pi pi-clock text-xl text-indigo-500 opacity-80 mb-2"></i>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Duración</span>
+          <span class="text-lg font-mono font-black text-slate-800 dark:text-slate-100">{{ formatDuration(workout.durationSeconds) }}</span>
         </div>
-        <div class="modal-stat stat-green">
-          <i class="pi pi-heart modal-stat-icon"></i>
-          <span class="modal-stat-label">FC Promedio</span>
-          <span class="modal-stat-value">{{ workout.avgBpm ?? '--' }} <span class="stat-unit">bpm</span></span>
+        <!-- FC Promedio -->
+        <div class="flex flex-col items-center p-4 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 transition-colors hover:border-emerald-500/40 shadow-[inset_0_0_15px_rgba(16,185,129,0.05)]">
+          <i class="pi pi-heart text-xl text-emerald-500 opacity-80 mb-2 animate-pulse"></i>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-emerald-600 dark:text-emerald-500 mb-1">Avg HR</span>
+          <div class="flex items-baseline gap-1">
+            <span class="text-xl font-black text-emerald-700 dark:text-emerald-400">{{ workout.avgBpm ?? '--' }}</span>
+            <span class="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-500/70">BPM</span>
+          </div>
         </div>
-        <div class="modal-stat stat-red">
-          <i class="pi pi-chart-line modal-stat-icon"></i>
-          <span class="modal-stat-label">FC Máxima</span>
-          <span class="modal-stat-value">{{ workout.maxBpm ?? '--' }} <span class="stat-unit">bpm</span></span>
+        <!-- FC Max -->
+        <div class="flex flex-col items-center p-4 rounded-xl bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 transition-colors hover:border-red-500/40 shadow-[inset_0_0_15px_rgba(239,68,68,0.05)]">
+          <i class="pi pi-chart-line text-xl text-red-500 opacity-80 mb-2"></i>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-red-600 dark:text-red-500 mb-1">Max HR</span>
+          <div class="flex items-baseline gap-1">
+            <span class="text-xl font-black text-red-700 dark:text-red-400">{{ workout.maxBpm ?? '--' }}</span>
+            <span class="text-[10px] font-bold text-red-600/70 dark:text-red-500/70">BPM</span>
+          </div>
         </div>
       </div>
 
       <!-- Chart -->
       @if (workout.heartRateData && workout.heartRateData.length > 0) {
-        <div class="modal-chart-section">
-          <h4 class="modal-chart-title">Curva Cardíaca</h4>
-          <p-chart
-            id="details-hr-chart"
-            type="line"
-            [data]="chartData"
-            [options]="chartOptions"
-            height="180px"
-          />
+        <div class="mt-2 pt-4 border-t border-slate-200 dark:border-slate-800/60">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-1.5 h-4 bg-gradient-to-b from-indigo-500 to-cyan-400 rounded-full"></div>
+            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 m-0">Curva Cardíaca</h4>
+          </div>
+          <div class="bg-slate-50/50 dark:bg-[#06060c]/50 p-4 rounded-xl border border-slate-200/50 dark:border-slate-800/30">
+            <p-chart
+              id="details-hr-chart"
+              type="line"
+              [data]="chartData"
+              [options]="chartOptions"
+              height="180px"
+            />
+          </div>
         </div>
       } @else {
-        <p class="no-data-hint"><i class="pi pi-info-circle"></i> Sin datos de FC grabados para esta sesión.</p>
+        <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3 text-amber-700 dark:text-amber-400">
+          <i class="pi pi-info-circle text-lg"></i>
+          <p class="text-sm m-0 font-medium">Sin datos de frecuencia cardíaca grabados para esta sesión.</p>
+        </div>
       }
 
     </div>

@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/landing/landing-page.component').then(m => m.LandingPageComponent)
+  },
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -37,5 +41,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/privacidad/privacidad-page.component').then(m => m.PrivacidadPageComponent)
   },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: '' }
 ];

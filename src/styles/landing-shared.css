@@ -1,0 +1,28 @@
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%);
+}
+
+.landing-shell {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+}
+
+.landing-title-balance {
+  text-wrap: balance;
+}
+
+.landing-copy {
+  max-width: 58rem;
+  line-height: 1.88;
+}
+
+.landing-card-pad {
+  padding: 2.25rem;
+}

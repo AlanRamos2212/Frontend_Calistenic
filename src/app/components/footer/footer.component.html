@@ -1,66 +1,58 @@
-<footer class="w-full bg-slate-50 dark:bg-[#0a0a0b] border-t border-slate-200 dark:border-slate-800/80 mt-auto pt-16 pb-8">
-  <div class="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-    <!-- Brand Section -->
-    <div class="flex flex-col gap-4 md:col-span-1">
-      <div class="flex items-center gap-2">
-        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-          <i class="pi pi-bolt text-lg"></i>
+<footer class="w-full border-t border-slate-200/80 bg-slate-50 transition-colors duration-300 dark:border-slate-800/80 dark:bg-[#060610] mt-24 md:mt-28 pt-20 md:pt-28 pb-12 md:pb-14">
+  <div class="mx-auto w-full max-w-[1280px] px-6">
+    <div class="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-10">
+      <div class="flex max-w-[360px] flex-col gap-5 text-center items-center lg:col-span-4 lg:items-center lg:text-center">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-xs text-white shadow-[0_12px_24px_rgba(79,70,229,0.2)]">
+            <i class="pi pi-bolt"></i>
+          </div>
+          <span class="text-base font-black tracking-tight text-slate-800 dark:text-slate-100">CalistenicTrack</span>
         </div>
-        <span class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">CalistenicTrack</span>
+        <p class="m-0 max-w-[28ch] text-sm leading-[1.8] text-slate-500 dark:text-slate-400">
+          Monitoriza tu rendimiento con claridad editorial. Cada latido cuenta.
+        </p>
       </div>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-        Lleva tu entrenamiento al siguiente nivel con seguimiento avanzado y rutinas impulsadas por datos.
-      </p>
-    </div>
 
-    <!-- Navigation Section 1 -->
-    <div class="flex flex-col gap-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200">Plataforma</h3>
-      <div class="flex flex-col gap-3 text-sm text-slate-500 dark:text-slate-400 font-medium">
-        <a routerLink="/dashboard" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Dashboard</a>
-        <a routerLink="/ejercicios" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Librería de Ejercicios</a>
-        <a routerLink="/progreso" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Progreso</a>
-      </div>
-    </div>
+      <div class="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-8 lg:gap-12 lg:justify-items-center">
+        <div class="flex flex-col gap-3 items-center text-center">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-700 dark:text-slate-300">Plataforma</h4>
+          <a routerLink="/dashboard" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Dashboard</a>
+          <a routerLink="/ejercicios" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Ejercicios</a>
+          <a routerLink="/progreso" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Progreso</a>
+          <a routerLink="/comunidad" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Comunidad</a>
+        </div>
 
-    <!-- Navigation Section 2 -->
-    <div class="flex flex-col gap-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200">Legal</h3>
-      <div class="flex flex-col gap-3 text-sm text-slate-500 dark:text-slate-400 font-medium">
-        <a routerLink="/politicas" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Términos y Condiciones</a>
-        <a routerLink="/privacidad" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Aviso de Privacidad</a>
-        <a routerLink="/contacto" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contacto</a>
-      </div>
-    </div>
+        <div class="flex flex-col gap-3 items-center text-center">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-700 dark:text-slate-300">Legal</h4>
+          <a routerLink="/politicas" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Términos</a>
+          <a routerLink="/privacidad" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Privacidad</a>
+          <a routerLink="/contacto" class="text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">Contacto</a>
+        </div>
 
-    <!-- Community Section -->
-    <div class="flex flex-col gap-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200">Comunidad</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-        Únete a nuestra comunidad y comparte tu progreso.
-      </p>
-      <div class="flex items-center gap-3 mt-2">
-        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-900/50 transition-all">
-          <i class="pi pi-instagram"></i>
-        </a>
-        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-900/50 transition-all">
-          <i class="pi pi-twitter"></i>
-        </a>
-        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-900/50 transition-all">
-          <i class="pi pi-github"></i>
-        </a>
+        <div class="flex flex-col gap-3 items-center text-center sm:col-span-1">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.24em] text-slate-700 dark:text-slate-300">Comunidad</h4>
+          <div class="flex gap-2.5 pt-1">
+            <a href="#" aria-label="Instagram" class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all hover:border-indigo-500/30 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400">
+              <i class="pi pi-instagram text-xs"></i>
+            </a>
+            <a href="#" aria-label="Twitter" class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all hover:border-indigo-500/30 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400">
+              <i class="pi pi-twitter text-xs"></i>
+            </a>
+            <a href="#" aria-label="GitHub" class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all hover:border-indigo-500/30 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:border-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400">
+              <i class="pi pi-github text-xs"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="max-w-[1400px] mx-auto px-6 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">
-      &copy; {{ currentYear }} CalistenicTrack. Todos los derechos reservados.
-    </p>
-    <div class="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
-      <span>Made with</span>
-      <i class="pi pi-heart-fill text-red-500"></i>
-      <span>by ti</span>
+    <div class="mt-16 flex flex-col items-center justify-between gap-3 border-t border-slate-200/80 pt-5 text-center sm:flex-row sm:text-left dark:border-slate-800/60 md:mt-20">
+      <span class="text-xs sm:text-sm tracking-wide text-slate-400 dark:text-slate-500">
+        &copy; {{ currentYear }} CalistenicTrack. Todos los derechos reservados.
+      </span>
+      <span class="flex items-center justify-center text-xs sm:text-sm tracking-wide text-slate-400 dark:text-slate-500">
+        Hecho con <i class="pi pi-heart-fill mx-1 text-[9px] text-red-500"></i> para atletas
+      </span>
     </div>
   </div>
 </footer>

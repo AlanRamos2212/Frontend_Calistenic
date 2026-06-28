@@ -1,4 +1,4 @@
-<div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col gap-6">
+<div class="page-wrapper flex flex-col gap-10 pb-24 md:pb-28 animate-fade-in">
 
   <!-- Page Header -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800 animate-fade-in">
@@ -23,7 +23,7 @@
   </div>
 
   <!-- Filters -->
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-center justify-between animate-slide-down">
+  <div class="flex flex-col gap-5 sm:flex-row sm:items-center justify-between animate-slide-down">
     <!-- Category chips -->
     <div class="flex flex-wrap gap-2">
       @for (cat of categories; track cat.value) {
@@ -72,9 +72,9 @@
 
   <!-- Exercise Grid -->
   @if (filteredExercises().length > 0) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start animate-fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start animate-fade-in">
       @for (exercise of filteredExercises(); track exercise.id) {
-        <div class="glass-card p-6 flex flex-col gap-4 relative overflow-hidden transition-all duration-300 hover:border-indigo-200 dark:hover:border-indigo-900/30 hover:-translate-y-1 hover:shadow-lg">
+        <div class="glass-card p-7 flex flex-col gap-5 relative overflow-hidden transition-all duration-300 hover:border-indigo-200 dark:hover:border-indigo-900/30 hover:-translate-y-1 hover:shadow-lg">
           <!-- Card Header -->
           <div class="flex items-start justify-between">
             <div class="flex items-center justify-center w-12 h-12 rounded-xl"
@@ -138,14 +138,14 @@
             icon="pi pi-play"
             severity="contrast"
             styleClass="w-full py-2.5 font-semibold transition-transform active:scale-[0.98]"
-            [routerLink]="['/dashboard']"
+            (onClick)="startWithExercise(exercise)"
             size="small"
           />
         </div>
       }
 
       <!-- AI Card CTA -->
-      <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-4 min-h-[280px] border-dashed border-indigo-300 dark:border-indigo-900/50 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5">
+      <div class="glass-card p-7 flex flex-col items-center justify-center text-center gap-5 min-h-[300px] border-dashed border-indigo-300 dark:border-indigo-900/50 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5">
         <div class="flex flex-col items-center gap-3">
           <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 animate-pulse">
             <lucide-icon [img]="Cpu" class="w-6 h-6"></lucide-icon>

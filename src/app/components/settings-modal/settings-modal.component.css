@@ -1,20 +1,4 @@
-.settings-body { display: flex; flex-direction: column; gap: 1.25rem; padding-top: 0.5rem; }
+/* Settings Modal — Premium Glassmorphism Overrides */
 
-.promo-card {
-  padding: 1.25rem;
-  border-radius: 0.875rem;
-  background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(99,102,241,0.08) 100%);
-  border: 1px solid rgba(245,158,11,0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.promo-title { font-size: 0.95rem; font-weight: 700; }
-.promo-desc  { font-size: 0.8rem; opacity: 0.65; line-height: 1.5; }
-
-.settings-section { display: flex; flex-direction: column; gap: 1.25rem; }
-.settings-section-title { font-size: 0.85rem; font-weight: 700; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.06em; }
-
-.setting-item { display: flex; flex-direction: column; gap: 0.35rem; }
-.setting-label-row { display: flex; justify-content: space-between; align-items: center; }
-.setting-label { font-size: 0.875rem; font-weight: 500; }
+/* All custom styling has been migrated to Tailwind utility classes in the HTML template to match the premium dark glassmorphism aesthetic.
+   The ct-glass-dialog style class is shared and defined in workout-details-modal.component.css (or a global styles file) for PrimeNG dialogs. */

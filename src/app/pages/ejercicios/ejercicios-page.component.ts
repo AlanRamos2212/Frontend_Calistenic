@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,7 +22,6 @@ type FilterLevel    = 'all' | ExerciseLevel;
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     ButtonModule,
     TagModule,
     InputTextModule,
@@ -35,6 +34,7 @@ type FilterLevel    = 'all' | ExerciseLevel;
   styleUrl: './ejercicios-page.component.css'
 })
 export class EjerciciosPageComponent {
+  private readonly router = inject(Router);
   searchQuery  = signal('');
   activeCategory = signal<FilterCategory>('all');
   activeLevel    = signal<FilterLevel>('all');
@@ -98,6 +98,15 @@ export class EjerciciosPageComponent {
 
   onSearchInput(event: Event) {
     this.searchQuery.set((event.target as HTMLInputElement).value);
+  }
+
+  startWithExercise(exercise: Exercise) {
+    this.router.navigate(['/dashboard'], {
+      queryParams: {
+        workoutName: exercise.name,
+        workoutDescription: exercise.description
+      }
+    });
   }
 
   setCategory(cat: FilterCategory) { this.activeCategory.set(cat); }

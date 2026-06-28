@@ -1,7 +1,7 @@
-<div class="max-w-[1400px] mx-auto p-6 flex flex-col gap-5 min-h-[calc(100vh-64px)]">
+<div class="page-wrapper flex flex-col gap-8 min-h-[calc(100vh-64px)]">
 
   <!-- TAB SWITCHER -->
-  <div class="flex items-center gap-2 bg-white/80 dark:bg-slate-900/75 backdrop-blur-md border border-slate-100 dark:border-slate-800 rounded-2xl p-1.5 shadow-sm">
+  <div class="flex items-center gap-2 bg-white/80 dark:bg-[rgba(15,15,30,0.82)] backdrop-blur-xl border border-slate-100 dark:border-slate-800 rounded-2xl p-1.5 shadow-sm">
     <button
       id="tab-dashboard-btn"
       class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
@@ -54,10 +54,10 @@
 
   <!-- DASHBOARD TAB -->
   @if (activeTab() === 'dashboard') {
-    <div class="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-5 items-start animate-fade-in">
+    <div class="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8 items-start animate-fade-in">
 
       <!-- LEFT: Device + Form -->
-      <div class="flex flex-col gap-5 w-full">
+      <div class="flex flex-col gap-6 w-full">
         <app-ble-panel></app-ble-panel>
         <app-workout-form
           [isActive]="isWorkoutActive()"
@@ -65,6 +65,8 @@
           [deviceConnected]="ble.deviceConnected()"
           [isSimulated]="ble.isSimulated()"
           [formattedTime]="formattedTime()"
+          [initialWorkoutName]="initialWorkoutName()"
+          [initialWorkoutDescription]="initialWorkoutDescription()"
           (onStart)="startWorkout($event)"
           (onEnd)="endWorkout()">
         </app-workout-form>
@@ -86,7 +88,7 @@
 
   <!-- HISTORY TAB -->
   @if (activeTab() === 'history') {
-    <div class="flex flex-col gap-5 animate-fade-in">
+      <div class="flex flex-col gap-8 animate-fade-in">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
           <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100 m-0">Historial de Sesiones</h2>
@@ -108,7 +110,7 @@
       }
 
       @if (workouts().length > 0) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           @for (workout of workouts(); track workout.id) {
             <app-workout-card
               [workout]="workout"
