@@ -1,42 +1,53 @@
-<!-- ───────────────────────────────────────────────────────────── -->
-<!--  LANDING PAGE — CalistenicTrack v2                           -->
-<!-- ───────────────────────────────────────────────────────────── -->
-<div class="w-full min-h-screen overflow-x-hidden bg-[#080810] text-slate-100 font-sans">
+<div class="w-full min-h-screen overflow-x-hidden bg-[#080810] text-slate-100 font-sans flex flex-col items-center">
 
-  <!-- MINI HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-[100] border-b border-white/10 bg-[#080810]/75 backdrop-blur-[32px]">
-    <div class="mx-auto flex h-16 max-w-[1200px] items-center gap-8 px-6">
+  <header
+    class="fixed top-0 left-0 right-0 z-[100] border-b border-white/10 bg-[#080810]/75 backdrop-blur-[32px] flex justify-center">
+    <div class="w-full max-w-[1200px] flex h-16 items-center gap-8 px-6">
       <a routerLink="/" class="flex shrink-0 items-center gap-2.5 no-underline">
         <div class="animate-heartbeat text-[1.4rem]" aria-hidden="true">❤️</div>
         <div class="flex items-baseline gap-1.5">
-          <span class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-[1.05rem] font-extrabold tracking-[-0.03em] text-transparent">CalistenicTrack</span>
-          <span class="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-1.5 py-0.5 text-[0.6rem] font-bold text-cyan-300">v2</span>
+          <span
+            class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-[1.05rem] font-extrabold tracking-[-0.03em] text-transparent">CalistenicTrack</span>
+          <span
+            class="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-1.5 py-0.5 text-[0.6rem] font-bold text-cyan-300">v2</span>
         </div>
       </a>
 
       <nav class="hidden flex-1 items-center gap-1 md:flex" aria-label="Navegación de landing">
-        <a href="#features" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Funciones</a>
-        <a href="#stats" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Stats</a>
-        <a href="#reviews" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Reviews</a>
+        <a href="#features"
+          class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Funciones</a>
+        <a href="#stats"
+          class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Stats</a>
+        <a href="#reviews"
+          class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Reviews</a>
       </nav>
 
-      <a routerLink="/dashboard" class="ml-auto inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-5 py-2.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all hover:-translate-y-px hover:opacity-95" id="header-open-app-btn">
+      <a routerLink="/dashboard"
+        class="ml-auto inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-5 py-2.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all hover:-translate-y-px hover:opacity-95"
+        id="header-open-app-btn">
         <i class="pi pi-chart-line"></i>
         Abrir App
       </a>
     </div>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="relative min-h-screen overflow-hidden px-6 pb-28 pt-36 flex items-center" id="hero">
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true" style="width: 700px; height: 700px; background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%); top: -200px; left: -200px;"></div>
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true" style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%); bottom: -100px; right: -100px;"></div>
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%); top: 40%; left: 40%;"></div>
+  <section class="w-full viewport-section relative overflow-hidden px-6 pt-28 pb-12 lg:py-0"
+    id="hero">
+    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
+      style="width: 700px; height: 700px; background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%); top: -200px; left: -200px;">
+    </div>
+    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
+      style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%); bottom: -100px; right: -100px;">
+    </div>
+    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
+      style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%); top: 40%; left: 40%;">
+    </div>
     <div class="hero-grid-overlay" aria-hidden="true"></div>
 
-    <div class="landing-shell grid w-full grid-cols-1 items-center gap-20 lg:grid-cols-2">
-      <div class="flex flex-col gap-8 animate-reveal-up">
-        <div class="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200">
+    <div class="max-w-[1200px] w-full grid grid-cols-1 items-center justify-items-center gap-20 lg:grid-cols-2">
+      <div class="w-full flex flex-col gap-8 items-center text-center lg:items-start lg:text-left animate-reveal-up">
+        <div
+          class="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200">
           <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 pulse-active"></span>
           <span>Nuevo · BLE v2 · Monitor Cardíaco en Tiempo Real</span>
         </div>
@@ -47,23 +58,26 @@
           Mide cada latido.
         </h1>
 
-        <p class="landing-copy text-[1.12rem] text-slate-300/70 animate-reveal-up-delay-1">
+        <p class="landing-copy text-[1.12rem] text-slate-300/70 max-w-[500px] animate-reveal-up-delay-1">
           Monitor de frecuencia cardíaca en tiempo real para atletas de calistenia.
           Conecta tu wearable BLE y visualiza tu rendimiento al instante.
         </p>
 
-        <div class="flex flex-wrap gap-4 animate-reveal-up-delay-2">
-          <a routerLink="/dashboard" id="hero-start-btn" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
+        <div class="flex flex-wrap justify-center lg:justify-start gap-4 animate-reveal-up-delay-2">
+          <a routerLink="/dashboard" id="hero-start-btn"
+            class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
             <i class="pi pi-bolt"></i>
             Empezar Gratis
           </a>
-          <a href="#features" id="hero-features-btn" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-[0.95rem] font-semibold text-slate-200/90 transition-all hover:-translate-y-0.5 hover:bg-white/10">
+          <a href="#features" id="hero-features-btn"
+            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-[0.95rem] font-semibold text-slate-200/90 transition-all hover:-translate-y-0.5 hover:bg-white/10">
             <i class="pi pi-play-circle"></i>
             Ver funciones
           </a>
         </div>
 
-        <div class="flex flex-wrap items-center gap-6 text-[0.82rem] font-medium text-slate-400/70 animate-reveal-up-delay-3">
+        <div
+          class="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-[0.82rem] font-medium text-slate-400/70 animate-reveal-up-delay-3">
           <div class="flex items-center gap-1.5">
             <i class="pi pi-check-circle text-xs text-emerald-400"></i>
             <span>Sin registro</span>
@@ -79,8 +93,9 @@
         </div>
       </div>
 
-      <div class="relative flex items-center justify-center animate-reveal-up-delay-2">
-        <div class="w-full max-w-[420px] rounded-[1.95rem] border border-white/10 bg-[#0f0f1e]/90 p-8 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(99,102,241,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl animate-float animate-glow">
+      <div class="relative w-full flex items-center justify-center animate-reveal-up-delay-2">
+        <div
+          class="w-full max-w-[420px] rounded-[1.95rem] border border-white/10 bg-[#0f0f1e]/90 p-8 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(99,102,241,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl animate-float animate-glow">
           <div class="flex items-center gap-3">
             <div class="flex gap-1.5">
               <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
@@ -94,63 +109,70 @@
             </div>
           </div>
 
-          <div class="mt-8 flex flex-col items-center gap-4.5">
-            <div class="flex flex-col items-center leading-none animate-bpm-beat">
-              <span class="text-[5rem] font-black tracking-[-0.05em] transition-colors duration-500" [style.color]="getZoneColor(currentZone())">
+          <div class="mt-8 flex flex-col items-center justify-center gap-4.5">
+            <div class="flex flex-col items-center justify-center leading-none animate-bpm-beat">
+              <span class="text-[5rem] font-black tracking-[-0.05em] transition-colors duration-500"
+                [style.color]="getZoneColor(currentZone())">
                 {{ currentBpm() }}
               </span>
               <span class="mt-1 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-slate-400/60">BPM</span>
             </div>
-            <div class="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-[0.84rem] font-bold transition-all duration-500" [style.background]="getZoneColor(currentZone()) + '22'" [style.color]="getZoneColor(currentZone())" [style.border-color]="getZoneColor(currentZone()) + '44'">
+            <div
+              class="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-[0.84rem] font-bold transition-all duration-500"
+              [style.background]="getZoneColor(currentZone()) + '22'" [style.color]="getZoneColor(currentZone())"
+              [style.border-color]="getZoneColor(currentZone()) + '44'">
               <i class="pi pi-heart-fill animate-heartbeat"></i>
               Zona {{ currentZone() }} — {{ getZoneLabel(currentZone()) }}
             </div>
           </div>
 
-          <div class="mt-6 flex h-[64px] items-end gap-1 px-1">
+          <div class="mt-6 flex h-[64px] items-end justify-center gap-1 px-1">
             @for (h of [60,72,85,55,90,78,95,88,70,82,65,75,88,92,80,95,85,70,80,85]; track $index) {
-              <div class="min-h-1 flex-1 rounded-t-[2px] transition-[height,background] duration-400" [style.height.%]="h" [style.background]="$index >= 16 ? getZoneColor(currentZone()) : 'rgba(99,102,241,0.3)'"></div>
+            <div class="min-h-1 flex-1 rounded-t-[2px] transition-[height,background] duration-400" [style.height.%]="h"
+              [style.background]="$index >= 16 ? getZoneColor(currentZone()) : 'rgba(99,102,241,0.3)'"></div>
             }
           </div>
 
-          <div class="mt-5 flex gap-2.5">
+          <div class="mt-5 flex gap-2.5 justify-center">
             @for (z of [1,2,3,4,5]; track z) {
-              <div class="rounded-full border px-3 py-1 text-[0.7rem] font-bold transition-all duration-400" [style.border-color]="z === currentZone() ? getZoneColor(z) : 'transparent'" [style.background]="z === currentZone() ? getZoneColor(z) + '25' : 'rgba(100,116,139,0.08)'" [style.color]="z === currentZone() ? getZoneColor(z) : 'rgba(241,245,249,.4)'">
-                Z{{ z }}
-              </div>
+            <div class="rounded-full border px-3 py-1 text-[0.7rem] font-bold transition-all duration-400"
+              [style.border-color]="z === currentZone() ? getZoneColor(z) : 'transparent'"
+              [style.background]="z === currentZone() ? getZoneColor(z) + '25' : 'rgba(100,116,139,0.08)'"
+              [style.color]="z === currentZone() ? getZoneColor(z) : 'rgba(241,245,249,.4)'">
+              Z{{ z }}
+            </div>
             }
           </div>
 
           <div class="mt-5 grid grid-cols-3 gap-4 border-t border-white/6 pt-5">
-            <div class="flex items-center gap-2">
-              <i class="pi pi-clock text-[0.8rem] text-indigo-400/70"></i>
-              <div>
-                <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">32:14</div>
-                <div class="text-[0.62rem] font-medium text-slate-400/60">Duración</div>
-              </div>
+            <div class="flex flex-col items-center justify-center text-center">
+              <i class="pi pi-clock text-[0.8rem] text-indigo-400/70 mb-1"></i>
+              <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">32:14</div>
+              <div class="text-[0.62rem] font-medium text-slate-400/60">Duración</div>
             </div>
-            <div class="flex items-center gap-2">
-              <i class="pi pi-heart text-[0.8rem] text-indigo-400/70"></i>
-              <div>
-                <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">{{ currentBpm() - 4 }}</div>
-                <div class="text-[0.62rem] font-medium text-slate-400/60">Avg HR</div>
+            <div class="flex flex-col items-center justify-center text-center">
+              <i class="pi pi-heart text-[0.8rem] text-indigo-400/70 mb-1"></i>
+              <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">{{ currentBpm() - 4 }}
               </div>
+              <div class="text-[0.62rem] font-medium text-slate-400/60">Avg HR</div>
             </div>
-            <div class="flex items-center gap-2">
-              <i class="pi pi-bolt text-[0.8rem] text-indigo-400/70"></i>
-              <div>
-                <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">284 kcal</div>
-                <div class="text-[0.62rem] font-medium text-slate-400/60">Calorías</div>
-              </div>
+            <div class="flex flex-col items-center justify-center text-center">
+              <i class="pi pi-bolt text-[0.8rem] text-indigo-400/70 mb-1"></i>
+              <div class="text-[0.8rem] font-bold tracking-[-0.03em] text-slate-100 font-mono">284 kcal</div>
+              <div class="text-[0.62rem] font-medium text-slate-400/60">Calorías</div>
             </div>
           </div>
         </div>
 
-        <div class="absolute top-[10%] -right-[30px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float" style="animation-delay: .5s">
+        <div
+          class="absolute top-[10%] -right-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float"
+          style="animation-delay: .5s">
           <i class="pi pi-bluetooth text-cyan-400"></i>
           <span>BLE Conectado</span>
         </div>
-        <div class="absolute bottom-[18%] -left-[30px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float" style="animation-delay: 1.2s">
+        <div
+          class="absolute bottom-[18%] -left-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float"
+          style="animation-delay: 1.2s">
           <i class="pi pi-check-circle text-emerald-400"></i>
           <span>Zona óptima</span>
         </div>
@@ -158,85 +180,97 @@
     </div>
   </section>
 
-  <!-- STATS BAR -->
-  <section class="border-y border-white/5 bg-indigo-500/5 px-6 py-16" id="stats">
-    <div class="landing-shell grid grid-cols-2 gap-5 lg:grid-cols-4">
+  <section class="w-full viewport-section border-y border-white/5 bg-indigo-500/5 px-6 py-20" id="stats">
+    <div class="w-full max-w-[1200px] grid grid-cols-2 gap-6 justify-items-center lg:grid-cols-4">
       @for (stat of stats; track stat.label) {
-        <div class="glass-card landing-card-pad flex flex-col items-center gap-2.5 rounded-2xl border border-white/7 bg-white/4 text-center shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
-          <span class="text-[2.35rem] font-black tracking-[-0.04em] text-slate-50">{{ stat.value }}{{ stat.suffix }}</span>
-          <span class="text-[1rem] font-medium text-slate-400/70">{{ stat.label }}</span>
-        </div>
+      <div
+        class="w-full glass-card p-6 flex flex-col items-center justify-center gap-2.5 rounded-2xl border border-white/7 bg-white/4 text-center shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
+        <span class="text-[2.35rem] font-black tracking-[-0.04em] text-slate-50">{{ stat.value }}{{ stat.suffix
+          }}</span>
+        <span class="text-[1rem] font-medium text-slate-400/70">{{ stat.label }}</span>
+      </div>
       }
     </div>
   </section>
 
-  <!-- FEATURES SECTION -->
-  <section class="px-6 py-32" id="features">
-    <div class="landing-shell flex flex-col gap-16">
-      <div class="flex flex-col items-center gap-6 text-center">
+  <section class="w-full viewport-section px-6 py-20" id="features">
+    <div class="w-full max-w-[1200px] flex flex-col items-center gap-16">
+      <div class="flex flex-col items-center justify-center gap-4 text-center">
         <span class="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300/70">Funcionalidades</span>
-        <h2 class="landing-title-balance mx-auto max-w-[12ch] text-center text-[clamp(2.2rem,4vw,3.5rem)] font-black tracking-[-0.04em] text-slate-50">¿Listo para llevar tu<br><span class="gradient-text-hero">entrenamiento al siguiente nivel?</span></h2>
-        <p class="landing-copy text-[1.08rem] text-slate-300/70">Una suite completa de herramientas para atletas serios que quieren datos reales de su rendimiento.</p>
+        <h2
+          class="mx-auto max-w-[25ch] text-center text-[clamp(2.2rem,4vw,3.5rem)] font-black tracking-[-0.04em] text-slate-50 leading-tight">
+          ¿Listo para llevar tu<br><span class="gradient-text-hero">entrenamiento al siguiente nivel?</span>
+        </h2>
+        <p class="landing-copy text-[1.08rem] text-slate-300/70 max-w-[600px]">Una suite completa de herramientas para
+          atletas serios que quieren datos reales de su rendimiento.</p>
       </div>
 
-      <div class="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
+      <div class="w-full grid grid-cols-1 gap-7 justify-items-center md:grid-cols-2 xl:grid-cols-3">
         @for (f of features; track f.title) {
-          <div class="glass-card landing-card-pad flex flex-col gap-5 rounded-2xl border border-white/7 bg-[#0f0f1e]/70 transition-all hover:-translate-y-1">
-            <div class="flex h-12 w-12 items-center justify-center rounded-[0.85rem] text-[1.2rem]" [ngClass]="featureToneClasses(f.color)">
-              <i [class]="f.icon"></i>
-            </div>
-            <h3 class="text-[1.28rem] font-bold tracking-[-0.03em] text-slate-50">{{ f.title }}</h3>
-            <p class="text-[1rem] leading-[1.85] text-slate-300/70">{{ f.desc }}</p>
+        <div
+          class="w-full max-w-[380px] md:max-w-none glass-card p-8 flex flex-col items-center text-center md:items-start md:text-left gap-5 rounded-2xl border border-white/7 bg-[#0f0f1e]/70 transition-all hover:-translate-y-1">
+          <div class="flex h-12 w-12 items-center justify-center rounded-[0.85rem] text-[1.2rem]"
+            [ngClass]="featureToneClasses(f.color)">
+            <i [class]="f.icon"></i>
           </div>
+          <h3 class="text-[1.28rem] font-bold tracking-[-0.03em] text-slate-50">{{ f.title }}</h3>
+          <p class="text-[1rem] leading-[1.85] text-slate-300/70">{{ f.desc }}</p>
+        </div>
         }
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
-  <section class="border-y border-white/5 bg-indigo-500/3 px-6 py-28" id="reviews">
-    <div class="landing-shell flex flex-col gap-16">
-      <div class="flex flex-col items-center gap-6 text-center">
+  <section class="w-full viewport-section border-y border-white/5 bg-indigo-500/3 px-6 py-20" id="reviews">
+    <div class="w-full max-w-[1200px] flex flex-col items-center gap-16">
+      <div class="flex flex-col items-center text-center">
         <span class="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300/70">Reviews</span>
-
       </div>
 
-      <div class="grid grid-cols-1 gap-7 lg:grid-cols-3">
+      <div class="w-full grid grid-cols-1 gap-7 justify-items-center lg:grid-cols-3">
         @for (t of testimonials; track t.name) {
-          <div class="glass-card landing-card-pad flex flex-col gap-6 rounded-2xl border border-white/7 bg-[#0f0f1e]/70">
-            <div class="flex gap-1 text-[0.85rem] text-amber-400">
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-            </div>
-            <p class="flex-1 text-[1rem] leading-[1.85] italic text-slate-200/80">"{{ t.text }}"</p>
-            <div class="flex items-center gap-3.5">
-              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-[1.8rem]">{{ t.avatar }}</span>
-              <div>
-                <div class="text-[1rem] font-bold text-slate-50">{{ t.name }}</div>
-                <div class="text-[0.85rem] text-slate-400/45">{{ t.role }}</div>
-              </div>
+        <div
+          class="w-full max-w-[380px] lg:max-w-none glass-card p-8 flex flex-col gap-6 rounded-2xl border border-white/7 bg-[#0f0f1e]/70">
+          <div class="flex gap-1 justify-center lg:justify-start text-[0.85rem] text-amber-400">
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+          </div>
+          <p class="flex-1 text-[1rem] leading-[1.85] italic text-center lg:text-left text-slate-200/80">"{{ t.text }}"
+          </p>
+          <div class="flex items-center justify-center lg:justify-start gap-3.5">
+            <span
+              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-[1.8rem]">{{
+              t.avatar }}</span>
+            <div class="text-center lg:text-left">
+              <div class="text-[1rem] font-bold text-slate-50">{{ t.name }}</div>
+              <div class="text-[0.85rem] text-slate-400/45">{{ t.role }}</div>
             </div>
           </div>
+        </div>
         }
       </div>
     </div>
   </section>
 
-  <!-- CTA FINAL -->
-  <section class="relative overflow-hidden px-6 py-32">
-    <div class="absolute left-1/2 top-[-140px] h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-[80px] pointer-events-none" aria-hidden="true" style="background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 72%);"></div>
-    <div class="relative mx-auto flex max-w-[820px] flex-col items-center gap-9 text-center">
-
-      <p class="landing-copy text-[1.08rem] text-slate-300/70">Conéctate, muévete y mide cada latido. Gratis. Siempre.</p>
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <a routerLink="/dashboard" id="cta-final-btn" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
+  <section class="w-full viewport-section relative overflow-hidden px-6 py-20 lg:py-0" id="cta-section">
+    <div
+      class="absolute left-1/2 top-[-140px] h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-[80px] pointer-events-none"
+      aria-hidden="true" style="background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 72%);">
+    </div>
+    <div class="relative w-full max-w-[820px] flex flex-col items-center gap-9 text-center">
+      <p class="landing-copy text-[1.08rem] text-slate-300/70">Conéctate, muévete y mide cada latido. Gratis. Siempre.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a routerLink="/dashboard" id="cta-final-btn"
+          class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
           <i class="pi pi-bolt"></i>
           Abrir CalistenicTrack
         </a>
-        <a routerLink="/ejercicios" id="cta-exercises-btn" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-[0.95rem] font-semibold text-slate-200/90 transition-all hover:-translate-y-0.5 hover:bg-white/10">
+        <a routerLink="/ejercicios" id="cta-exercises-btn"
+          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-[0.95rem] font-semibold text-slate-200/90 transition-all hover:-translate-y-0.5 hover:bg-white/10">
           <i class="pi pi-list"></i>
           Ver ejercicios
         </a>
@@ -244,18 +278,26 @@
     </div>
   </section>
 
-  <!-- MINI FOOTER -->
-  <footer class="border-t border-white/6 px-6 py-14 md:py-16">
-    <div class="landing-shell flex flex-col items-center justify-between gap-6 md:flex-row">
-      <span class="text-[1.02rem] text-slate-400/55">© {{ currentYear }} CalistenicTrack · Hecho con ❤️ para atletas</span>
-      <div class="flex flex-wrap items-center justify-center gap-6 text-[1rem] font-medium text-slate-400/55">
-        <a routerLink="/politicas" class="transition-colors hover:text-indigo-300">Términos</a>
-        <a routerLink="/privacidad" class="transition-colors hover:text-indigo-300">Privacidad</a>
-        <a routerLink="/contacto" class="transition-colors hover:text-indigo-300">Contacto</a>
-        <a routerLink="/dashboard" class="transition-colors hover:text-indigo-300">Dashboard</a>
+  <footer class="w-full border-t border-white/5 bg-[#06060c] px-6 py-8 flex justify-center mt-auto">
+    <div
+      class="w-full max-w-[1200px] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-[0.82rem] font-medium text-slate-400/50">
+      <div class="flex items-center gap-2">
+        <span>© {{ currentYear }} CalistenicTrack.</span>
+        <span class="text-slate-500">·</span>
+        <span>Hecho para atletas.</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="https://github.com" target="_blank" rel="noopener"
+          class="transition-colors hover:text-indigo-400 flex items-center gap-1.5">
+          <i class="pi pi-github"></i> Código Abierto
+        </a>
+        <span class="text-slate-500">·</span>
+        <span
+          class="text-cyan-400/70 font-semibold tracking-wide uppercase text-[0.7rem] border border-cyan-400/20 bg-cyan-400/5 px-2 py-0.5 rounded-md">
+          MIT License
+        </span>
       </div>
     </div>
   </footer>
 
 </div>
-

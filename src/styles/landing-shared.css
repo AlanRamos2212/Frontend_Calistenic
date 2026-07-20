@@ -26,3 +26,21 @@
 .landing-card-pad {
   padding: 2.25rem;
 }
+
+/* ── Viewport Height Sections for Desktop ── */
+@media (min-width: 1024px) {
+  .viewport-section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding-top: 5.5rem !important; /* clears fixed header and adds breathing room */
+    padding-bottom: 2.5rem !important;
+  }
+}
+

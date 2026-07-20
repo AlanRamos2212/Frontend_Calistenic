@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
@@ -10,12 +10,13 @@ import { ThemeService } from '../../services/theme.service';
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })
-export class LandingPageComponent implements OnInit {
+export class LandingPageComponent implements OnInit, OnDestroy {
   private readonly themeService = inject(ThemeService);
+  private intervalId: any;
 
-  currentBpm = signal(142);
-  currentZone = signal(3);
-  liveActive = signal(true);
+  currentBpm = signal<number>(142);
+  currentZone = signal<number>(3);
+  liveActive = signal<boolean>(true);
 
   readonly features = [
     {
@@ -99,25 +100,45 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Simulate a live BPM for the hero mockup
+    // Simulación del pulso cardíaco para el mockup del Hero
     let bpm = 142;
     let dir = 1;
-    setInterval(() => {
-      bpm += dir * (Math.random() * 3 | 0);
+    this.intervalId = setInterval(() => {
+      bpm += dir * ((Math.random() * 3) | 0);
       if (bpm > 158) dir = -1;
       if (bpm < 130) dir = 1;
+      
       this.currentBpm.set(bpm);
       this.currentZone.set(bpm < 130 ? 2 : bpm < 145 ? 3 : bpm < 160 ? 4 : 5);
     }, 900);
   }
 
+  ngOnDestroy() {
+    // Evita memory leaks destruyendo el intervalo al salir de la ruta
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
   getZoneLabel(zone: number): string {
-    const labels: Record<number, string> = { 1:'Reposo', 2:'Aeróbico ligero', 3:'Aeróbico', 4:'Anaeróbico', 5:'Máximo' };
+    const labels: Record<number, string> = { 
+      1: 'Reposo', 
+      2: 'Aeróbico ligero', 
+      3: 'Aeróbico', 
+      4: 'Anaeróbico', 
+      5: 'Máximo' 
+    };
     return labels[zone] ?? 'Zona ' + zone;
   }
 
   getZoneColor(zone: number): string {
-    const colors: Record<number, string> = { 1:'#3b82f6', 2:'#10b981', 3:'#f59e0b', 4:'#ef4444', 5:'#b91c1c' };
+    const colors: Record<number, string> = { 
+      1: '#3b82f6', 
+      2: '#10b981', 
+      3: '#f59e0b', 
+      4: '#ef4444', 
+      5: '#b91c1c' 
+    };
     return colors[zone] ?? '#6366f1';
   }
 }
