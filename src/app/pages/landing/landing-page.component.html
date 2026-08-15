@@ -4,7 +4,6 @@
     class="fixed top-0 left-0 right-0 z-[100] border-b border-white/10 bg-[#080810]/75 backdrop-blur-[32px] flex justify-center">
     <div class="w-full max-w-[1200px] flex h-16 items-center gap-8 px-6">
       <a routerLink="/" class="flex shrink-0 items-center gap-2.5 no-underline">
-        <div class="animate-heartbeat text-[1.4rem]" aria-hidden="true">❤️</div>
         <div class="flex items-baseline gap-1.5">
           <span
             class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-[1.05rem] font-extrabold tracking-[-0.03em] text-transparent">CalistenicTrack</span>
@@ -22,7 +21,8 @@
           class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300/70 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200">Reviews</a>
       </nav>
 
-      <a routerLink="/dashboard"
+      <a href="/dashboard"
+        (click)="handleOpenApp($event)"
         class="ml-auto inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-5 py-2.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all hover:-translate-y-px hover:opacity-95"
         id="header-open-app-btn">
         <i class="pi pi-chart-line"></i>
@@ -33,23 +33,23 @@
 
   <section class="w-full viewport-section relative overflow-hidden px-6 pt-28 pb-12 lg:py-0"
     id="hero">
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
-      style="width: 700px; height: 700px; background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%); top: -200px; left: -200px;">
-    </div>
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
-      style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%); bottom: -100px; right: -100px;">
-    </div>
-    <div class="absolute rounded-full blur-[80px] pointer-events-none" aria-hidden="true"
-      style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%); top: 40%; left: 40%;">
-    </div>
+    <div class="absolute rounded-full blur-[80px] pointer-events-none hero-glow hero-glow-1" aria-hidden="true"></div>
+    <div class="absolute rounded-full blur-[80px] pointer-events-none hero-glow hero-glow-2" aria-hidden="true"></div>
+    <div class="absolute rounded-full blur-[80px] pointer-events-none hero-glow hero-glow-3" aria-hidden="true"></div>
     <div class="hero-grid-overlay" aria-hidden="true"></div>
 
-    <div class="max-w-[1200px] w-full grid grid-cols-1 items-center justify-items-center gap-20 lg:grid-cols-2">
+    <!-- Background hero image (behind text/button) - hidden on small screens -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none hidden md:flex" aria-hidden="true">
+      <img src="assets/images/strong.png" alt="Fondo atleta" loading="lazy"
+           class="max-w-[900px] w-full h-auto object-cover opacity-65 rounded-2xl shadow-2xl" />
+    </div>
+
+    <div class="max-w-[1200px] w-full relative z-10 grid grid-cols-1 items-center justify-items-center gap-20 lg:grid-cols-2">
       <div class="w-full flex flex-col gap-8 items-center text-center lg:items-start lg:text-left animate-reveal-up">
         <div
           class="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200">
           <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 pulse-active"></span>
-          <span>Nuevo · BLE v2 · Monitor Cardíaco en Tiempo Real</span>
+          <span>Nuevo · Vinculación por código · Monitor Cardíaco en Tiempo Real</span>
         </div>
 
         <h1 class="text-[clamp(2.8rem,5.5vw,4.2rem)] font-black leading-[1.06] tracking-[-0.04em] text-slate-50">
@@ -60,11 +60,11 @@
 
         <p class="landing-copy text-[1.12rem] text-slate-300/70 max-w-[500px] animate-reveal-up-delay-1">
           Monitor de frecuencia cardíaca en tiempo real para atletas de calistenia.
-          Conecta tu wearable BLE y visualiza tu rendimiento al instante.
+          Vincula tu wearable por código de 6 dígitos y sigue tu rendimiento al instante.
         </p>
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-4 animate-reveal-up-delay-2">
-          <a routerLink="/dashboard" id="hero-start-btn"
+          <a href="/dashboard" (click)="handleOpenApp($event)" id="hero-start-btn"
             class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
             <i class="pi pi-bolt"></i>
             Empezar Gratis
@@ -94,6 +94,7 @@
       </div>
 
       <div class="relative w-full flex items-center justify-center animate-reveal-up-delay-2">
+
         <div
           class="w-full max-w-[420px] rounded-[1.95rem] border border-white/10 bg-[#0f0f1e]/90 p-8 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(99,102,241,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl animate-float animate-glow">
           <div class="flex items-center gap-3">
@@ -165,14 +166,12 @@
         </div>
 
         <div
-          class="absolute top-[10%] -right-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float"
-          style="animation-delay: .5s">
-          <i class="pi pi-bluetooth text-cyan-400"></i>
-          <span>BLE Conectado</span>
+          class="absolute top-[10%] -right-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float hero-badge hero-badge-wearable">
+          <i class="pi pi-watch text-cyan-400"></i>
+          <span>Wearable vinculado</span>
         </div>
         <div
-          class="absolute bottom-[18%] -left-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float"
-          style="animation-delay: 1.2s">
+          class="absolute bottom-[18%] -left-[10px] inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f0f1e]/85 px-4 py-2 text-[0.78rem] font-semibold whitespace-nowrap text-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-[20px] animate-float hero-badge hero-badge-zone">
           <i class="pi pi-check-circle text-emerald-400"></i>
           <span>Zona óptima</span>
         </div>
@@ -221,8 +220,13 @@
     </div>
   </section>
 
-  <section class="w-full viewport-section border-y border-white/5 bg-indigo-500/3 px-6 py-20" id="reviews">
-    <div class="w-full max-w-[1200px] flex flex-col items-center gap-16">
+  <section class="w-full viewport-section relative border-y border-white/5 bg-indigo-500/3 px-6 py-20" id="reviews">
+    <!-- Background image for reviews (behind content) - hidden on small screens -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none hidden md:flex" aria-hidden="true">
+      <img src="assets/images/flexion.png" alt="Fondo reviews atleta" loading="lazy"
+           class="max-w-[900px] w-full h-auto object-cover opacity-20 rounded-2xl" />
+    </div>
+    <div class="w-full max-w-[1200px] relative z-10 flex flex-col items-center gap-16">
       <div class="flex flex-col items-center text-center">
         <span class="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300/70">Reviews</span>
       </div>
@@ -257,26 +261,23 @@
 
   <section class="w-full viewport-section relative overflow-hidden px-6 py-20 lg:py-0" id="cta-section">
     <div
-      class="absolute left-1/2 top-[-140px] h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-[80px] pointer-events-none"
-      aria-hidden="true" style="background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 72%);">
+      class="absolute left-1/2 top-[-140px] h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-[80px] pointer-events-none hero-cta-bg"
+      aria-hidden="true">
     </div>
     <div class="relative w-full max-w-[820px] flex flex-col items-center gap-9 text-center">
       <p class="landing-copy text-[1.08rem] text-slate-300/70">Conéctate, muévete y mide cada latido. Gratis. Siempre.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-4">
-        <a routerLink="/dashboard" id="cta-final-btn"
+        <a href="/dashboard" (click)="handleOpenApp($event)" id="cta-final-btn"
           class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-7 py-3.5 text-[0.95rem] font-bold text-white shadow-[0_0_30px_rgba(99,102,241,0.35),0_8px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 hover:opacity-95">
           <i class="pi pi-bolt"></i>
           Abrir CalistenicTrack
         </a>
-        <a routerLink="/ejercicios" id="cta-exercises-btn"
-          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-[0.95rem] font-semibold text-slate-200/90 transition-all hover:-translate-y-0.5 hover:bg-white/10">
-          <i class="pi pi-list"></i>
-          Ver ejercicios
-        </a>
+
       </div>
     </div>
   </section>
+
 
   <footer class="w-full border-t border-white/5 bg-[#06060c] px-6 py-8 flex justify-center mt-auto">
     <div
@@ -299,5 +300,7 @@
       </div>
     </div>
   </footer>
+
+  <app-auth-modal *ngIf="showAuthModal()" (close)="closeAuth()"></app-auth-modal>
 
 </div>

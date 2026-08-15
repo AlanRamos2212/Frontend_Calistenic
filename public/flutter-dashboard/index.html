@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/flutter-dashboard/">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="smartwatch_app">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>smartwatch_app</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
+
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script>
+    (function(){
+      function getToken(){ return window.__calistenicDeviceToken || sessionStorage.getItem('app.session.token'); }
+
+      // Helper to rewrite legacy Flutter endpoint and ensure absolute path
+      function rewriteUrl(url){
+        try{
+          // Accept RequestInfo or string
+          const raw = (typeof url === 'string') ? url : (url && url.url) || url;
+          if (!raw) return url;
+          // If it ends with /api/statistics, rewrite to wearable endpoint
+          const u = new URL(raw, window.location.origin);
+          if (u.pathname === '/api/statistics'){
+            u.pathname = '/api/wearable-sessions/stats';
+            console.debug('debug-rewrite-url:', raw, '->', u.toString());
+            return u.toString();
+          }
+          return url;
+        } catch(e){ return url; }
+      }
+
+      // Monkeypatch fetch to rewrite legacy path and attach Authorization
+      try{
+        const _fetch = window.fetch.bind(window);
+        window.fetch = function(resource, init){
+          const rewritten = rewriteUrl(resource);
+          init = init || {};
+          init.headers = new Headers(init.headers || {});
+          const token = getToken();
+          if (token) init.headers.set('Authorization', 'Bearer ' + token);
+          console.debug('debug-fetch:', rewritten, init.headers);
+          return _fetch.call(this, rewritten, init);
+        };
+      } catch(e){ console.warn('Could not patch fetch', e); }
+
+      // Monkeypatch XMLHttpRequest to rewrite URL and add Authorization header when possible
+      try{
+        const OrigX = window.XMLHttpRequest;
+        function X(){
+          const xhr = new OrigX();
+          const _open = xhr.open;
+          xhr.open = function(method, url){
+            try{ url = rewriteUrl(url); } catch(e){}
+            this._url = url;
+            return _open.apply(this, arguments);
+          };
+          const _setRequestHeader = xhr.setRequestHeader;
+          const _send = xhr.send;
+          xhr.send = function(body){
+            try{
+              const token = getToken();
+              if (token){
+                try{ _setRequestHeader.call(this, 'Authorization', 'Bearer ' + token); } catch(err) { console.warn('XHR cannot set header', err); }
+              }
+            } catch(err){ console.warn('XHR debug error', err); }
+            console.debug('debug-xhr-send to', this._url);
+            return _send.apply(this, arguments);
+          };
+          return xhr;
+        }
+        window.XMLHttpRequest = X;
+      } catch(e){ console.warn('Could not patch XHR', e); }
+
+      console.info('Flutter dashboard debug injector initialized, token=', getToken());
+    })();
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Listen for token from parent Angular app and store it for Flutter web
+    window.addEventListener('message', function(event) {
+      try {
+        const data = event.data;
+        if (!data) return;
+        // Expected message: { type: 'calistenic-device-token', token, userId }
+        if (data.type === 'calistenic-device-token') {
+          console.log('Flutter dashboard received device token via postMessage');
+          if (data.token) {
+            try { sessionStorage.setItem('app.session.token', data.token); } catch (e) { console.warn('Could not set sessionStorage token', e); }
+            try { sessionStorage.setItem('app.user.id', data.userId || ''); } catch (e) { console.warn('Could not set sessionStorage userId', e); }
+            // also expose as global variable for JS interop
+            window.__calistenicDeviceToken = data.token;
+          }
+        }
+      } catch (err) {
+        console.error('Error processing postMessage in flutter index.html', err);
+      }
+    }, false);
+  </script>
+</body>
+</html>

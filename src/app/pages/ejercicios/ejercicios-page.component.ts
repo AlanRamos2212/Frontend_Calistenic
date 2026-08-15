@@ -11,10 +11,11 @@ import { CardModule } from 'primeng/card';
 import { LucideAngularModule, Dumbbell, Zap, Flame, User, Users, Clock, Heart, Cpu, Target, Activity } from 'lucide-angular';
 
 import { Exercise, ExerciseCategory, ExerciseLevel } from '../../models/exercise.model';
-import { EXERCISES_DATA } from '../../data/exercises.data';
+import { ExercisesService } from '../../services/exercises.service';
 
 type FilterCategory = 'all' | ExerciseCategory;
 type FilterLevel    = 'all' | ExerciseLevel;
+type SortMode = 'default' | 'az' | 'za' | 'recent';
 
 @Component({
   selector: 'app-ejercicios-page',
@@ -35,9 +36,11 @@ type FilterLevel    = 'all' | ExerciseLevel;
 })
 export class EjerciciosPageComponent {
   private readonly router = inject(Router);
+  private readonly exercisesService = inject(ExercisesService);
   searchQuery  = signal('');
   activeCategory = signal<FilterCategory>('all');
   activeLevel    = signal<FilterLevel>('all');
+  sortMode = signal<SortMode>('default');
 
   readonly categories = [
     { label: 'Todos',       value: 'all' as FilterCategory,        icon: Dumbbell },
@@ -58,13 +61,30 @@ export class EjerciciosPageComponent {
     const cat  = this.activeCategory();
     const lvl  = this.activeLevel();
 
-    return EXERCISES_DATA.filter(e => {
+    const list = this.exercisesService.exercises().filter(e => {
       const matchesSearch = !q || e.name.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.muscles.join(' ').toLowerCase().includes(q);
       const matchesCat    = cat === 'all' || e.category === cat;
       const matchesLevel  = lvl === 'all' || e.level === lvl;
       return matchesSearch && matchesCat && matchesLevel;
     });
+
+    if (this.sortMode() === 'az') {
+      return [...list].sort((a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }));
+    }
+
+    if (this.sortMode() === 'za') {
+      return [...list].sort((a, b) => b.name.localeCompare(a.name, 'es', { sensitivity: 'base' }));
+    }
+
+    if (this.sortMode() === 'recent') {
+      return [...list].sort((a, b) => b.id - a.id);
+    }
+
+    return list;
   });
+
+  constructor() {
+  }
 
   getLevelSeverity(level: ExerciseLevel): 'success'|'warn'|'danger' {
     if (level === 'principiante') return 'success';
@@ -113,4 +133,6 @@ export class EjerciciosPageComponent {
   toggleLevel(lvl: FilterLevel) {
     this.activeLevel.set(this.activeLevel() === lvl ? 'all' : lvl);
   }
+
+  setSortMode(mode: SortMode) { this.sortMode.set(mode); }
 }

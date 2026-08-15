@@ -8,18 +8,53 @@
     </div>
 
     <!-- Search -->
-    <p-iconfield styleClass="w-full sm:w-[280px]">
-      <p-inputicon styleClass="pi pi-search" />
-      <input
-        id="ejercicios-search"
-        pInputText
-        type="text"
-        placeholder="Buscar ejercicios, músculos…"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="searchQuery.set($event)"
-        class="w-full"
-      />
-    </p-iconfield>
+    <div class="flex flex-col gap-3 w-full sm:w-auto">
+      <p-iconfield styleClass="w-full sm:w-[280px]">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          id="ejercicios-search"
+          pInputText
+          type="text"
+          placeholder="Buscar ejercicios, músculos…"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          class="w-full"
+        />
+      </p-iconfield>
+
+      <div class="flex flex-wrap gap-2">
+        <button
+          pButton
+          type="button"
+          label="A-Z"
+          class="px-3.5 py-1.5 rounded-full text-xs font-semibold"
+          [class.bg-indigo-600]="sortMode() === 'az'"
+          [class.text-white]="sortMode() === 'az'"
+          [class.border-slate-200]="sortMode() !== 'az'"
+          (click)="setSortMode('az')"
+        >A-Z</button>
+        <button
+          pButton
+          type="button"
+          label="Z-A"
+          class="px-3.5 py-1.5 rounded-full text-xs font-semibold"
+          [class.bg-indigo-600]="sortMode() === 'za'"
+          [class.text-white]="sortMode() === 'za'"
+          [class.border-slate-200]="sortMode() !== 'za'"
+          (click)="setSortMode('za')"
+        >Z-A</button>
+        <button
+          pButton
+          type="button"
+          label="Recientes"
+          class="px-3.5 py-1.5 rounded-full text-xs font-semibold"
+          [class.bg-indigo-600]="sortMode() === 'recent'"
+          [class.text-white]="sortMode() === 'recent'"
+          [class.border-slate-200]="sortMode() !== 'recent'"
+          (click)="setSortMode('recent')"
+        >Recientes</button>
+      </div>
+    </div>
   </div>
 
   <!-- Filters -->
@@ -38,7 +73,7 @@
           [class.dark:!border-indigo-900/50]="activeCategory() === cat.value"
           (click)="activeCategory.set(cat.value)"
         >
-          <lucide-icon [img]="cat.icon" class="w-3.5 h-3.5"></lucide-icon>
+          <i class="pi pi-tag text-[12px]"></i>
           <span>{{ cat.label }}</span>
         </button>
       }
@@ -84,7 +119,7 @@
                    'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400': exercise.category === 'lower_body',
                    'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-600 dark:text-cyan-400': exercise.category === 'full_body'
                  }">
-              <lucide-icon [img]="getCategoryIcon(exercise.category)" class="w-6 h-6"></lucide-icon>
+              <i class="pi pi-bolt text-lg"></i>
             </div>
             <div class="flex flex-col gap-1.5 items-end">
               <p-tag
@@ -118,15 +153,15 @@
           <!-- Stats Row -->
           <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-100 dark:border-slate-800/80">
             <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center">
-              <lucide-icon [img]="Clock" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
+              <i class="pi pi-clock text-[12px] text-indigo-500"></i>
               <span>{{ exercise.durationMin }} min</span>
             </div>
             <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center border-x border-slate-200/60 dark:border-slate-800/60 px-1">
-              <lucide-icon [img]="getCategoryIcon('lower_body')" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
+              <i class="pi pi-fire text-[12px] text-indigo-500"></i>
               <span>~{{ exercise.estimatedCalories }} kcal</span>
             </div>
             <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-1 justify-center">
-              <lucide-icon [img]="Heart" class="w-3.5 h-3.5 text-indigo-500"></lucide-icon>
+              <i class="pi pi-heart-fill text-[12px] text-indigo-500"></i>
               <span>{{ exercise.targetHrMin }}–{{ exercise.targetHrMax }} bpm</span>
             </div>
           </div>
@@ -148,7 +183,7 @@
       <div class="glass-card p-7 flex flex-col items-center justify-center text-center gap-5 min-h-[300px] border-dashed border-indigo-300 dark:border-indigo-900/50 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5">
         <div class="flex flex-col items-center gap-3">
           <div class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 animate-pulse">
-            <lucide-icon [img]="Cpu" class="w-6 h-6"></lucide-icon>
+            <i class="pi pi-microchip text-xl"></i>
           </div>
           <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 m-0">Crear rutina personalizada con IA</h3>
           <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[220px] leading-relaxed m-0">Describe tu objetivo y nivel, y la IA generará una rutina única para ti.</p>

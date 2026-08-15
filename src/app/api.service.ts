@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -21,12 +21,29 @@ export interface Workout {
   heartRateData?: HeartRatePoint[];
 }
 
+export interface WearableBinding {
+  id: number;
+  wearableId: string;
+  deviceToken?: string;
+  pairedAt?: string;
+  active?: boolean;
+  pinConfirmed?: boolean;
+  confirmedAt?: string | null;
+}
+
+export interface WearablePairingCodeResponse {
+  code: string;
+  expiresAt: string;
+  expiresInSeconds: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private readonly apiUrl = '/api/workouts';
-  private localMode = false; // Set dynamically if backend connection fails
+  private readonly backendUrl = 'http://localhost:8080/api';
+  private readonly localMode = true; // Workout history is stored locally for now
 
   constructor(private http: HttpClient) {
     // Check if we already have local workouts initialized
@@ -39,87 +56,74 @@ export class ApiService {
    * Start a workout session
    */
   startWorkout(name: string, description: string): Observable<Workout> {
-    const payload = { name, description };
-    
-    if (this.localMode) {
-      return of(this.startLocalWorkout(name, description));
-    }
-
-    return this.http.post<Workout>(`${this.apiUrl}/start`, payload).pipe(
-      catchError(err => {
-        console.warn('Backend offline, entering Local Storage Mode for this session:', err);
-        this.localMode = true;
-        return of(this.startLocalWorkout(name, description));
-      })
-    );
+    return of(this.startLocalWorkout(name, description));
   }
 
   /**
    * Save recorded heart rate data points to active session
    */
   saveHeartRates(workoutId: number, dataPoints: HeartRatePoint[]): Observable<any> {
-    if (this.localMode || workoutId < 0) {
-      this.saveLocalHeartRates(workoutId, dataPoints);
-      return of({ status: 'success', local: true });
-    }
-
-    return this.http.post(`${this.apiUrl}/${workoutId}/heart-rate`, dataPoints).pipe(
-      catchError(err => {
-        console.warn('Failed to upload data points to backend, logging locally:', err);
-        this.saveLocalHeartRates(workoutId, dataPoints);
-        return of({ status: 'success', local: true });
-      })
-    );
+    this.saveLocalHeartRates(workoutId, dataPoints);
+    return of({ status: 'success', local: true });
   }
 
   /**
    * End a workout session
    */
   endWorkout(workoutId: number): Observable<Workout> {
-    if (this.localMode || workoutId < 0) {
-      return of(this.endLocalWorkout(workoutId));
-    }
-
-    return this.http.post<Workout>(`${this.apiUrl}/${workoutId}/end`, {}).pipe(
-      catchError(err => {
-        console.warn('Failed to end workout on backend, ending locally:', err);
-        return of(this.endLocalWorkout(workoutId));
-      })
-    );
+    return of(this.endLocalWorkout(workoutId));
   }
 
   /**
    * Get all workouts (for history list)
    */
   getWorkouts(): Observable<Workout[]> {
-    if (this.localMode) {
-      return of(this.getLocalWorkouts());
-    }
-
-    return this.http.get<Workout[]>(this.apiUrl).pipe(
-      catchError(err => {
-        console.warn('Backend offline, retrieving workouts from Local Storage:', err);
-        this.localMode = true;
-        return of(this.getLocalWorkouts());
-      })
-    );
+    return of(this.getLocalWorkouts());
   }
 
   /**
    * Get detailed workout session (including full HR points)
    */
   getWorkoutDetails(id: number): Observable<Workout> {
-    if (this.localMode || id < 0) {
-      const workout = this.getLocalWorkoutById(id);
-      return workout ? of(workout) : throwError(() => new Error('Workout not found locally.'));
-    }
+    const workout = this.getLocalWorkoutById(id);
+    return workout ? of(workout) : throwError(() => new Error('Workout not found locally.'));
+  }
 
-    return this.http.get<Workout>(`${this.apiUrl}/${id}`).pipe(
-      catchError(err => {
-        console.warn(`Failed to fetch workout ${id} from backend, loading locally:`, err);
-        const workout = this.getLocalWorkoutById(id);
-        return workout ? of(workout) : throwError(() => err);
-      })
+  /**
+   * Get wearable bindings for the authenticated user
+   */
+  getWearables(): Observable<WearableBinding[]> {
+    const headers = this.authHeaders();
+    return this.http.get<WearableBinding[]>(`${this.backendUrl}/wearables`, {
+      headers,
+      withCredentials: true
+    });
+  }
+
+  requestPairingCode(): Observable<WearablePairingCodeResponse> {
+    const headers = this.authHeaders();
+    return this.http.post<WearablePairingCodeResponse>(
+      `${this.backendUrl}/wearables/pairing/request`,
+      {},
+      {
+        headers,
+        withCredentials: true
+      }
+    );
+  }
+
+  /**
+   * Bind a wearable to the authenticated user
+   */
+  bindWearable(wearableId: string): Observable<WearableBinding> {
+    const headers = this.authHeaders();
+    return this.http.post<WearableBinding>(
+      `${this.backendUrl}/wearables/bind`,
+      { wearableId },
+      {
+        headers,
+        withCredentials: true
+      }
     );
   }
 
@@ -127,29 +131,30 @@ export class ApiService {
    * Delete a workout session
    */
   deleteWorkout(id: number): Observable<any> {
-    if (this.localMode || id < 0) {
-      this.deleteLocalWorkout(id);
-      return of({ status: 'deleted', local: true });
-    }
-
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
-      catchError(err => {
-        console.warn(`Failed to delete workout ${id} on backend, deleting locally:`, err);
-        this.deleteLocalWorkout(id);
-        return of({ status: 'deleted', local: true });
-      })
-    );
+    this.deleteLocalWorkout(id);
+    return of({ status: 'deleted', local: true });
   }
 
   /**
    * Reset mode (to check backend connectivity again)
    */
   resetToBackendMode() {
-    this.localMode = false;
+    // The workout history service is intentionally local-only for now.
+    // Keep this as a no-op so callers can invoke it safely.
   }
 
   isLocalMode(): boolean {
     return this.localMode;
+  }
+
+  private authHeaders(): HttpHeaders {
+    const token = localStorage.getItem('app.auth.token') ?? sessionStorage.getItem('app.auth.token');
+    if (!token) {
+      return new HttpHeaders();
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
   }
 
   // --- LOCAL STORAGE BACKEND ENGINE ---

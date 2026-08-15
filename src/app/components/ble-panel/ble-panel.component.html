@@ -5,15 +5,17 @@
     <div class="ble-header-left">
       <div class="ble-icon">📡</div>
       <div>
-        <h3 class="ble-title">Wearable BLE</h3>
-        <p class="ble-sub">Banda cardíaca Bluetooth Smart</p>
+        <h3 class="ble-title">{{ panelTitle() }}</h3>
+        <p class="ble-sub">{{ panelSubtitle() }}</p>
       </div>
     </div>
-    @if (ble.deviceConnected()) {
+    @if (isWearableLoading()) {
+      <p-tag value="Cargando" severity="warn" icon="pi pi-spin pi-spinner" [rounded]="true" />
+    } @else if (activeWearable()) {
       <p-tag
         id="ble-status-connected"
-        [value]="ble.isSimulated() ? 'Simulado' : 'BLE Activo'"
-        severity="success"
+        [value]="wearableStatusLabel()"
+        [severity]="wearableStatusSeverity()"
         icon="pi pi-circle-fill"
         [rounded]="true"
         styleClass="pulse-active"
@@ -23,46 +25,49 @@
     }
   </div>
 
-  <!-- Scanning Progress -->
-  @if (ble.isScanning()) {
-    <p-progressbar id="ble-scanning-bar" mode="indeterminate" styleClass="h-1" />
-    <p class="scanning-text">Buscando dispositivos BLE…</p>
-  }
-
   <!-- Error -->
   @if (ble.error()) {
     <p-message id="ble-error-msg" severity="error" [text]="ble.error()" styleClass="w-full" />
   }
 
+  @if (activeWearable()) {
+    @let wearable = activeWearable();
+    <p-message
+      id="wearable-linked-msg"
+      [severity]="wearable!.pinConfirmed ? 'success' : 'warn'"
+      [text]="wearable!.pinConfirmed ? 'Wearable vinculado: ' + wearable!.wearableId : 'Wearable enlazado, pendiente PIN: ' + wearable!.wearableId"
+      styleClass="w-full"
+    />
+  } @else {
+    <p-message
+      id="ble-real-flow-msg"
+      severity="info"
+      text="La vinculación real del wearable se hace por código en la app Flutter wearable, no aquí en Angular."
+      styleClass="w-full"
+    />
+  }
+
   <!-- Device Info -->
-  @if (ble.deviceConnected()) {
+  @if (activeWearable()) {
+    @let wearable = activeWearable();
     <div class="device-info">
       <div class="info-row">
-        <span class="info-label"><i class="pi pi-mobile-alt"></i> Dispositivo</span>
-        <strong class="info-value">{{ ble.deviceName() }}</strong>
+        <span class="info-label"><i class="pi pi-mobile-alt"></i> Wearable ID</span>
+        <strong class="info-value">{{ wearable!.wearableId }}</strong>
       </div>
       <div class="info-row">
-        <span class="info-label"><i class="pi pi-heart-fill"></i> FC Actual</span>
-        <strong class="info-value bpm-live">{{ ble.heartRate() }} <span class="bpm-unit">bpm</span></strong>
+        <span class="info-label"><i class="pi pi-heart-fill"></i> PIN</span>
+        <strong class="info-value bpm-live">{{ wearable!.pinConfirmed ? 'Confirmado' : 'Pendiente' }}</strong>
       </div>
     </div>
   }
 
   <!-- Buttons -->
   <div class="ble-actions">
-    @if (!ble.deviceConnected()) {
-      <p-button
-        id="ble-connect-btn"
-        label="Vincular Wearable BLE"
-        icon="pi pi-bluetooth"
-        severity="contrast"
-        styleClass="w-full"
-        [loading]="ble.isScanning()"
-        (onClick)="connect()"
-      />
+    @if (!activeWearable()) {
       <p-button
         id="ble-simulate-btn"
-        label="Iniciar Simulación"
+        label="Usar modo local"
         icon="pi pi-play"
         severity="secondary"
         [outlined]="true"
@@ -72,12 +77,12 @@
     } @else {
       <p-button
         id="ble-disconnect-btn"
-        label="Desconectar Wearable"
+        label="Refrescar estado"
         icon="pi pi-power-off"
         severity="danger"
         [outlined]="true"
         styleClass="w-full"
-        (onClick)="disconnect()"
+        (onClick)="refreshWearableStatus()"
       />
     }
   </div>

@@ -1,0 +1,121 @@
+<div class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+  <!-- Backdrop Blur overlay -->
+  <div class="absolute inset-0 bg-[#040408]/75 backdrop-blur-md" (click)="onClose()"></div>
+
+  <!-- Modal Content Box -->
+  <div 
+    class="relative w-full max-w-[440px] rounded-3xl border border-white/10 bg-[#0c0c16]/95 p-8 shadow-[0_32px_64px_rgba(0,0,0,0.6),0_0_0_1px_rgba(99,102,241,0.15),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl animate-fade-in text-slate-100 flex flex-col gap-6"
+  >
+    <!-- Modal Close Button -->
+    <button 
+      (click)="onClose()" 
+      class="absolute top-5 right-5 flex h-8 w-8 items-center justify-center rounded-full border border-white/5 bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10 transition-colors"
+      aria-label="Cerrar modal"
+    >
+      <span class="text-lg">&times;</span>
+    </button>
+
+    <!-- Header -->
+    <div class="flex flex-col gap-1.5 text-center mt-2">
+      <h3 class="text-2xl font-black tracking-tight text-slate-50">
+        {{ isLoginMode() ? 'Bienvenido de nuevo' : 'Crea tu cuenta' }}
+      </h3>
+      <p class="text-sm text-slate-400/80">
+        {{ isLoginMode() ? 'Accede a tu historial y métricas de calistenia' : 'Registra tus datos y empieza a medir tus rutinas' }}
+      </p>
+    </div>
+
+    <!-- Error Alert Message -->
+    @if (errorMessage()) {
+      <div class="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-xs font-semibold text-red-400 animate-slide-in">
+        <span class="text-base"></span>
+        <div class="flex-1">{{ errorMessage() }}</div>
+      </div>
+    }
+
+    <!-- Form -->
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      
+      <!-- Name Field (Register mode only) -->
+      @if (!isLoginMode()) {
+        <div class="flex flex-col gap-1.5">
+          <label for="reg-name" class="text-xs font-bold uppercase tracking-wider text-slate-400">Nombre Completo</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></span>
+            <input 
+              id="reg-name" 
+              type="text" 
+              formControlName="name"
+              placeholder="Juan García"
+              class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
+            >
+          </div>
+          @if (authForm.get('name')?.touched && authForm.get('name')?.invalid) {
+            <span class="text-[11px] font-semibold text-red-400/80">El nombre es requerido</span>
+          }
+        </div>
+      }
+
+      <!-- Email Field -->
+      <div class="flex flex-col gap-1.5">
+        <label for="auth-email" class="text-xs font-bold uppercase tracking-wider text-slate-400">Email</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></span>
+          <input 
+            id="auth-email" 
+            type="email" 
+            formControlName="email"
+            placeholder="correo@ejemplo.com"
+            class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
+          >
+        </div>
+        @if (authForm.get('email')?.touched && authForm.get('email')?.invalid) {
+          <span class="text-[11px] font-semibold text-red-400/80">Ingresa un correo electrónico válido</span>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="flex flex-col gap-1.5">
+        <label for="auth-pass" class="text-xs font-bold uppercase tracking-wider text-slate-400">Contraseña</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></span>
+          <input 
+            id="auth-pass" 
+            type="password" 
+            formControlName="password"
+            placeholder="••••••••"
+            class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
+          >
+        </div>
+        @if (authForm.get('password')?.touched && authForm.get('password')?.invalid) {
+          <span class="text-[11px] font-semibold text-red-400/80">La contraseña debe tener al menos 6 caracteres</span>
+        }
+      </div>
+
+      <!-- Action Button -->
+      <button 
+        type="submit" 
+        [disabled]="isLoading()"
+        class="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:opacity-95 disabled:opacity-50 cursor-pointer"
+      >
+        @if (isLoading()) {
+          <span class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+          <span>Procesando...</span>
+        } @else {
+          <span>{{ isLoginMode() ? 'Iniciar Sesión' : 'Registrarse' }}</span>
+        }
+      </button>
+    </form>
+
+    <!-- Footer Toggle Mode Link -->
+    <div class="text-center text-xs font-medium text-slate-400/75 border-t border-white/5 pt-4">
+      <span>{{ isLoginMode() ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?' }}</span>
+      <button 
+        (click)="toggleMode()" 
+        class="ml-1 font-bold text-indigo-400 hover:text-indigo-300 hover:underline bg-transparent border-none cursor-pointer"
+      >
+        {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión aquí' }}
+      </button>
+    </div>
+  </div>
+</div>

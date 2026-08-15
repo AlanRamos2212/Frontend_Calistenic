@@ -21,7 +21,7 @@ export class BleService {
   constructor() {}
 
   /**
-   * Connect to a physical BLE Heart Rate Wearable using Web Bluetooth
+   * Connect to an optional browser-accessible wearable source
    */
   async connect() {
     this.error.set('');
@@ -34,12 +34,11 @@ export class BleService {
 
     if (!(navigator as any).bluetooth) {
       this.isScanning.set(false);
-      this.error.set('Web Bluetooth is not supported in this browser. Please try Chrome, Edge, or Opera, or use Simulation mode.');
+      this.error.set('La conexión directa no está disponible en este navegador. Usa el modo local.');
       return;
     }
 
     try {
-      // Standard Heart Rate service UUID is 0x180D (or 'heart_rate')
       this.bluetoothDevice = await (navigator as any).bluetooth.requestDevice({
         filters: [{ services: ['heart_rate'] }],
         optionalServices: ['generic_access']
@@ -55,7 +54,6 @@ export class BleService {
       const service = await server.getPrimaryService('heart_rate');
       this.hrCharacteristic = await service.getCharacteristic('heart_rate_measurement');
       
-      // Start receiving heart rate notification events
       await this.hrCharacteristic.startNotifications();
       this.hrCharacteristic.addEventListener('characteristicvaluechanged', (event: any) => {
         this.parseHeartRate(event.target.value);
@@ -66,16 +64,16 @@ export class BleService {
     } catch (err: any) {
       this.isScanning.set(false);
       if (err.name === 'NotFoundError') {
-        this.error.set('Bluetooth device selection cancelled.');
+        this.error.set('Selección de dispositivo cancelada.');
       } else {
-        this.error.set(`Connection failed: ${err.message || err}`);
+        this.error.set(`La conexión falló: ${err.message || err}`);
       }
       this.handleDisconnect();
     }
   }
 
   /**
-   * Disconnect from BLE device or stop simulation
+   * Disconnect from the browser source or stop simulation
    */
   disconnect() {
     if (this.isSimulated()) {
@@ -95,18 +93,15 @@ export class BleService {
   }
 
   /**
-   * Parse the binary payload received from standard BLE Heart Rate Measurement Characteristic (0x2A37)
+   * Parse the binary payload received from the heart rate measurement characteristic
    */
   private parseHeartRate(value: DataView) {
-    // Standard BLE Heart Rate parsing:
-    // First byte is flags.
-    // Bit 0 specifies format: 0 = uint8 BPM, 1 = uint16 BPM.
     const flags = value.getUint8(0);
     const rate16Bits = flags & 0x01;
     let bpm = 0;
     
     if (rate16Bits) {
-      bpm = value.getUint16(1, true); // true for Little Endian
+      bpm = value.getUint16(1, true);
     } else {
       bpm = value.getUint8(1);
     }
@@ -126,23 +121,18 @@ export class BleService {
     this.isSimulated.set(true);
     this.deviceConnected.set(true);
     this.deviceName.set('Virtual FitBand (Simulated)');
-    this.simBaseHr = 70 + Math.random() * 10; // Random starting HR (70-80 BPM)
+    this.simBaseHr = 70 + Math.random() * 10;
     this.simTime = 0;
     this.heartRate.set(Math.round(this.simBaseHr));
 
-    // Update simulated heart rate every 1 second
     this.simulationIntervalId = setInterval(() => {
       this.simTime += 1;
       
-      // Simulate physical workout load: HR ramps up over time, then stabilizes, with small random fluctuations
-      // We use a mathematical function (sine/arctangent) to mimic workout curves:
-      // Rapid rise at the beginning, peaking, then minor fluctuations.
-      const riseFactor = Math.atan(this.simTime / 60) * 80; // Rise up to +80 bpm
+      const riseFactor = Math.atan(this.simTime / 60) * 80;
       const noise = Math.sin(this.simTime * 0.2) * 3 + (Math.random() - 0.5) * 2;
       
       const currentBpm = Math.round(this.simBaseHr + riseFactor + noise);
       
-      // Keep it within human-athlete limits (60 - 200 BPM)
       this.heartRate.set(Math.max(60, Math.min(200, currentBpm)));
     }, 1000);
   }

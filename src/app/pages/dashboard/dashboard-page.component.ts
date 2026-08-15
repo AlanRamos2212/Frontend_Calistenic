@@ -6,7 +6,6 @@ import { ToastModule } from 'primeng/toast';
 
 import { BleService } from '../../ble.service';
 import { ApiService, Workout, HeartRatePoint } from '../../api.service';
-import { BlePanelComponent } from '../../components/ble-panel/ble-panel.component';
 import { WorkoutFormComponent } from '../../components/workout-form/workout-form.component';
 import { DashboardMonitorComponent } from '../../components/dashboard-monitor/dashboard-monitor.component';
 import { WorkoutCardComponent } from '../../components/workout-card/workout-card.component';
@@ -14,6 +13,7 @@ import { WorkoutDetailsModalComponent } from '../../components/workout-details-m
 import { WarningBannerComponent } from '../../components/warning-banner/warning-banner.component';
 import { SettingsModalComponent } from '../../components/settings-modal/settings-modal.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
+import { WearablePairingComponent } from '../../components/wearable-pairing/wearable-pairing.component';
 
 const DEFAULT_WORKOUT_NAME = 'Entrenamiento de Calistenia';
 const DEFAULT_WORKOUT_DESCRIPTION = 'Rutina de fuerza (Dominadas, Fondos, Flexiones)';
@@ -24,14 +24,14 @@ const DEFAULT_WORKOUT_DESCRIPTION = 'Rutina de fuerza (Dominadas, Fondos, Flexio
   imports: [
     CommonModule,
     ToastModule,
-    BlePanelComponent,
     WorkoutFormComponent,
     DashboardMonitorComponent,
     WorkoutCardComponent,
     WorkoutDetailsModalComponent,
     WarningBannerComponent,
     SettingsModalComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    WearablePairingComponent
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css'
@@ -146,7 +146,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
     this.messageService.add({
       severity: 'error',
-      summary: '🚨 Alerta Cardíaca',
+      summary: ' Alerta Cardíaca',
       detail: msg,
       life: 8000,
       sticky: false
@@ -155,7 +155,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     try {
       if ('vibrate' in navigator) navigator.vibrate([200, 100, 200]);
       if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('🚨 CalistenicTrack: Alerta Cardíaca', {
+        new Notification(' CalistenicTrack: Alerta Cardíaca', {
           body: `Tu FC de ${bpm} BPM ha superado la zona de seguridad.`,
           icon: '/favicon.ico'
         });
@@ -178,7 +178,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   loadWorkoutsHistory() {
     this.api.getWorkouts().subscribe({
       next: list => this.workouts.set(list),
-      error: err => console.error('Error loading history:', err)
+      error: () => undefined
     });
   }
 
@@ -278,7 +278,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         this.api.saveHeartRates(workoutId, batch).subscribe({
           error: err => {
             this.unsavedHeartRates.unshift(...batch);
-            console.error('Sync failed, retry next cycle:', err);
+            void err;
           }
         });
       }

@@ -58,7 +58,7 @@
 
       <!-- LEFT: Device + Form -->
       <div class="flex flex-col gap-6 w-full">
-        <app-ble-panel></app-ble-panel>
+        <app-wearable-pairing></app-wearable-pairing>
         <app-workout-form
           [isActive]="isWorkoutActive()"
           [currentWorkout]="currentWorkout()"
@@ -103,7 +103,7 @@
         <app-empty-state
           icon="💪"
           title="No hay sesiones guardadas"
-          description="Conecta un dispositivo BLE o inicia la simulación para guardar tus primeras sesiones."
+          description="Conecta tu wearable por código o inicia la simulación para guardar tus primeras sesiones."
           actionText="Ir al Monitor"
           (onAction)="activeTab.set('dashboard')">
         </app-empty-state>

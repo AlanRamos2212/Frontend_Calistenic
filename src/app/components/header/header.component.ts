@@ -1,8 +1,7 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, computed, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { BleService } from '../../ble.service';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { SearchService, SearchResult } from '../../services/search.service';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +10,8 @@ import { DialogModule } from 'primeng/dialog';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TooltipModule } from 'primeng/tooltip';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ApiService, WearableBinding } from '../../api.service';
 
 @Component({
   selector: 'app-header',
@@ -30,12 +31,25 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
-  readonly ble = inject(BleService);
+export class HeaderComponent implements OnInit {
+  readonly api = inject(ApiService);
   readonly searchService = inject(SearchService);
   readonly router = inject(Router);
+  readonly authService = inject(AuthService);
 
   readonly searchOpen = signal(false);
+  readonly wearableBindings = signal<WearableBinding[]>([]);
+  readonly isWearableLoading = signal(true);
+  readonly activeWearable = computed(() =>
+    this.wearableBindings().find(w => w.active) ?? this.wearableBindings()[0] ?? null
+  );
+  readonly wearableStatusLabel = computed(() => {
+    const wearable = this.activeWearable();
+    if (!wearable) return 'Sin wearable';
+    if (!wearable.active) return 'Wearable inactivo';
+    return wearable.pinConfirmed ? 'Wearable vinculado' : 'Pendiente PIN';
+  });
+
   searchQuery = '';
   searchSuggestions: SearchResult[] = [];
   selectedResult: SearchResult | null = null;
@@ -46,6 +60,24 @@ export class HeaderComponent {
     { label: 'Progreso', path: '/progreso', icon: 'pi pi-chart-bar' },
     { label: 'Comunidad', path: '/comunidad', icon: 'pi pi-users' }
   ];
+
+  ngOnInit(): void {
+    this.loadWearableStatus();
+  }
+
+  private loadWearableStatus(): void {
+    this.isWearableLoading.set(true);
+    this.api.getWearables().subscribe({
+      next: bindings => {
+        this.wearableBindings.set(bindings ?? []);
+        this.isWearableLoading.set(false);
+      },
+      error: () => {
+        this.wearableBindings.set([]);
+        this.isWearableLoading.set(false);
+      }
+    });
+  }
 
   @HostListener('document:keydown', ['$event'])
   handleKeydown(e: KeyboardEvent) {

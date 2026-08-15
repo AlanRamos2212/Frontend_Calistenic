@@ -1,18 +1,41 @@
 import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
+import { AuthService } from '../../services/auth.service';
+import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, AuthModalComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
   private readonly themeService = inject(ThemeService);
+  readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private intervalId: any;
+
+  readonly showAuthModal = signal(false);
+
+  openAuth(): void {
+    this.showAuthModal.set(true);
+  }
+
+  closeAuth(): void {
+    this.showAuthModal.set(false);
+  }
+
+  handleOpenApp(event: Event): void {
+    event.preventDefault();
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.openAuth();
+    }
+  }
 
   currentBpm = signal<number>(142);
   currentZone = signal<number>(3);
@@ -20,10 +43,10 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   readonly features = [
     {
-      icon: 'pi pi-bluetooth',
+      icon: 'pi pi-mobile',
       color: 'indigo',
-      title: 'BLE en Tiempo Real',
-      desc: 'Conecta tu banda cardíaca Bluetooth Smart al instante. Sin cables, sin latencia.'
+      title: 'Vinculación por Código',
+      desc: 'Genera un código de 6 dígitos y confirma la conexión desde tu wearable en segundos.'
     },
     {
       icon: 'pi pi-heart-fill',
@@ -61,7 +84,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     { value: '5', label: 'Zonas HR', suffix: '' },
     { value: '20+', label: 'Ejercicios', suffix: '' },
     { value: '100%', label: 'Open Source', suffix: '' },
-    { value: '0ms', label: 'Latencia BLE', suffix: '' },
+    { value: '6D', label: 'Código', suffix: '' },
   ];
 
   readonly currentYear = new Date().getFullYear();
@@ -70,7 +93,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       name: 'Carlos M.',
       role: 'Atleta de calistenia · 3 años',
-      text: 'Finalmente una app que conecta con mi banda BLE sin fricciones. El monitor en tiempo real es increíble.',
+      text: 'La vinculación por código es rápida y me permite seguir mi entrenamiento sin interrupciones. El monitor es increíble.',
       avatar: '🏋️'
     },
     {
