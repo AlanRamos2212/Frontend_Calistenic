@@ -4,14 +4,19 @@
   <div class="flex flex-col gap-4 p-5 md:p-6 border-b border-white/5">
     <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
       <div>
-        <p class="text-[11px] uppercase font-black tracking-[0.28em] text-cyan-500 dark:text-cyan-400">Vinculación de Wearable</p>
-        <h2 class="mt-2 text-xl md:text-2xl font-black text-slate-900 dark:text-slate-100">Código de 6 dígitos</h2>
-        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-3xl">
-          Genera un código aquí, ingresa los 6 dígitos en la app del wearable, y confirma el PIN en el dispositivo.
-          El backend creará el vínculo automáticamente.
-        </p>
+        <p class="text-[11px] uppercase font-black tracking-[0.28em] text-cyan-500 dark:text-cyan-400">Estado de Wearable</p>
       </div>
-      @if (pairingCodeReady()) {
+      @if (wearableState().status === 'connected') {
+        <span class="inline-flex items-center gap-2 dark:text-emerald-300">
+          <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Wearable conectado
+        </span>
+      } @else if (wearableState().status === 'pairing') {
+        <span class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-300">
+          <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+          Esperando PIN
+        </span>
+      } @else if (pairingCodeReady()) {
         <span class="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-300">
           <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
           Código Listo
@@ -24,48 +29,108 @@
   <div class="p-5 md:p-6">
     <div class="rounded-3xl border border-white/10 bg-slate-950/30 p-5 md:p-6">
       <div class="flex flex-col gap-4">
-        <!-- Pairing Code Display -->
-        <div class="rounded-2xl border border-black/20 bg-black/20 p-4">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p class="text-[10px] uppercase tracking-[0.24em] text-slate-400">Código de vinculación</p>
-              @if (pairingCode()) {
-                <div class="mt-3 flex items-center gap-3">
-                  <span class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-6 py-3 text-3xl md:text-4xl font-black tracking-[0.4em] text-cyan-300 font-mono">
-                    {{ pairingCode()?.code }}
+        @if (wearableState().status === 'connected') {
+          <div class="relative overflow-hidden rounded-3xl border border-emerald-500/30">
+            <!-- Background Glow -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-[50px] rounded-full pointer-events-none"></div>
+
+            <div class="relative flex flex-col gap-6 sm:flex-row sm:items-center">
+              
+              <!-- Wearable Device Graphic -->
+              <div class="relative flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-full bg-emerald-500/5 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)പ്പെടുത്തി">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="5" width="10" height="14" rx="3" fill="rgba(16,185,129,0.05)"></rect>
+                  <path d="M8 5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"></path>
+                  <path d="M8 19v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2"></path>
+                  <!-- Screen Pulse -->
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor" class="animate-pulse"></circle>
+                  <path d="M9 10h6" stroke="rgba(52,211,153,0.5)" stroke-width="1" />
+                  <path d="M9 14h4" stroke="rgba(52,211,153,0.5)" stroke-width="1" />
+                </svg>
+                <!-- Connectivity ring -->
+                <div class="absolute inset-0 rounded-full border-2 border-emerald-500/10 border-t-emerald-400/60 animate-[spin_3s_linear_infinite]"></div>
+                <div class="absolute inset-0 rounded-full border border-emerald-500/10 border-b-emerald-300/40 animate-[spin_4s_linear_infinite_reverse]"></div>
+              </div>
+
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-emerald-300">
+                    {{ wearableState().deviceId || 'Sync OK' }}
                   </span>
-                  <div class="text-xs text-slate-400">
-                    <p class="m-0">Expira: {{ pairingCode()?.expiresAt | date:'shortTime' }}</p>
-                    <p class="m-0">Válido por {{ pairingCode()?.expiresInSeconds }} s</p>
-                  </div>
                 </div>
-              } @else {
-                <p class="mt-3 text-sm text-slate-400">Pulsa el botón para generar un nuevo código.</p>
-              }
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <p-button
-                [label]="isPairingCodeLoading() ? 'Generando...' : 'Generar código'"
-                icon="pi pi-key"
-                severity="secondary"
-                [outlined]="true"
-                [loading]="isPairingCodeLoading()"
-                (onClick)="requestPairingCode()"
-              />
-              <p-button
-                *ngIf="pairingCode()"
-                label="Limpiar"
-                icon="pi pi-times"
-                severity="secondary"
-                [outlined]="true"
-                (onClick)="clearPairingCode()"
-              />
+                <h3 class="text-xl md:text-sm font-black text-emerald-50 m-0">
+                  Wearable Conectado
+                </h3>
+                <p class="mt-2 text-sm text-emerald-100/60 leading-relaxed max-w-lg m-0">
+                  El dispositivo está enlazado.
+                </p>
+              </div>
+
+              <!-- Action button -->
+              <div class="sm:ml-auto mt-4 sm:mt-0">
+                <button
+                  class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 hover:border-rose-500/50 transition-colors text-xs font-bold uppercase tracking-wider"
+                  (click)="unlinkWearable()"
+                >
+                  <i class="pi pi-unlink text-sm"></i>
+                  Desvincular
+                </button>
+              </div>
+
             </div>
           </div>
-          @if (pairingCodeError()) {
-            <p class="mt-3 text-sm text-rose-300">{{ pairingCodeError() }}</p>
-          }
-        </div>
+        } @else {
+          <!-- Pairing Code Display -->
+          <div class="rounded-2xl border border-black/20 bg-black/20 p-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.24em] text-slate-400">Código de vinculación</p>
+                @if (pairingCode()) {
+                  <div class="mt-3 flex items-center gap-3">
+                    <span class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-6 py-3 text-3xl md:text-4xl font-black tracking-[0.4em] text-cyan-300 font-mono">
+                      {{ pairingCode()?.code }}
+                    </span>
+                    <div class="text-xs text-slate-400">
+                      <p class="m-0">Expira: {{ pairingCode()?.expiresAt | date:'shortTime' }}</p>
+                      <p class="m-0">Válido por {{ pairingCode()?.expiresInSeconds }} s</p>
+                    </div>
+                  </div>
+                } @else {
+                  <p class="mt-3 text-sm text-slate-400">Pulsa el botón para generar un nuevo código.</p>
+                }
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <p-button
+                  [label]="isPairingCodeLoading() ? 'Generando...' : 'Generar código'"
+                  icon="pi pi-key"
+                  severity="secondary"
+                  [outlined]="true"
+                  [loading]="isPairingCodeLoading()"
+                  (onClick)="requestPairingCode()"
+                />
+                <p-button
+                  [label]="isCheckingPairing() ? 'Revisando...' : 'Revisar estado'"
+                  icon="pi pi-sync"
+                  severity="secondary"
+                  [outlined]="true"
+                  [loading]="isCheckingPairing()"
+                  (onClick)="refreshPairingStatus()"
+                />
+                <p-button
+                  *ngIf="pairingCode()"
+                  label="Limpiar"
+                  icon="pi pi-times"
+                  severity="secondary"
+                  [outlined]="true"
+                  (onClick)="clearPairingCode()"
+                />
+              </div>
+            </div>
+            @if (pairingCodeError()) {
+              <p class="mt-3 text-sm text-rose-300">{{ pairingCodeError() }}</p>
+            }
+          </div>
+        }
 
         <!-- Guide Toggle -->
         <div class="flex flex-wrap gap-3 pt-2">
@@ -107,6 +172,11 @@
             <div class="mt-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300">
               <strong>✓ Flujo descentralizado:</strong> El wearable se vincula directamente con el backend. Angular solo orquesta el estado.
             </div>
+            @if (wearableState().status === 'connected') {
+              <div class="mt-4 p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-200">
+                <strong>✓ Conectado:</strong> El wearable ya quedó enlazado y el dashboard puede actualizarse con ese estado.
+              </div>
+            }
           </div>
         }
       </div>

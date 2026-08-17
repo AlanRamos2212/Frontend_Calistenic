@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal, computed, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChartModule } from 'primeng/chart';
@@ -9,8 +9,9 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ApiService, Workout } from '../../api.service';
 import { AuthService } from '../../services/auth.service';
+import { WearableConnectionService } from '../../services/wearable-connection.service';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
-import { firstValueFrom } from 'rxjs';
+import { Subscription, firstValueFrom, interval } from 'rxjs';
 
 interface DeviceTokenResponse {
   deviceToken: string;
@@ -36,14 +37,16 @@ interface WearableBinding {
   templateUrl: './progreso-page.component.html',
   styleUrl: './progreso-page.component.css'
 })
-export class ProgresoPageComponent implements OnInit {
+export class ProgresoPageComponent implements OnInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = 'http://localhost:8080/api';
+  private readonly wearableConnection = inject(WearableConnectionService);
+  private readonly apiBaseUrl = 'http://localhost:8082/api';
   private readonly deviceTokenStorageKey = 'app.device.token';
   private readonly userIdStorageKey = 'app.user.id';
   @ViewChild('flutterDashboardFrame') private flutterDashboardFrame?: ElementRef<HTMLIFrameElement>;
+  private wearableRefreshSub?: Subscription;
 
   readonly flutterDashboardUrl = '/flutter-dashboard/index.html';
 
@@ -90,6 +93,7 @@ export class ProgresoPageComponent implements OnInit {
 
   ngOnInit() {
     this.loadWearableBindings();
+    this.wearableRefreshSub = interval(5000).subscribe(() => this.loadWearableBindings());
 
     this.api.getWorkouts().subscribe({
       next: list => {
@@ -103,18 +107,34 @@ export class ProgresoPageComponent implements OnInit {
     void this.prepareFlutterDashboard();
   }
 
+  ngOnDestroy(): void {
+    this.wearableRefreshSub?.unsubscribe();
+  }
+
   private loadWearableBindings(): void {
     this.isWearableLoading.set(true);
     this.wearableError.set(null);
-
-    this.api.getWearables().subscribe({
+    this.wearableConnection.rehydrateFromStorage();
+    this.wearableConnection.loadFromBackend().subscribe({
       next: bindings => {
-        this.wearableBindings.set(bindings ?? []);
+        this.wearableBindings.set(bindings);
         this.isWearableLoading.set(false);
       },
-      error: () => {
-        this.wearableBindings.set([]);
-        this.wearableError.set('No fue posible consultar el estado del wearable.');
+      error: error => {
+        console.error('Error loading wearable bindings from backend:', error);
+        const state = this.wearableConnection.connectionState();
+        if (state.deviceId) {
+          this.wearableBindings.set([{
+            id: 0,
+            wearableId: state.deviceId,
+            active: state.status === 'connected',
+            pinConfirmed: state.status === 'connected',
+            confirmedAt: state.status === 'connected' ? new Date().toISOString() : null,
+          }]);
+        } else {
+          this.wearableBindings.set([]);
+        }
+        this.wearableError.set('No fue posible cargar el estado real del wearable desde el backend.');
         this.isWearableLoading.set(false);
       }
     });

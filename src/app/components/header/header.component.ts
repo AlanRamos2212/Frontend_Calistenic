@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, HostListener, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,8 +10,10 @@ import { DialogModule } from 'primeng/dialog';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TooltipModule } from 'primeng/tooltip';
 import { Router } from '@angular/router';
+import { Subscription, interval } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ApiService, WearableBinding } from '../../api.service';
+import { WearableConnectionService } from '../../services/wearable-connection.service';
 
 @Component({
   selector: 'app-header',
@@ -31,28 +33,41 @@ import { ApiService, WearableBinding } from '../../api.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit {
-  readonly api = inject(ApiService);
+export class HeaderComponent implements OnInit, OnDestroy {
   readonly searchService = inject(SearchService);
   readonly router = inject(Router);
   readonly authService = inject(AuthService);
+  readonly api = inject(ApiService);
+  readonly wearableConnection = inject(WearableConnectionService);
 
   readonly searchOpen = signal(false);
-  readonly wearableBindings = signal<WearableBinding[]>([]);
   readonly isWearableLoading = signal(true);
-  readonly activeWearable = computed(() =>
-    this.wearableBindings().find(w => w.active) ?? this.wearableBindings()[0] ?? null
-  );
+  readonly connectionState = this.wearableConnection.connectionState;
+  readonly activeWearable = computed<WearableBinding | null>(() => {
+    const state = this.connectionState();
+    if (!state.deviceId || state.status === 'disconnected') {
+      return null;
+    }
+
+    return {
+      id: 0,
+      wearableId: state.deviceId,
+      active: state.status === 'connected',
+      pinConfirmed: state.status === 'connected',
+      confirmedAt: state.status === 'connected' ? new Date().toISOString() : null
+    };
+  });
   readonly wearableStatusLabel = computed(() => {
-    const wearable = this.activeWearable();
-    if (!wearable) return 'Sin wearable';
-    if (!wearable.active) return 'Wearable inactivo';
-    return wearable.pinConfirmed ? 'Wearable vinculado' : 'Pendiente PIN';
+    const state = this.connectionState();
+    if (state.status === 'connected') return 'Wearable conectado';
+    if (state.status === 'pairing') return 'Pendiente PIN';
+    return 'Sin wearable';
   });
 
   searchQuery = '';
   searchSuggestions: SearchResult[] = [];
   selectedResult: SearchResult | null = null;
+  private wearableRefreshSub?: Subscription;
 
   readonly navLinks = [
     { label: 'Dashboard', path: '/dashboard', icon: 'pi pi-chart-line' },
@@ -62,18 +77,23 @@ export class HeaderComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.loadWearableStatus();
+    this.refreshWearableState();
+    this.wearableRefreshSub = interval(5000).subscribe(() => this.refreshWearableState());
   }
 
-  private loadWearableStatus(): void {
+  ngOnDestroy(): void {
+    this.wearableRefreshSub?.unsubscribe();
+  }
+
+  private refreshWearableState(): void {
     this.isWearableLoading.set(true);
-    this.api.getWearables().subscribe({
-      next: bindings => {
-        this.wearableBindings.set(bindings ?? []);
+    this.wearableConnection.loadFromBackend().subscribe({
+      next: () => {
         this.isWearableLoading.set(false);
       },
-      error: () => {
-        this.wearableBindings.set([]);
+      error: error => {
+        console.error('Error loading wearable bindings from backend:', error);
+        this.wearableConnection.rehydrateFromStorage();
         this.isWearableLoading.set(false);
       }
     });

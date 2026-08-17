@@ -27,12 +27,12 @@
     </nav>
 
     <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-auto md:ml-0">
-      @if (isWearableLoading()) {
+      @if (wearableConnection.connectionState().status === 'pairing') {
         <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 text-slate-500 dark:text-slate-400">
           <i class="pi pi-spin pi-spinner text-[10px]"></i>
           <span>Verificando wearable</span>
         </div>
-      } @else if (activeWearable()) {
+      } @else if (wearableConnection.connectionState().status === 'connected') {
         <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] md:text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm" id="header-ble-badge">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
           <span>{{ wearableStatusLabel() }}</span>

@@ -30,7 +30,7 @@ export interface UserFullProfile {
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly apiUrl = 'http://localhost:8080/api/auth';
+  private readonly apiUrl = 'http://localhost:8082/api/auth';
   private readonly tokenKey = 'app.auth.token';
   private readonly legacyTokenKey = 'app.session.token';
   private readonly userKey = 'app.user.id';

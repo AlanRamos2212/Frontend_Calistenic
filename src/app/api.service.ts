@@ -37,12 +37,20 @@ export interface WearablePairingCodeResponse {
   expiresInSeconds: number;
 }
 
+export interface WearablePairingStatusResponse {
+  code: string;
+  status: 'INVALID' | 'EXPIRED' | 'PENDING' | 'BOUND_WAITING_PIN' | 'CONFIRMED';
+  wearableId?: string | null;
+  pinConfirmed?: boolean | null;
+  expiresAt?: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private readonly apiUrl = '/api/workouts';
-  private readonly backendUrl = 'http://localhost:8080/api';
+  private readonly backendUrl = 'http://localhost:8082/api';
   private readonly localMode = true; // Workout history is stored locally for now
 
   constructor(private http: HttpClient) {
@@ -112,6 +120,15 @@ export class ApiService {
     );
   }
 
+  getPairingStatus(code: string): Observable<WearablePairingStatusResponse> {
+    return this.http.get<WearablePairingStatusResponse>(
+      `${this.backendUrl}/wearables/pairing/status/${encodeURIComponent(code)}`,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
   /**
    * Bind a wearable to the authenticated user
    */
@@ -120,6 +137,20 @@ export class ApiService {
     return this.http.post<WearableBinding>(
       `${this.backendUrl}/wearables/bind`,
       { wearableId },
+      {
+        headers,
+        withCredentials: true
+      }
+    );
+  }
+
+  /**
+   * Unbind a wearable from the authenticated user
+   */
+  unbindWearable(wearableId: string): Observable<any> {
+    const headers = this.authHeaders();
+    return this.http.delete(
+      `${this.backendUrl}/wearables/${wearableId}`,
       {
         headers,
         withCredentials: true

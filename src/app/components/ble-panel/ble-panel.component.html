@@ -9,20 +9,13 @@
         <p class="ble-sub">{{ panelSubtitle() }}</p>
       </div>
     </div>
-    @if (isWearableLoading()) {
-      <p-tag value="Cargando" severity="warn" icon="pi pi-spin pi-spinner" [rounded]="true" />
-    } @else if (activeWearable()) {
-      <p-tag
-        id="ble-status-connected"
-        [value]="wearableStatusLabel()"
-        [severity]="wearableStatusSeverity()"
-        icon="pi pi-circle-fill"
-        [rounded]="true"
-        styleClass="pulse-active"
-      />
-    } @else {
-      <p-tag id="ble-status-offline" value="Offline" severity="danger" icon="pi pi-power-off" [rounded]="true" />
-    }
+    <p-tag
+      [value]="wearableStatusLabel()"
+      [severity]="wearableStatusSeverity()"
+      icon="pi pi-circle-fill"
+      [rounded]="true"
+      styleClass="pulse-active"
+    />
   </div>
 
   <!-- Error -->
@@ -30,41 +23,28 @@
     <p-message id="ble-error-msg" severity="error" [text]="ble.error()" styleClass="w-full" />
   }
 
-  @if (activeWearable()) {
-    @let wearable = activeWearable();
-    <p-message
-      id="wearable-linked-msg"
-      [severity]="wearable!.pinConfirmed ? 'success' : 'warn'"
-      [text]="wearable!.pinConfirmed ? 'Wearable vinculado: ' + wearable!.wearableId : 'Wearable enlazado, pendiente PIN: ' + wearable!.wearableId"
-      styleClass="w-full"
-    />
-  } @else {
-    <p-message
-      id="ble-real-flow-msg"
-      severity="info"
-      text="La vinculación real del wearable se hace por código en la app Flutter wearable, no aquí en Angular."
-      styleClass="w-full"
-    />
-  }
+  <p-message
+    id="ble-real-flow-msg"
+    severity="info"
+    text="La vinculación real ahora se resuelve por código de 6 dígitos y el estado se comparte con Angular."
+    styleClass="w-full"
+  />
 
   <!-- Device Info -->
-  @if (activeWearable()) {
-    @let wearable = activeWearable();
-    <div class="device-info">
-      <div class="info-row">
-        <span class="info-label"><i class="pi pi-mobile-alt"></i> Wearable ID</span>
-        <strong class="info-value">{{ wearable!.wearableId }}</strong>
-      </div>
-      <div class="info-row">
-        <span class="info-label"><i class="pi pi-heart-fill"></i> PIN</span>
-        <strong class="info-value bpm-live">{{ wearable!.pinConfirmed ? 'Confirmado' : 'Pendiente' }}</strong>
-      </div>
+  <div class="device-info">
+    <div class="info-row">
+      <span class="info-label"><i class="pi pi-mobile-alt"></i> Wearable</span>
+      <strong class="info-value">{{ activeWearable() ?? 'Sin ID local' }}</strong>
     </div>
-  }
+    <div class="info-row">
+      <span class="info-label"><i class="pi pi-heart-fill"></i> Estado</span>
+      <strong class="info-value bpm-live">{{ connectionState().status === 'connected' ? 'Conectado' : (connectionState().status === 'pairing' ? 'Emparejando' : 'Simulación') }}</strong>
+    </div>
+  </div>
 
   <!-- Buttons -->
   <div class="ble-actions">
-    @if (!activeWearable()) {
+    @if (connectionState().status !== 'connected') {
       <p-button
         id="ble-simulate-btn"
         label="Usar modo local"
@@ -77,9 +57,9 @@
     } @else {
       <p-button
         id="ble-disconnect-btn"
-        label="Refrescar estado"
-        icon="pi pi-power-off"
-        severity="danger"
+        label="Revisar vínculo"
+        icon="pi pi-sync"
+        severity="success"
         [outlined]="true"
         styleClass="w-full"
         (onClick)="refreshWearableStatus()"
@@ -90,7 +70,7 @@
   <!-- Simulation Controls -->
   @if (ble.isSimulated()) {
     <div class="sim-controls">
-      <p class="sim-label">⚡ Ajuste de Esfuerzo Emulado</p>
+      <p class="sim-label">⚡ Ajuste de ejercicio emulado</p>
       <div class="sim-buttons">
         <p-button id="sim-rest-btn"     label="Reposo"   icon="pi pi-moon"      severity="info"    [outlined]="true" size="small" (onClick)="exertSimulated('rest')" />
         <p-button id="sim-moderate-btn" label="Moderado" icon="pi pi-sun"        severity="warn"    [outlined]="true" size="small" (onClick)="exertSimulated('moderate')" />
@@ -98,5 +78,4 @@
       </div>
     </div>
   }
-
 </section>

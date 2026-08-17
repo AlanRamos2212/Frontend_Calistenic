@@ -5,7 +5,8 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 import { BleService } from '../../ble.service';
-import { ApiService, Workout, HeartRatePoint } from '../../api.service';
+import { ApiService, Workout, HeartRatePoint, WearableBinding } from '../../api.service';
+import { WearableConnectionService } from '../../services/wearable-connection.service';
 import { WorkoutFormComponent } from '../../components/workout-form/workout-form.component';
 import { DashboardMonitorComponent } from '../../components/dashboard-monitor/dashboard-monitor.component';
 import { WorkoutCardComponent } from '../../components/workout-card/workout-card.component';
@@ -40,6 +41,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   readonly ble = inject(BleService);
   readonly api = inject(ApiService);
   readonly messageService = inject(MessageService);
+  readonly wearableConnection = inject(WearableConnectionService);
   private readonly route = inject(ActivatedRoute);
 
   // UI State
@@ -53,6 +55,23 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   readonly warningMessage = signal<string>('');
   readonly initialWorkoutName = signal<string>(DEFAULT_WORKOUT_NAME);
   readonly initialWorkoutDescription = signal<string>(DEFAULT_WORKOUT_DESCRIPTION);
+
+  // Wearable State - read from service
+  readonly wearableConnectionState = this.wearableConnection.connectionState;
+  readonly wearableConnected = computed(() => 
+    this.wearableConnection.isFullyConnected()
+  );
+  readonly wearableStatus = computed(() => {
+    const state = this.wearableConnection.getStatus();
+    switch (state) {
+      case 'connected':
+        return '✓ Conectado';
+      case 'pairing':
+        return '⏳ Vinculando...';
+      default:
+        return '✗ Desconectado';
+    }
+  });
 
   // Analytics
   readonly elapsedSeconds = signal<number>(0);
@@ -132,6 +151,16 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     if (this.saveIntervalId) clearInterval(this.saveIntervalId);
   }
 
+  onWearableLinked(binding: WearableBinding): void {
+    this.wearableConnection.notifyWearableLinked(binding.wearableId);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Wearable conectado',
+      detail: `El wearable ${binding.wearableId} quedó vinculado correctamente.`,
+      life: 5000
+    });
+  }
+
   // --- Notifications ---
   requestNotificationPermissions() {
     if ('Notification' in window && Notification.permission === 'default') {
@@ -199,6 +228,11 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         this.warningBannerVisible.set(false);
         this.startStopwatch();
         this.startPeriodicSync(workout.id);
+        
+        if (!this.ble.deviceConnected()) {
+          this.ble.startSimulation();
+        }
+
         this.messageService.add({ severity: 'success', summary: '¡Sesión iniciada!', detail: event.name, life: 3000 });
       },
       error: err => {
@@ -213,6 +247,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
     this.stopStopwatch();
     if (this.saveIntervalId) { clearInterval(this.saveIntervalId); this.saveIntervalId = null; }
+
+    if (this.ble.isSimulated()) {
+      this.ble.stopSimulation();
+    }
 
     if (this.unsavedHeartRates.length > 0) {
       this.api.saveHeartRates(workout.id, [...this.unsavedHeartRates]).subscribe();

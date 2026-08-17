@@ -1,54 +1,88 @@
 <div class="page-wrapper flex flex-col gap-8 min-h-[calc(100vh-64px)]">
 
-  <!-- TAB SWITCHER -->
-  <div class="flex items-center gap-2 bg-white/80 dark:bg-[rgba(15,15,30,0.82)] backdrop-blur-xl border border-slate-100 dark:border-slate-800 rounded-2xl p-1.5 shadow-sm">
-    <button
-      id="tab-dashboard-btn"
-      class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
-      [class.!bg-indigo-50]="activeTab() === 'dashboard'"
-      [class.dark:!bg-indigo-950/30]="activeTab() === 'dashboard'"
-      [class.!text-indigo-600]="activeTab() === 'dashboard'"
-      [class.dark:!text-indigo-400]="activeTab() === 'dashboard'"
-      [class.font-bold]="activeTab() === 'dashboard'"
-      (click)="activeTab.set('dashboard')"
-    >
-      <i class="pi pi-chart-line"></i>
-      <span>Monitor Live</span>
-    </button>
-    <button
-      id="tab-history-btn"
-      class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
-      [class.!bg-indigo-50]="activeTab() === 'history'"
-      [class.dark:!bg-indigo-950/30]="activeTab() === 'history'"
-      [class.!text-indigo-600]="activeTab() === 'history'"
-      [class.dark:!text-indigo-400]="activeTab() === 'history'"
-      [class.font-bold]="activeTab() === 'history'"
-      (click)="activeTab.set('history'); loadWorkoutsHistory()"
-    >
-      <i class="pi pi-list"></i>
-      <span>Historial</span>
-      @if (workouts().length > 0) {
-        <span class="text-[9px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1">{{ workouts().length }}</span>
-      }
-    </button>
+  <!-- TAB SWITCHER + WEARABLE STATUS -->
+  <div class="flex flex-col gap-3">
+    <div class="flex items-center gap-2 bg-white/80 dark:bg-[rgba(15,15,30,0.82)] backdrop-blur-xl border border-slate-100 dark:border-slate-800 rounded-2xl p-1.5 shadow-sm">
+      <button
+        id="tab-dashboard-btn"
+        class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
+        [class.!bg-indigo-50]="activeTab() === 'dashboard'"
+        [class.dark:!bg-indigo-950/30]="activeTab() === 'dashboard'"
+        [class.!text-indigo-600]="activeTab() === 'dashboard'"
+        [class.dark:!text-indigo-400]="activeTab() === 'dashboard'"
+        [class.font-bold]="activeTab() === 'dashboard'"
+        (click)="activeTab.set('dashboard')"
+      >
+        <i class="pi pi-chart-line"></i>
+        <span>Monitor Live</span>
+      </button>
+      <button
+        id="tab-history-btn"
+        class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-indigo-50/50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all cursor-pointer"
+        [class.!bg-indigo-50]="activeTab() === 'history'"
+        [class.dark:!bg-indigo-950/30]="activeTab() === 'history'"
+        [class.!text-indigo-600]="activeTab() === 'history'"
+        [class.dark:!text-indigo-400]="activeTab() === 'history'"
+        [class.font-bold]="activeTab() === 'history'"
+        (click)="activeTab.set('history'); loadWorkoutsHistory()"
+      >
+        <i class="pi pi-list"></i>
+        <span>Historial</span>
+        @if (workouts().length > 0) {
+          <span class="text-[9px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1">{{ workouts().length }}</span>
+        }
+      </button>
 
-    <div class="ml-auto flex items-center gap-1.5">
-      <button
-        id="settings-open-btn"
-        class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all"
-        (click)="isSettingsOpen.set(true)"
-        title="Configuración"
-      >
-        <i class="pi pi-cog"></i>
-      </button>
-      <button
-        id="simulate-alert-btn"
-        class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-950/20 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-900/30 transition-all"
-        (click)="simulateHighHRAlert()"
-        title="Simular alerta de FC alta"
-      >
-        <i class="pi pi-exclamation-triangle"></i>
-      </button>
+      <div class="ml-auto flex items-center gap-1.5">
+        <!-- WEARABLE STATUS BADGE -->
+        <div
+          [class.bg-emerald-50]="wearableConnected()"
+          [class.dark:bg-emerald-950/20]="wearableConnected()"
+          [class.border-emerald-200]="wearableConnected()"
+          [class.dark:border-emerald-900/30]="wearableConnected()"
+          [class.bg-amber-50]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.dark:bg-amber-950/20]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.border-amber-200]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.dark:border-amber-900/30]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.bg-slate-50]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+          [class.dark:bg-slate-900/20]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+          [class.border-slate-200]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+          [class.dark:border-slate-800]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold"
+          [class.text-emerald-600]="wearableConnected()"
+          [class.dark:text-emerald-300]="wearableConnected()"
+          [class.text-amber-600]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.dark:text-amber-300]="!wearableConnected() && wearableConnectionState().status === 'pairing'"
+          [class.text-slate-500]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+          [class.dark:text-slate-400]="!wearableConnected() && wearableConnectionState().status !== 'pairing'"
+        >
+          @if (wearableConnected()) {
+            <i class="pi pi-check-circle text-sm"></i>
+          } @else if (wearableConnectionState().status === 'pairing') {
+            <i class="pi pi-spin pi-spinner text-sm"></i>
+          } @else {
+            <i class="pi pi-times-circle text-sm"></i>
+          }
+          <span>{{ wearableStatus() }}</span>
+        </div>
+
+        <button
+          id="settings-open-btn"
+          class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/20 dark:hover:text-indigo-400 transition-all"
+          (click)="isSettingsOpen.set(true)"
+          title="Configuración"
+        >
+          <i class="pi pi-cog"></i>
+        </button>
+        <button
+          id="simulate-alert-btn"
+          class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent cursor-pointer text-slate-500 dark:text-slate-400 text-xs hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-950/20 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-900/30 transition-all"
+          (click)="simulateHighHRAlert()"
+          title="Simular alerta de FC alta"
+        >
+          <i class="pi pi-exclamation-triangle"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -58,11 +92,11 @@
 
       <!-- LEFT: Device + Form -->
       <div class="flex flex-col gap-6 w-full">
-        <app-wearable-pairing></app-wearable-pairing>
+        <app-wearable-pairing (wearableLinked)="onWearableLinked($event)"></app-wearable-pairing>
         <app-workout-form
           [isActive]="isWorkoutActive()"
           [currentWorkout]="currentWorkout()"
-          [deviceConnected]="ble.deviceConnected()"
+          [deviceConnected]="ble.deviceConnected() || wearableConnected()"
           [isSimulated]="ble.isSimulated()"
           [formattedTime]="formattedTime()"
           [initialWorkoutName]="initialWorkoutName()"
