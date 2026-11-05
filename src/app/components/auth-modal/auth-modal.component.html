@@ -46,6 +46,8 @@
               id="reg-name" 
               type="text" 
               formControlName="name"
+              maxlength="80"
+              autocomplete="name"
               placeholder="Juan García"
               class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
             >
@@ -65,6 +67,8 @@
             id="auth-email" 
             type="email" 
             formControlName="email"
+            maxlength="120"
+            autocomplete="email"
             placeholder="correo@ejemplo.com"
             class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
           >
@@ -83,12 +87,14 @@
             id="auth-pass" 
             type="password" 
             formControlName="password"
+            maxlength="72"
+            autocomplete="current-password"
             placeholder="••••••••"
             class="w-full rounded-xl border border-white/5 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500/70 outline-none transition-all focus:border-indigo-500/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(99,102,241,0.2)]"
           >
         </div>
         @if (authForm.get('password')?.touched && authForm.get('password')?.invalid) {
-          <span class="text-[11px] font-semibold text-red-400/80">La contraseña debe tener al menos 6 caracteres</span>
+          <span class="text-[11px] font-semibold text-red-400/80">La contraseña debe tener entre 8 y 72 caracteres</span>
         }
       </div>
 

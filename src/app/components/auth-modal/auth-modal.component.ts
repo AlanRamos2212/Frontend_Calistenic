@@ -23,9 +23,9 @@ export class AuthModalComponent {
   readonly isLoading = signal(false);
 
   readonly authForm: FormGroup = this.fb.group({
-    name: [''],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    name: ['', [Validators.minLength(2), Validators.maxLength(80)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(120)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]]
   });
 
   toggleMode(): void {
@@ -37,7 +37,7 @@ export class AuthModalComponent {
     if (this.isLoginMode()) {
       this.authForm.get('name')?.clearValidators();
     } else {
-      this.authForm.get('name')?.setValidators([Validators.required]);
+      this.authForm.get('name')?.setValidators([Validators.required, Validators.minLength(2), Validators.maxLength(80)]);
     }
     this.authForm.get('name')?.updateValueAndValidity();
   }
@@ -51,7 +51,9 @@ export class AuthModalComponent {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    const { name, email, password } = this.authForm.value;
+    const name = String(this.authForm.value.name ?? '').trim();
+    const email = String(this.authForm.value.email ?? '').trim().toLowerCase();
+    const password = String(this.authForm.value.password ?? '');
 
     const request$ = this.isLoginMode()
       ? this.authService.login(email, password)
@@ -63,10 +65,10 @@ export class AuthModalComponent {
         this.close.emit(); // Cerrar modal al autenticar con éxito
         this.router.navigate(['/dashboard']); // Redirigir al Dashboard
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        const serverError = err?.error || 'Ocurrió un error inesperado. Inténtalo de nuevo.';
-        this.errorMessage.set(typeof serverError === 'string' ? serverError : 'Credenciales inválidas.');
+        // Never expose backend details or distinguish an unknown email from a bad password.
+        this.errorMessage.set('No se pudo completar la autenticación. Inténtalo nuevamente.');
       }
     });
   }

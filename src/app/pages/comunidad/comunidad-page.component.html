@@ -33,6 +33,33 @@
     <i class="pi pi-globe text-8xl text-indigo-500/10 dark:text-indigo-400/5 pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></i>
   </div>
 
+  <!-- Mobile app preview -->
+  <div class="glass-card p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-cyan-500/5 via-indigo-500/5 to-transparent border-cyan-500/10 animate-fade-in">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
+        <i class="pi pi-mobile text-xl" aria-hidden="true"></i>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">CalistenicTrack Mobile</h2>
+          <p-tag value="En desarrollo" severity="info" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0 max-w-[650px]">
+          Lleva tus rutinas, logros y estadísticas contigo. La app móvil Flutter se conecta con tu perfil web y prepara la experiencia para el wearable.
+        </p>
+      </div>
+    </div>
+    <p-button
+      id="mobile-app-info-btn"
+      label="Conocer la app móvil"
+      icon="pi pi-arrow-right"
+      severity="secondary"
+      [outlined]="true"
+      [disabled]="true"
+      styleClass="font-semibold whitespace-nowrap"
+    />
+  </div>
+
   <!-- Feature Preview -->
   <div class="flex flex-col gap-4 animate-fade-in">
     <h2 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-0">Lo que viene</h2>
