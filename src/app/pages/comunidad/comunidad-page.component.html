@@ -1,79 +1,64 @@
 <div class="page-wrapper page-wrapper--narrow flex flex-col gap-10 animate-fade-in">
 
-  <!-- Hero: real feed if authenticated, coming-soon otherwise -->
-  @if (authService.isAuthenticated()) {
-    <div class="glass-card p-6 md:p-8 relative overflow-hidden bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in flex flex-col gap-6">
-      <div class="flex flex-wrap items-center gap-3">
-        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">Comunidad CalistenicTrack</h1>
-        <p-tag id="comunidad-badge" value="En vivo" severity="success" icon="pi pi-bolt" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
-      </div>
-      <app-community-feed />
-    </div>
-  } @else {
-    <div class="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in">
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,rgba(99,102,241,0.12)_0%,transparent_60%)] pointer-events-none"></div>
-      <div class="flex flex-col gap-5 max-w-[520px] relative z-10 items-start">
-        <p-tag id="comunidad-badge" value="Próximamente" severity="warn" icon="pi pi-clock" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">Comunidad CalistenicTrack</h1>
-        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0">
-          La comunidad ya está viva en la app móvil. Inicia sesión para ver la actividad reciente aquí también.
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <p-button
-            id="waitlist-btn"
-            label="Iniciar sesión"
-            icon="pi pi-user"
-            severity="contrast"
-            routerLink="/"
-            styleClass="font-semibold"
-          />
-          <p-button
-            id="dashboard-from-comunidad"
-            label="Ir al Dashboard"
-            icon="pi pi-chart-line"
-            severity="secondary"
-            [outlined]="true"
-            routerLink="/dashboard"
-            styleClass="font-semibold"
-          />
-        </div>
-      </div>
-      <i class="pi pi-globe text-8xl text-indigo-500/10 dark:text-indigo-400/5 pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></i>
-    </div>
-  }
-
-  <!-- Mobile app preview -->
-  <div class="glass-card p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-cyan-500/5 via-indigo-500/5 to-transparent border-cyan-500/10 animate-fade-in">
-    <div class="flex items-start gap-4">
-      <div class="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
-        <i class="pi pi-mobile text-xl" aria-hidden="true"></i>
-      </div>
-      <div class="flex flex-col gap-2">
-        <div class="flex flex-wrap items-center gap-2">
-          <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">CalistenicTrack Mobile</h2>
-          <p-tag value="En desarrollo" severity="info" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
-        </div>
-        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0 max-w-[650px]">
-          Lleva tus rutinas, logros y estadísticas contigo. La app móvil Flutter se conecta con tu perfil web y prepara la experiencia para el wearable.
-        </p>
+  <!-- Hero: la experiencia vive en la app móvil -->
+  <div class="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,rgba(99,102,241,0.12)_0%,transparent_60%)] pointer-events-none"></div>
+    <div class="flex flex-col gap-5 max-w-[520px] relative z-10 items-start">
+      <p-tag id="comunidad-badge" value="Disponible" severity="success" icon="pi pi-check-circle" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">La comunidad vive en la app móvil</h1>
+      <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0">
+        CalistenicTrack Mobile es donde ocurre todo: comparte entrenamientos con foto, comenta los logros de otros atletas, desbloquea insignias y revisa tus estadísticas reales — todo en la palma de tu mano.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a
+          id="mobile-app-info-btn"
+          href="https://github.com/AlanRamos2212/Calistenic_Mobile/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-button p-button-contrast font-semibold"
+          style="text-decoration: none;"
+        >
+          <span class="pi pi-download p-button-icon p-button-icon-left"></span>
+          <span class="p-button-label">Obtener la app móvil</span>
+        </a>
+        <p-button
+          id="dashboard-from-comunidad"
+          label="Ir al Dashboard"
+          icon="pi pi-chart-line"
+          severity="secondary"
+          [outlined]="true"
+          routerLink="/dashboard"
+          styleClass="font-semibold"
+        />
       </div>
     </div>
-    <p-button
-      id="mobile-app-info-btn"
-      label="Conocer la app móvil"
-      icon="pi pi-arrow-right"
-      severity="secondary"
-      [outlined]="true"
-      [disabled]="true"
-      styleClass="font-semibold whitespace-nowrap"
-    />
+    <i class="pi pi-mobile text-8xl text-indigo-500/10 dark:text-indigo-400/5 pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></i>
   </div>
 
-  <!-- Feature Preview -->
+  <!-- Cómo probar la app -->
+  <div class="glass-card p-6 md:p-8 flex flex-col gap-4 animate-fade-in">
+    <div class="flex flex-wrap items-center gap-2">
+      <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Cómo probar la app</h2>
+      <p-tag value="3 pasos" severity="info" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
+    </div>
+    <ol class="flex flex-col gap-3 m-0 p-0 list-none">
+      @for (step of testSteps; track step; let i = $index) {
+        <li class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          <span class="w-6 h-6 shrink-0 rounded-full bg-indigo-100 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center text-xs font-bold">{{ i + 1 }}</span>
+          {{ step }}
+        </li>
+      }
+    </ol>
+    <p class="text-xs text-slate-500 dark:text-slate-500 leading-relaxed m-0">
+      ¿Sin cuenta? La pantalla de login también tiene registro — crea la tuya en segundos.
+    </p>
+  </div>
+
+  <!-- Qué encontrarás en la app -->
   <div class="flex flex-col gap-4 animate-fade-in">
-    <h2 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-0">Lo que viene</h2>
+    <h2 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-0">Dentro de la app</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      @for (f of features; track f.title) {
+      @for (f of appFeatures; track f.title) {
         <div class="glass-card p-6 flex flex-col gap-3 hover:border-indigo-200 dark:hover:border-indigo-900/30 transition-all duration-300">
           <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 flex items-center justify-center">
             <i class="pi text-lg" [ngClass]="f.icon"></i>
