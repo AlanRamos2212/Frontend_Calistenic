@@ -1,18 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import { AuthService } from '../../services/auth.service';
+import { CommunityFeedComponent } from './community-feed.component';
 
 @Component({
   selector: 'app-comunidad-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonModule, CardModule, TagModule],
+  imports: [CommonModule, RouterLink, ButtonModule, CardModule, TagModule, CommunityFeedComponent],
   templateUrl: './comunidad-page.component.html',
   styleUrl: './comunidad-page.component.css'
 })
 export class ComunidadPageComponent {
+  protected readonly authService = inject(AuthService);
+
   readonly features = [
     { icon: 'pi-trophy',   title: 'Tablas de Clasificación', desc: 'Compite con otros atletas por el mayor volumen de entrenamiento.' },
     { icon: 'pi-comments', title: 'Feed Social',             desc: 'Comparte tus logros, sesiones y rutinas con la comunidad.' },

@@ -1,37 +1,46 @@
 <div class="page-wrapper page-wrapper--narrow flex flex-col gap-10 animate-fade-in">
 
-  <!-- Hero Coming Soon -->
-  <div class="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,rgba(99,102,241,0.12)_0%,transparent_60%)] pointer-events-none"></div>
-    <div class="flex flex-col gap-5 max-w-[520px] relative z-10 items-start">
-      <p-tag id="comunidad-badge" value="Próximamente" severity="warn" icon="pi pi-clock" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
-      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">Comunidad CalistenicTrack</h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0">
-        Estamos construyendo el espacio donde los atletas se conectan, compiten y se motivan juntos.
-        Únete a la lista de espera para ser el primero en acceder.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <p-button
-          id="waitlist-btn"
-          label="Unirse a la lista de espera"
-          icon="pi pi-bell"
-          severity="contrast"
-          [disabled]="true"
-          styleClass="font-semibold"
-        />
-        <p-button
-          id="dashboard-from-comunidad"
-          label="Ir al Dashboard"
-          icon="pi pi-chart-line"
-          severity="secondary"
-          [outlined]="true"
-          routerLink="/dashboard"
-          styleClass="font-semibold"
-        />
+  <!-- Hero: real feed if authenticated, coming-soon otherwise -->
+  @if (authService.isAuthenticated()) {
+    <div class="glass-card p-6 md:p-8 relative overflow-hidden bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in flex flex-col gap-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">Comunidad CalistenicTrack</h1>
+        <p-tag id="comunidad-badge" value="En vivo" severity="success" icon="pi pi-bolt" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
       </div>
+      <app-community-feed />
     </div>
-    <i class="pi pi-globe text-8xl text-indigo-500/10 dark:text-indigo-400/5 pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></i>
-  </div>
+  } @else {
+    <div class="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 animate-fade-in">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,rgba(99,102,241,0.12)_0%,transparent_60%)] pointer-events-none"></div>
+      <div class="flex flex-col gap-5 max-w-[520px] relative z-10 items-start">
+        <p-tag id="comunidad-badge" value="Próximamente" severity="warn" icon="pi pi-clock" [rounded]="true" styleClass="text-[10px] font-bold uppercase" />
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent m-0">Comunidad CalistenicTrack</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed m-0">
+          La comunidad ya está viva en la app móvil. Inicia sesión para ver la actividad reciente aquí también.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <p-button
+            id="waitlist-btn"
+            label="Iniciar sesión"
+            icon="pi pi-user"
+            severity="contrast"
+            routerLink="/"
+            styleClass="font-semibold"
+          />
+          <p-button
+            id="dashboard-from-comunidad"
+            label="Ir al Dashboard"
+            icon="pi pi-chart-line"
+            severity="secondary"
+            [outlined]="true"
+            routerLink="/dashboard"
+            styleClass="font-semibold"
+          />
+        </div>
+      </div>
+      <i class="pi pi-globe text-8xl text-indigo-500/10 dark:text-indigo-400/5 pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></i>
+    </div>
+  }
 
   <!-- Mobile app preview -->
   <div class="glass-card p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-cyan-500/5 via-indigo-500/5 to-transparent border-cyan-500/10 animate-fade-in">

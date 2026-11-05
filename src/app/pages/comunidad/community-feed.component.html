@@ -1,0 +1,83 @@
+<div class="flex flex-col gap-3 animate-fade-in">
+
+  <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Actividad reciente</h2>
+      <p class="text-xs text-slate-600 dark:text-slate-400 m-0">
+        Vista previa del feed — la experiencia completa está en la app móvil.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="text-xs font-semibold text-indigo-500 hover:text-indigo-400 transition-colors"
+      (click)="loadFeed()"
+      aria-label="Actualizar feed"
+    >
+      <i class="pi pi-refresh mr-1"></i>Actualizar
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="glass-card p-6 flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+      <i class="pi pi-spinner pi-spin text-indigo-500"></i>
+      Cargando actividad de la comunidad…
+    </div>
+  } @else if (failed()) {
+    <div class="glass-card p-6 flex flex-col gap-3 text-sm text-slate-600 dark:text-slate-400">
+      <span><i class="pi pi-exclamation-circle mr-2 text-amber-500"></i>No se pudo cargar el feed.</span>
+      <button
+        type="button"
+        class="self-start text-xs font-semibold text-indigo-500 hover:text-indigo-400"
+        (click)="loadFeed()"
+      >
+        Reintentar
+      </button>
+    </div>
+  } @else if (posts().length === 0) {
+    <div class="glass-card p-6 text-sm text-slate-600 dark:text-slate-400">
+      Todavía no hay actividad pública. ¡Publica tu primer entrenamiento desde la app móvil!
+    </div>
+  } @else {
+    @for (post of visiblePosts(); track post.id) {
+      <article class="glass-card p-5 flex flex-col gap-3">
+        <div class="flex items-center gap-3">
+          @if (mediaUrl(post.userAvatar); as avatarUrl) {
+            <img
+              [src]="avatarUrl"
+              [alt]="'Avatar de ' + post.userName"
+              class="w-9 h-9 rounded-full object-cover"
+            />
+          } @else {
+            <div class="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center text-sm font-bold">
+              {{ initials(post.userName) }}
+            </div>
+          }
+          <div class="flex flex-col leading-tight">
+            <span class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ post.userName }}</span>
+            <span class="text-[11px] text-slate-400">{{ relativeTime(post.createdAt) }}</span>
+          </div>
+        </div>
+
+        @if (post.imageUrl) {
+          <img
+            [src]="mediaUrl(post.imageUrl)"
+            [alt]="'Imagen compartida por ' + post.userName"
+            class="max-h-64 w-full object-cover rounded-xl border border-slate-200 dark:border-slate-800"
+            loading="lazy"
+          />
+        }
+
+        <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed m-0">{{ post.content }}</p>
+
+        <div class="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+          <span><i class="pi pi-heart mr-1" [class.text-red-500]="post.likedByCurrentUser"></i>{{ post.likesCount }}</span>
+          <span><i class="pi pi-comment mr-1"></i>{{ post.commentsCount }}</span>
+        </div>
+      </article>
+    }
+    <p class="text-[11px] text-slate-400 dark:text-slate-500 text-center m-0">
+      Mostrando {{ visiblePosts().length }} de {{ posts().length }} posts · publica desde CalistenicTrack Mobile
+    </p>
+  }
+
+</div>
