@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 import { WearableConnectionService } from '../../services/wearable-connection.service';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { Subscription, firstValueFrom, interval } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface DeviceTokenResponse {
   deviceToken: string;
@@ -42,7 +43,7 @@ export class ProgresoPageComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
   private readonly wearableConnection = inject(WearableConnectionService);
-  private readonly apiBaseUrl = 'http://localhost:8082/api';
+  private readonly apiBaseUrl = environment.apiUrl;
   private readonly deviceTokenStorageKey = 'app.device.token';
   private readonly userIdStorageKey = 'app.user.id';
   @ViewChild('flutterDashboardFrame') private flutterDashboardFrame?: ElementRef<HTMLIFrameElement>;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface HeartRatePoint {
   timestamp: string;
@@ -50,7 +51,7 @@ export interface WearablePairingStatusResponse {
 })
 export class ApiService {
   private readonly apiUrl = '/api/workouts';
-  private readonly backendUrl = 'http://localhost:8082/api';
+  private readonly backendUrl = environment.apiUrl;
   private readonly localMode = true; // Workout history is stored locally for now
 
   constructor(private http: HttpClient) {

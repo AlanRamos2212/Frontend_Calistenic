@@ -1,4 +1,4 @@
-(function dartProgram(){function copyProperties(a,b){var s=Object.keys(a)
+﻿(function dartProgram(){function copyProperties(a,b){var s=Object.keys(a)
 for(var r=0;r<s.length;r++){var q=s[r]
 b[q]=a[q]}}function mixinPropertiesHard(a,b){var s=Object.keys(a)
 for(var r=0;r<s.length;r++){var q=s[r]
@@ -84689,7 +84689,7 @@ return A.S($async$vw,r)},
 lp(){var s=0,r=A.T(t.yf),q,p=this,o,n,m,l
 var $async$lp=A.U(function(a,b){if(a===1)return A.Q(b,r)
 for(;;)switch(s){case 0:m=A
-l=A.ig("http://localhost:8080/api/statistics")
+l=A.ig("https://backend-calistenic.onrender.com/api/statistics")
 s=4
 return A.O(p.vw(),$async$lp)
 case 4:s=3
