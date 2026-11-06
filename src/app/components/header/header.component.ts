@@ -86,6 +86,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private refreshWearableState(): void {
+    // Without an authenticated session there is no JWT: calling
+    // loadFromBackend() would only produce a 401 every 5 seconds. Show the
+    // locally stored state (if any) and skip the network call entirely.
+    if (!this.authService.isAuthenticated() || !this.authService.getToken()) {
+      this.wearableConnection.rehydrateFromStorage();
+      this.isWearableLoading.set(false);
+      return;
+    }
     this.isWearableLoading.set(true);
     this.wearableConnection.loadFromBackend().subscribe({
       next: () => {

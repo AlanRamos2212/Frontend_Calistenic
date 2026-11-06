@@ -113,6 +113,14 @@ export class ProgresoPageComponent implements OnInit, OnDestroy {
   }
 
   private loadWearableBindings(): void {
+    // Without an authenticated session there is no JWT: skip the network call
+    // (it would return 401 every 5 seconds) and keep the local state instead.
+    if (!this.authService.isAuthenticated() || !this.authService.getToken()) {
+      this.wearableConnection.rehydrateFromStorage();
+      this.wearableError.set(null);
+      this.isWearableLoading.set(false);
+      return;
+    }
     this.isWearableLoading.set(true);
     this.wearableError.set(null);
     this.wearableConnection.rehydrateFromStorage();
