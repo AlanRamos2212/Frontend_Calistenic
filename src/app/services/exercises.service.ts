@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Exercise } from '../models/exercise.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExercisesService {
@@ -13,7 +14,7 @@ export class ExercisesService {
   }
 
   private loadExercises(): void {
-    this.http.get<any[]>('/api/exercises').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/exercises`).subscribe({
       next: list => {
         if (Array.isArray(list) && list.length > 0) {
           this.exercises.set(list.map(this.mapApiExercise));
