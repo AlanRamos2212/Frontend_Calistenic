@@ -21,8 +21,8 @@ export class ComunidadPageComponent {
   ];
 
   readonly testSteps = [
-    'Descarga el APK de la app móvil (enlace del release del equipo).',
+    'Descarga el APK v1.0.0 con el botón (descarga directa, sin pasar por GitHub).',
     'Habilita "Instalar de fuentes desconocidas" en tu Android.',
-    'Inicia sesión con tu cuenta de CalistenicTrack y tu backend activo.',
+    'Inicia sesión con tu cuenta de CalistenicTrack (backend Render en producción).',
   ];
 }
