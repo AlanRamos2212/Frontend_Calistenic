@@ -73,7 +73,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { label: 'Dashboard', path: '/dashboard', icon: 'pi pi-chart-line' },
     { label: 'Ejercicios', path: '/ejercicios', icon: 'pi pi-star' },
     { label: 'Progreso', path: '/progreso', icon: 'pi pi-chart-bar' },
-    { label: 'Comunidad', path: '/comunidad', icon: 'pi pi-users' }
+    { label: 'Comunidad', path: '/comunidad', icon: 'pi pi-users' },
+    { label: 'Soporte', path: '/soporte', icon: 'pi pi-life-ring' }
   ];
 
   ngOnInit(): void {

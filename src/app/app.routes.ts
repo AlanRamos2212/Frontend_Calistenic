@@ -46,5 +46,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/perfil/perfil-page.component').then(m => m.PerfilPageComponent)
   },
+  {
+    path: 'soporte',
+    loadComponent: () =>
+      import('./pages/soporte/soporte-page.component').then(m => m.SoportePageComponent)
+  },
   { path: '**', redirectTo: '' }
 ];

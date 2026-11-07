@@ -1,0 +1,73 @@
+<div class="page-wrapper page-wrapper--narrow flex flex-col gap-10 animate-fade-in">
+  <div class="glass-card p-8 md:p-12 flex flex-col gap-8">
+    <div class="flex flex-col gap-3">
+      <h1 class="text-3xl font-extrabold tracking-tight m-0">Soporte técnico</h1>
+      <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Reporta un bug: queda guardado en la BD (Práctica 7). Solo se muestra éxito tras recibir respuesta del backend.</p>
+    </div>
+
+    <form (ngSubmit)="submit()" class="flex flex-col gap-4">
+      <label class="flex flex-col gap-1 text-sm font-semibold">Título
+        <input [(ngModel)]="title" name="title" maxlength="120" required placeholder="Ej.: Botón se ve blanco" class="rounded-xl border p-3 font-normal" />
+      </label>
+      <label class="flex flex-col gap-1 text-sm font-semibold">Categoría
+        <select [(ngModel)]="category" name="category" class="rounded-xl border p-3 font-normal">
+          <option value="CRASH">Crash / cierre súbito</option>
+          <option value="UI">Interfaz</option>
+          <option value="DATOS">Datos</option>
+          <option value="RED">Conectividad</option>
+          <option value="OTRO">Otro</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-sm font-semibold">Descripción
+        <textarea [(ngModel)]="description" name="description" maxlength="4000" required rows="4" placeholder="Pasos para reproducirlo..." class="rounded-xl border p-3 font-normal"></textarea>
+      </label>
+      <button type="submit" [disabled]="loading()" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-5 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all hover:-translate-y-px hover:opacity-95">
+        <i class="pi pi-send"></i> Enviar reporte
+      </button>
+      @if (message()) { <p class="text-sm text-emerald-600 font-semibold m-0">{{ message() }}</p> }
+      @if (error()) { <p class="text-sm text-red-600 font-semibold m-0">{{ error() }}</p> }
+    </form>
+  </div>
+
+  @if (mine().length) {
+    <div class="glass-card p-6 md:p-8 flex flex-col gap-4">
+      <h2 class="text-lg font-bold m-0">Mis reportes</h2>
+      @for (r of mine(); track r.id) {
+        <div class="border rounded-xl p-4 flex flex-wrap justify-between gap-2">
+          <div><strong>#{{ r.id }} {{ r.title }}</strong><p class="text-sm m-0">{{ r.description }}</p></div>
+          <span class="text-xs font-bold uppercase">{{ r.status }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  @if (isAdmin) {
+    <div class="glass-card p-6 md:p-8 flex flex-col gap-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-lg font-bold m-0">Casos (ADMIN técnico)</h2>
+        <div class="flex gap-2">
+          <select [(ngModel)]="filter" (change)="refreshAll()" class="rounded-lg border px-2 py-1 text-sm">
+            <option value="">Todos</option>
+            <option value="OPEN">OPEN</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="RESOLVED">RESOLVED</option>
+          </select>
+          <button (click)="refreshAll()" class="text-sm font-bold text-indigo-600">Recargar</button>
+        </div>
+      </div>
+      @for (r of all(); track r.id) {
+        <div class="border rounded-xl p-4 flex flex-col gap-2">
+          <div class="flex flex-wrap justify-between gap-2">
+            <strong>#{{ r.id }} {{ r.title }} <span class="text-xs">({{ r.category }} — {{ r.userName }})</span></strong>
+            <span class="text-xs font-bold uppercase">{{ r.status }}</span>
+          </div>
+          <p class="text-sm m-0">{{ r.description }}</p>
+          <div class="flex gap-2">
+            <button (click)="changeStatus(r, 'IN_PROGRESS')" class="text-xs font-bold text-indigo-600">En proceso</button>
+            <button (click)="changeStatus(r, 'RESOLVED')" class="text-xs font-bold text-emerald-600">Resolver</button>
+          </div>
+        </div>
+      } @empty { <p class="text-sm m-0">Sin casos con ese filtro.</p> }
+    </div>
+  }
+</div>
