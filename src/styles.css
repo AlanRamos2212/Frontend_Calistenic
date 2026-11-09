@@ -1,4 +1,11 @@
-/* ── Google Fonts MUST be first ── */
+/* ── Cascade layer order (Tailwind v4 + PrimeNG) ──
+   Tailwind v4 declares `theme, base, components, utilities`. PrimeNG injects
+   its component styles into `@layer primeng`; it must sit AFTER Tailwind's
+   `base` (preflight resets button padding/border/background) but BEFORE
+   `utilities` so Tailwind utility classes can still override PrimeNG. */
+@layer theme, base, components, primeng, utilities;
+
+/* ── Google Fonts MUST be first @import ── */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @import "tailwindcss";
@@ -54,8 +61,10 @@
   --surface-muted:  #0f0f1a;
 }
 
-/* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset (in `base` so PrimeNG component styles can override it) ── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+}
 
 html {
   height: 100%;

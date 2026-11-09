@@ -22,7 +22,10 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.app-dark',
           cssLayer: {
             name: 'primeng',
-            order: 'tailwind-base, primeng, tailwind-utilities'
+            // Tailwind v4 layers are `theme, base, components, utilities`.
+            // Keep PrimeNG after `base` (so preflight does not reset buttons)
+            // and before `utilities` (so utility classes can still win).
+            order: 'theme, base, components, primeng, utilities'
           }
         }
       },
