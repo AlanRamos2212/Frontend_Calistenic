@@ -27,7 +27,6 @@ export const routes: Routes = [
   },
   {
     path: 'comunidad',
-    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./pages/comunidad/comunidad-page.component').then(m => m.ComunidadPageComponent)
   },
