@@ -33,9 +33,12 @@
     <div class="glass-card p-6 md:p-8 flex flex-col gap-4">
       <h2 class="text-lg font-bold m-0">Mis reportes</h2>
       @for (r of mine(); track r.id) {
-        <div class="border rounded-xl p-4 flex flex-wrap justify-between gap-2">
-          <div><strong>#{{ r.id }} {{ r.title }}</strong><p class="text-sm m-0">{{ r.description }}</p></div>
+        <div class="border rounded-xl p-4 flex flex-col md:flex-row gap-4 items-start">
+          <div class="flex-1"><strong>#{{ r.id }} {{ r.title }}</strong><p class="text-sm m-0">{{ r.description }}</p></div>
           <span class="text-xs font-bold uppercase">{{ r.status }}</span>
+          @if (r.imageUrl) {
+            <img [src]="r.imageUrl" alt="Captura del reporte" class="w-32 h-24 object-cover rounded-lg border border-white/20" />
+          }
         </div>
       }
     </div>
@@ -56,13 +59,18 @@
         </div>
       </div>
       @for (r of all(); track r.id) {
-        <div class="border rounded-xl p-4 flex flex-col gap-2">
-          <div class="flex flex-wrap justify-between gap-2">
-            <strong>#{{ r.id }} {{ r.title }} <span class="text-xs">({{ r.category }} — {{ r.userName }})</span></strong>
-            <span class="text-xs font-bold uppercase">{{ r.status }}</span>
+        <div class="border rounded-xl p-4 flex flex-col md:flex-row gap-4 items-start">
+          <div class="flex-1 flex flex-col gap-2">
+            <div class="flex flex-wrap justify-between gap-2">
+              <strong>#{{ r.id }} {{ r.title }} <span class="text-xs">({{ r.category }} — {{ r.userName }})</span></strong>
+              <span class="text-xs font-bold uppercase">{{ r.status }}</span>
+            </div>
+            <p class="text-sm m-0">{{ r.description }}</p>
           </div>
-          <p class="text-sm m-0">{{ r.description }}</p>
-          <div class="flex gap-2">
+          @if (r.imageUrl) {
+            <img [src]="r.imageUrl" alt="Captura del reporte" class="w-32 h-24 object-cover rounded-lg border border-white/20" />
+          }
+          <div class="flex gap-2 mt-2 md:mt-0">
             <button (click)="changeStatus(r, 'IN_PROGRESS')" class="text-xs font-bold text-indigo-600">En proceso</button>
             <button (click)="changeStatus(r, 'RESOLVED')" class="text-xs font-bold text-emerald-600">Resolver</button>
           </div>
