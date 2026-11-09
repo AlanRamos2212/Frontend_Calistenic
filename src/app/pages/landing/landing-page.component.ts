@@ -75,8 +75,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       icon: 'pi pi-users',
       color: 'purple',
-      title: 'Comunidad (Próximo)',
-      desc: 'Comparte tus logros, compite con otros atletas y descubre nuevas rutinas de la comunidad.'
+      title: 'Comunidad',
+      desc: 'Publica tus entrenamientos, recibe "me gusta" y comentarios de otros atletas. Descubre nuevas rutinas y mantente motivado.'
     }
   ];
 
