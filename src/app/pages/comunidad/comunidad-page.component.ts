@@ -21,7 +21,7 @@ export class ComunidadPageComponent {
   ];
 
   readonly testSteps = [
-    'Descarga el APK v1.0.0 con el botón (descarga directa, sin pasar por GitHub).',
+    'Descarga el APK v1.1.2 con el botón (descarga directa, sin pasar por GitHub).',
     'Habilita "Instalar de fuentes desconocidas" en tu Android.',
     'Inicia sesión con tu cuenta de CalistenicTrack (backend Render en producción).',
   ];
