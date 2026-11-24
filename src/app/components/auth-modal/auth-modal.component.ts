@@ -25,21 +25,28 @@ export class AuthModalComponent {
   readonly authForm: FormGroup = this.fb.group({
     name: ['', [Validators.minLength(2), Validators.maxLength(80)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(120)]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]]
+    // En login solo se exige que no este vacio: las reglas de longitud son
+    // de registro y bloqueaban cuentas antiguas con contrasena mas corta.
+    password: ['', [Validators.required]]
   });
 
   toggleMode(): void {
     this.isLoginMode.update(mode => !mode);
     this.errorMessage.set(null);
     this.authForm.reset();
-    
+
     // El nombre solo es requerido en modo de registro
     if (this.isLoginMode()) {
       this.authForm.get('name')?.clearValidators();
+      this.authForm.get('password')?.setValidators([Validators.required]);
     } else {
       this.authForm.get('name')?.setValidators([Validators.required, Validators.minLength(2), Validators.maxLength(80)]);
+      this.authForm.get('password')?.setValidators([
+        Validators.required, Validators.minLength(8), Validators.maxLength(72)
+      ]);
     }
     this.authForm.get('name')?.updateValueAndValidity();
+    this.authForm.get('password')?.updateValueAndValidity();
   }
 
   onSubmit(): void {
