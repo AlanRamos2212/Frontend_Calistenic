@@ -30,6 +30,15 @@
     styleClass="w-full"
   />
 
+  @if (ble.isSimulated()) {
+    <p-message
+      id="ble-simulation-msg"
+      severity="warn"
+      text="Modo simulación: los valores de frecuencia cardíaca se generan localmente y no provienen de un sensor BLE."
+      styleClass="w-full"
+    />
+  }
+
   <!-- Device Info -->
   <div class="device-info">
     <div class="info-row">
